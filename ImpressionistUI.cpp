@@ -9,8 +9,8 @@
 
 #include <math.h>
 
-#include "impressionistUI.h"
-#include "impressionistDoc.h"
+#include "ImpressionistUI.h"
+#include "ImpressionistDoc.h"
 
 /*
 //------------------------------ Widget Examples -------------------------------------------------
@@ -254,8 +254,28 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 
 	int type=(int)v;
 
+	if (type == BRUSH_LINES)
+	{
+		pUI->m_BrushWidthSlider->activate();
+		pUI->m_BrushAngleSlider->activate();
+	}
+	else
+	{
+		pUI->m_BrushWidthSlider->deactivate();
+		pUI->m_BrushAngleSlider->deactivate();
+	}
 
 	pDoc->setBrushType(type);
+}
+
+void ImpressionistUI::cb_strokeDirection(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* pUI=((ImpressionistUI *)(o->user_data()));
+	ImpressionistDoc* pDoc=pUI->getDocument();
+
+	int tpye = (int) v;
+
+	// pDoc->setStokeType(type);
 }
 
 //------------------------------------------------------------
@@ -426,7 +446,12 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {0}
 };
 
-
+Fl_Menu_Item ImpressionistUI::strokeDirectionTypeMenu[NUM_STROKE_TYPE+1] = {
+	{"Slider/Right Mouse",	FL_ALT+'s', (Fl_Callback *)ImpressionistUI::cb_strokeDirection, (void *)STROKE_SLIDER},
+	{"Gradient",			FL_ALT+'s', (Fl_Callback *)ImpressionistUI::cb_strokeDirection, (void *)STROKE_GRADIENT},
+	{"Brush Direction",		FL_ALT+'s', (Fl_Callback *)ImpressionistUI::cb_strokeDirection, (void *)STROKE_BRUSH_DIRECTION},
+	{0}
+};
 
 //----------------------------------------------------
 // Constructor.  Creates all of the widgets.
@@ -490,7 +515,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->callback(cb_sizeSlides);
 
 		// Add brush width slider to the dialog 
-		m_BrushWidthSlider = new Fl_Value_Slider(10, 110, 300, 20, "Width");
+		m_BrushWidthSlider = new Fl_Value_Slider(10, 110, 300, 20, "Line Width");
 		m_BrushWidthSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushWidthSlider->type(FL_HOR_NICE_SLIDER);
         m_BrushWidthSlider->labelfont(FL_COURIER);
@@ -501,9 +526,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushWidthSlider->value(m_nWidth);
 		m_BrushWidthSlider->align(FL_ALIGN_RIGHT);
 		m_BrushWidthSlider->callback(cb_widthSlides);
+		m_BrushWidthSlider->deactivate();
 
 		// Add brush angle slider to the dialog 
-		m_BrushAngleSlider = new Fl_Value_Slider(10, 140, 300, 20, "Angle");
+		m_BrushAngleSlider = new Fl_Value_Slider(10, 140, 300, 20, "Line Angle");
 		m_BrushAngleSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushAngleSlider->type(FL_HOR_NICE_SLIDER);
         m_BrushAngleSlider->labelfont(FL_COURIER);
@@ -514,6 +540,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAngleSlider->value(m_nAngle);
 		m_BrushAngleSlider->align(FL_ALIGN_RIGHT);
 		m_BrushAngleSlider->callback(cb_angleSlides);
+		m_BrushAngleSlider->deactivate();
 
     m_brushDialog->end();	
 
