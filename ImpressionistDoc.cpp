@@ -7,13 +7,14 @@
 
 #include <FL/fl_ask.H>
 
-#include "impressionistDoc.h"
-#include "impressionistUI.h"
+#include "ImpressionistDoc.h"
+#include "ImpressionistUI.h"
 
 #include "ImpBrush.h"
 
 // Include individual brush headers here.
 #include "PointBrush.h"
+#include "LineBrush.h"
 
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
@@ -36,7 +37,7 @@ ImpressionistDoc::ImpressionistDoc()
 
 	// Note: You should implement these 5 brushes.  They are set the same (PointBrush) for now
 	ImpBrush::c_pBrushes[BRUSH_LINES]				
-		= new PointBrush( this, "Lines" );
+		= new LineBrush( this, "Lines" );
 	ImpBrush::c_pBrushes[BRUSH_CIRCLES]				
 		= new PointBrush( this, "Circles" );
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_POINTS]	
@@ -84,6 +85,24 @@ int ImpressionistDoc::getSize()
 {
 	return m_pUI->getSize();
 }
+
+
+//---------------------------------------------------------
+// Returns the width of the brush.
+//---------------------------------------------------------
+int ImpressionistDoc::getWidth()
+{
+	return m_pUI->getWidth();
+}
+
+//---------------------------------------------------------
+// Returns the angle of the brush.
+//---------------------------------------------------------
+int ImpressionistDoc::getAngle()
+{
+	return m_pUI->getAngle();
+}
+
 
 //---------------------------------------------------------
 // Load the specified image
