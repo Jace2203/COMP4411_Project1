@@ -25,12 +25,15 @@ public:
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType
-	int		getSize();						// get the UI size
-	void	setSize(int size);				// set the UI size
-	int		getWidth();						// get the UI width
-	void	setWidth(int size);				// set the UI width
-	int		getAngle();						// get the UI angle
-	void	setAngle(int size);				// set the UI anlge
+	void	setStrokeType(int type);		// called by the UI to set the strokeType
+	int		getSize();						// get the brush size
+	void	setSize(int size);				// set the brush size
+	int		getWidth();						// get the brush width
+	void	setWidth(int size);				// set the brush width
+	int		getAngle();						// get the brush angle
+	void	setAngle(int size);				// set the brush anlge
+	int		getAlpha();						// get the brush alpha
+	void	setAlpha(int size);				// set the brush alpha
 	char*	getImageName();					// get the current image name
 	
 
@@ -48,9 +51,12 @@ public:
 
 
 	// The current active brush.
-	ImpBrush*			m_pCurrentBrush;	
+	ImpBrush*		m_pCurrentBrush;
+	// add stroke type variable (variable type not defined)
+	
 	// Size of the brush.
-	int m_nSize;
+	int 			m_nSize;
+
 
 	ImpressionistUI*	m_pUI;
 

@@ -80,6 +80,15 @@ void ImpressionistDoc::setBrushType(int type)
 }
 
 //---------------------------------------------------------
+// Called by the UI when the user changes the stroke type.
+// type: one of the defined stoke types.
+//---------------------------------------------------------
+void ImpressionistDoc::setStrokeType(int type)
+{
+	// set stroke direction method
+}
+
+//---------------------------------------------------------
 // Returns the size of the brush.
 //---------------------------------------------------------
 int ImpressionistDoc::getSize()
@@ -104,6 +113,13 @@ int ImpressionistDoc::getAngle()
 	return m_pUI->getAngle();
 }
 
+//---------------------------------------------------------
+// Returns the alpha of the brush.
+//---------------------------------------------------------
+int ImpressionistDoc::getAlpha()
+{
+	return m_pUI->getAlpha();
+}
 
 //---------------------------------------------------------
 // Load the specified image
