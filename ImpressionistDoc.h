@@ -32,8 +32,8 @@ public:
 	void	setWidth(int size);				// set the brush width
 	int		getAngle();						// get the brush angle
 	void	setAngle(int size);				// set the brush anlge
-	int		getAlpha();						// get the brush alpha
-	void	setAlpha(int size);				// set the brush alpha
+	double	getAlpha();						// get the brush alpha
+	void	setAlpha(double size);			// set the brush alpha
 	char*	getImageName();					// get the current image name
 	
 

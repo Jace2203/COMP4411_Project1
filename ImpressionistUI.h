@@ -74,8 +74,8 @@ public:
 	int					getAngle();
 	void				setAngle(int size);
 
-	int					getAlpha();
-	void				setAlpha(int size);
+	double				getAlpha();
+	void				setAlpha(double size);
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document

@@ -438,7 +438,7 @@ void ImpressionistUI::setAngle( int angle )
 //------------------------------------------------
 // Return the brush alpha
 //------------------------------------------------
-int ImpressionistUI::getAlpha()
+double ImpressionistUI::getAlpha()
 {
 	return m_nAlpha;
 }
@@ -446,7 +446,7 @@ int ImpressionistUI::getAlpha()
 //-------------------------------------------------
 // Set the brush alpha
 //-------------------------------------------------
-void ImpressionistUI::setAlpha( int alpha )
+void ImpressionistUI::setAlpha( double alpha )
 {
 	m_nAlpha=alpha;
 
@@ -599,7 +599,6 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAlphaSlider->value(m_nAlpha);
 		m_BrushAlphaSlider->align(FL_ALIGN_RIGHT);
 		m_BrushAlphaSlider->callback(cb_angleSlides);
-		m_BrushAlphaSlider->deactivate();
 		
 		m_EdgeClippingButton = new Fl_Light_Button(10, 200, 115, 25,"&Edge Clipping");
 		m_EdgeClippingButton->user_data((void*)(this));
