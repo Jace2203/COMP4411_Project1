@@ -37,7 +37,7 @@ PaintView::PaintView(int			x,
 {
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
-
+	m_ucPrevious = NULL;
 }
 
 
@@ -150,6 +150,7 @@ int PaintView::handle(int event)
 	    redraw();
 		break;
 	case FL_PUSH:
+		SavePrevious();
 		coord.x = Fl::event_x();
 		coord.y = Fl::event_y();
 		if (Fl::event_button()>1)
@@ -189,7 +190,7 @@ int PaintView::handle(int event)
 
 	}
 
-
+	m_pDoc->setMousePos(Point(coord.x, coord.y));
 
 	return 1;
 }
@@ -239,4 +240,17 @@ void PaintView::RestoreContent()
 				  m_pPaintBitstart);
 
 //	glDrawBuffer(GL_FRONT);
+}
+
+void PaintView::SavePrevious()
+{
+	delete [] m_ucPrevious;
+	m_ucPrevious = new unsigned char [m_nDrawWidth*m_nDrawHeight*3];
+	memcpy(m_ucPrevious, m_pDoc->m_ucPainting, m_nDrawWidth*m_nDrawHeight*3);
+}
+
+void PaintView::RestorePrevious()
+{
+	memcpy(m_pDoc->m_ucPainting, m_ucPrevious, m_nDrawWidth*m_nDrawHeight*3);
+	redraw();
 }

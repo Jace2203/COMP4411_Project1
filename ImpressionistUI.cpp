@@ -280,6 +280,15 @@ void ImpressionistUI::cb_sizeSlides(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nSize=int( ((Fl_Slider *)o)->value() ) ;
 }
 
+
+
+void ImpressionistUI::cb_undo(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	pDoc->RestorePrevious();
+
+}
+
 //---------------------------------- per instance functions --------------------------------------
 
 //------------------------------------------------
@@ -414,6 +423,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_ClearCanvasButton = new Fl_Button(240,10,150,25,"&Clear Canvas");
 		m_ClearCanvasButton->user_data((void*)(this));
 		m_ClearCanvasButton->callback(cb_clear_canvas_button);
+
+		m_UndoButton = new Fl_Button(240,45,150,25,"&Undo");
+		m_UndoButton->user_data((void*)(this));
+		m_UndoButton->callback(cb_undo);
 
 
 		// Add brush size slider to the dialog 

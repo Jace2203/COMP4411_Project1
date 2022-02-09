@@ -30,10 +30,16 @@ public:
 
 	void RestoreContent();
 
+	void SavePrevious();
+
+	void RestorePrevious();
+
 	ImpressionistDoc *m_pDoc;
 
 private:
 	GLvoid* m_pPaintBitstart;
+	unsigned char*	m_ucPrevious;
+
 	int		m_nDrawWidth,
 			m_nDrawHeight,
 			m_nStartRow, 

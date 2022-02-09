@@ -29,6 +29,10 @@ public:
 	void	setSize(int size);				// set the UI size
 	char*	getImageName();					// get the current image name
 	
+	void	setMousePos(Point source);
+	Point	getMousePos();
+
+	void	RestorePrevious();
 
 // Attributes
 public:
@@ -42,6 +46,7 @@ public:
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
 
+	Point			m_pMousePos;
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	
