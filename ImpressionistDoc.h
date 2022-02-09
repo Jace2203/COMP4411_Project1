@@ -12,6 +12,8 @@
 
 class ImpressionistUI;
 
+class Point;
+
 class ImpressionistDoc 
 {
 public:
@@ -29,6 +31,8 @@ public:
 	void	setSize(int size);				// set the UI size
 	char*	getImageName();					// get the current image name
 	
+	void	setMousePos(Point source);
+	Point	getMousePos();
 
 // Attributes
 public:
@@ -42,6 +46,8 @@ public:
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
 
+	// mouse coordinates
+	Point			m_pMousePos = Point(0, 0);
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	
@@ -56,7 +62,6 @@ public:
 	GLubyte* GetOriginalPixel( int x, int y );   
 	// Get the color of the original picture at the specified point	
 	GLubyte* GetOriginalPixel( const Point p );  
-
 
 private:
 	char			m_imageName[256];

@@ -190,6 +190,7 @@ int PaintView::handle(int event)
 	}
 
 
+	m_pDoc->setMousePos(Point(coord.x, coord.y));
 
 	return 1;
 }

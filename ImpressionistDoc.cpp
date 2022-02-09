@@ -200,3 +200,14 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 	return GetOriginalPixel( p.x, p.y );
 }
 
+void ImpressionistDoc::setMousePos(Point source)
+{
+	m_pMousePos = source;
+	m_pUI->m_origView->refresh();
+
+}
+
+Point ImpressionistDoc::getMousePos()
+{
+	return m_pMousePos;
+}
