@@ -16,7 +16,7 @@
 #include "PointBrush.h"
 #include "LineBrush.h"
 #include "CircleBrush.h"
-
+#include "ScatteredPointBrush.h"
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
 
@@ -37,15 +37,15 @@ ImpressionistDoc::ImpressionistDoc()
 	ImpBrush::c_pBrushes[BRUSH_POINTS]	= new PointBrush( this, "Points" );
 
 	// Note: You should implement these 5 brushes.  They are set the same (PointBrush) for now
-	ImpBrush::c_pBrushes[BRUSH_LINES]				
+	ImpBrush::c_pBrushes[BRUSH_LINES]			
 		= new LineBrush( this, "Lines" );
-	ImpBrush::c_pBrushes[BRUSH_CIRCLES]				
+	ImpBrush::c_pBrushes[BRUSH_CIRCLES]
 		= new CircleBrush( this, "Circles" );
-	ImpBrush::c_pBrushes[BRUSH_SCATTERED_POINTS]	
-		= new PointBrush( this, "Scattered Points" );
-	ImpBrush::c_pBrushes[BRUSH_SCATTERED_LINES]		
+	ImpBrush::c_pBrushes[BRUSH_SCATTERED_POINTS]
+		= new ScatteredPointBrush( this, "Scattered Points" );
+	ImpBrush::c_pBrushes[BRUSH_SCATTERED_LINES]
 		= new PointBrush( this, "Scattered Lines" );
-	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]	
+	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]
 		= new PointBrush( this, "Scattered Circles" );
 
 	// make one of the brushes current
