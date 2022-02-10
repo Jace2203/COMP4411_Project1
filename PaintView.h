@@ -39,6 +39,7 @@ public:
 
 	void RestoreContent();
 
+	void CreateSavedPhoto();
 	void SaveForUndo();
 	void LoadForUndo();
 

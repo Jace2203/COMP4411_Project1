@@ -254,7 +254,6 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 
 	int type=(int)v;
 
-
 	pDoc->setBrushType(type);
 }
 
@@ -265,6 +264,8 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_clear_canvas_button(Fl_Widget* o, void* v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+
+	pDoc->m_pUI->m_paintView->SaveForUndo();
 
 	pDoc->clearCanvas();
 }

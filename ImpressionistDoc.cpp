@@ -132,6 +132,7 @@ int ImpressionistDoc::loadImage(char *iname)
 	m_pUI->m_paintView->resizeWindow(width, height);	
 	m_pUI->m_paintView->refresh();
 
+	m_pUI->m_paintView->CreateSavedPhoto();
 
 	return 1;
 }

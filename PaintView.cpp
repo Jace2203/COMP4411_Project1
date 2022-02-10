@@ -31,7 +31,6 @@ static Point	coord;
 LinkedList::LinkedList(int w, int h)
 {
 	photo = new char[w*h*3];
-	memset(photo, 0, w*h*3);
 	next = nullptr;
 }
 
@@ -48,7 +47,7 @@ PaintView::PaintView(int			x,
 {
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
-	m_SavedPhoto = new LinkedList(w, h);
+	m_SavedPhoto = nullptr;
 }
 
 
@@ -253,13 +252,22 @@ void PaintView::RestoreContent()
 //	glDrawBuffer(GL_FRONT);
 }
 
+void PaintView::CreateSavedPhoto()
+{
+	m_SavedPhoto = new LinkedList(m_pDoc->m_nPaintWidth, m_pDoc->m_nPaintHeight);
+	memset(m_SavedPhoto->photo, 0, m_pDoc->m_nPaintWidth*m_pDoc->m_nPaintHeight*3);
+}
+
 void PaintView::SaveForUndo()
 {
-	LinkedList* temp = m_SavedPhoto;
-	while (temp->next != nullptr)
-		temp = temp->next;
-	temp->next = new LinkedList(m_nDrawWidth, m_nDrawHeight);
-	memcpy(temp->next->photo, m_pPaintBitstart, m_nDrawWidth*m_nDrawHeight*3);
+	if (m_SavedPhoto != NULL)
+	{
+		LinkedList* temp = m_SavedPhoto;
+		while (temp->next != nullptr)
+			temp = temp->next;
+		temp->next = new LinkedList(m_nDrawWidth, m_nDrawHeight);
+		memcpy(temp->next->photo, m_pPaintBitstart, m_nDrawWidth*m_nDrawHeight*3);
+	}
 }
 
 void PaintView::LoadForUndo()
