@@ -433,8 +433,8 @@ void ImpressionistUI::setAngle( int angle )
 {
 	m_nAngle=angle;
 
-	if (angle<=40) 
-		m_BrushSizeSlider->value(m_nAngle);
+	if (angle<=360) 
+		m_BrushAngleSlider->value(m_nAngle);
 }
 
 //------------------------------------------------

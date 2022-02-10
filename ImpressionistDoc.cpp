@@ -11,6 +11,7 @@
 #include "ImpressionistUI.h"
 
 #include "ImpBrush.h"
+#include "StrokeDirection.h"
 
 // Include individual brush headers here.
 #include "Brushes.h"
@@ -48,6 +49,7 @@ ImpressionistDoc::ImpressionistDoc()
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
 
+	m_pStrokeDirection = new StrokeDirection();
 }
 
 
@@ -82,7 +84,7 @@ void ImpressionistDoc::setBrushType(int type)
 //---------------------------------------------------------
 void ImpressionistDoc::setStrokeType(int type)
 {
-	// set stroke direction method
+	m_nStrokeType = type;
 }
 
 //---------------------------------------------------------

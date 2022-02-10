@@ -14,6 +14,8 @@ class ImpressionistUI;
 
 class Point;
 
+class StrokeDirection;
+
 class ImpressionistDoc 
 {
 public:
@@ -31,11 +33,11 @@ public:
 	int		getSize();						// get the brush size
 	void	setSize(int size);				// set the brush size
 	int		getWidth();						// get the brush width
-	void	setWidth(int size);				// set the brush width
+	void	setWidth(int width);			// set the brush width
 	int		getAngle();						// get the brush angle
-	void	setAngle(int size);				// set the brush anlge
+	void	setAngle(int angle);			// set the brush anlge
 	double	getAlpha();						// get the brush alpha
-	void	setAlpha(double size);			// set the brush alpha
+	void	setAlpha(double alpha);			// set the brush alpha
 	char*	getImageName();					// get the current image name
 	
 	void	setMousePos(Point source);
@@ -57,7 +59,12 @@ public:
 	Point			m_pMousePos = Point(0, 0);
 
 	// The current active brush.
-	ImpBrush*			m_pCurrentBrush;	
+	ImpBrush*					m_pCurrentBrush;
+	// The stroke direction object.
+	StrokeDirection*			m_pStrokeDirection;
+	// The stroke direction type.
+	int							m_nStrokeType;
+
 	// Size of the brush.
 	int m_nSize;							
 

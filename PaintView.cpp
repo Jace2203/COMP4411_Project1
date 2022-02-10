@@ -9,6 +9,7 @@
 #include "impressionistUI.h"
 #include "paintview.h"
 #include "ImpBrush.h"
+#include "StrokeDirection.h"
 
 
 #define LEFT_MOUSE_DOWN		1
@@ -117,12 +118,17 @@ void PaintView::draw()
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
+			m_pDoc->m_pStrokeDirection->StrokeBegin(source);
 
 			break;
 		case RIGHT_MOUSE_DRAG:
+			m_pDoc->m_pStrokeDirection->StrokeMove(source);
 
 			break;
 		case RIGHT_MOUSE_UP:
+			m_pDoc->m_pStrokeDirection->StrokeEnd(source);
+
+			m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(source, target, m_pDoc->m_nStrokeType));
 
 			break;
 
