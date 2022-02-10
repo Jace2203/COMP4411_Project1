@@ -40,6 +40,8 @@ public:
 	Fl_Slider*			m_BrushSizeSlider;
 	Fl_Button*          m_ClearCanvasButton;
 
+	Fl_Button*          m_UndoBySaveButton;
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -76,6 +78,7 @@ private:
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
 	static void	cb_sizeSlides(Fl_Widget* o, void* v);
 
+	static void	cb_undo_by_save_button(Fl_Widget* o, void* v);
 };
 
 #endif

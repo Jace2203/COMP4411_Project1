@@ -28,6 +28,17 @@ static int		eventToDo;
 static int		isAnEvent=0;
 static Point	coord;
 
+LinkedList::LinkedList(int w, int h)
+{
+	photo = new char[w*h*3];
+	memset(photo, 0, w*h*3);
+	next = nullptr;
+}
+
+LinkedList::~LinkedList()
+{
+}
+
 PaintView::PaintView(int			x, 
 					 int			y, 
 					 int			w, 
@@ -37,7 +48,7 @@ PaintView::PaintView(int			x,
 {
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
-
+	m_SavedPhoto = new LinkedList(w, h);
 }
 
 
@@ -150,6 +161,7 @@ int PaintView::handle(int event)
 	    redraw();
 		break;
 	case FL_PUSH:
+		SaveForUndo();
 		coord.x = Fl::event_x();
 		coord.y = Fl::event_y();
 		if (Fl::event_button()>1)
@@ -239,4 +251,27 @@ void PaintView::RestoreContent()
 				  m_pPaintBitstart);
 
 //	glDrawBuffer(GL_FRONT);
+}
+
+void PaintView::SaveForUndo()
+{
+	LinkedList* temp = m_SavedPhoto;
+	while (temp->next != nullptr)
+		temp = temp->next;
+	temp->next = new LinkedList(m_nDrawWidth, m_nDrawHeight);
+	memcpy(temp->next->photo, m_pPaintBitstart, m_nDrawWidth*m_nDrawHeight*3);
+}
+
+void PaintView::LoadForUndo()
+{
+	if (m_SavedPhoto->next != nullptr)
+	{
+		LinkedList* temp = m_SavedPhoto;
+		while (temp->next->next != nullptr)
+			temp = temp->next;
+		memcpy(m_pPaintBitstart, temp->next->photo, m_nDrawWidth*m_nDrawHeight*3);
+		delete temp->next;
+		temp->next = nullptr;
+		redraw();
+	}
 }

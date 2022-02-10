@@ -15,6 +15,15 @@
 
 class ImpressionistDoc;
 
+class LinkedList
+{
+public:
+	LinkedList(int w, int h);
+	~LinkedList();
+	char* photo;
+	LinkedList* next;
+};
+
 class PaintView : public Fl_Gl_Window
 {
 public:
@@ -30,6 +39,9 @@ public:
 
 	void RestoreContent();
 
+	void SaveForUndo();
+	void LoadForUndo();
+
 	ImpressionistDoc *m_pDoc;
 
 private:
@@ -43,6 +55,7 @@ private:
 			m_nWindowWidth, 
 			m_nWindowHeight;
 
+	LinkedList* m_SavedPhoto;
 };
 
 #endif
