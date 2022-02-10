@@ -75,6 +75,16 @@ void OriginalView::draw()
 		glDrawBuffer( GL_BACK );
 		glDrawPixels( drawWidth, drawHeight, GL_RGB, GL_UNSIGNED_BYTE, bitstart );
 
+		Point p = m_pDoc->getMousePos();
+		p.y = m_pDoc->m_nHeight-p.y;
+		int red_dot_size = 5; //side length
+		glColor4f(1, 0, 0, 1);
+		glBegin(GL_QUADS);
+			glVertex2d(p.x, p.y);
+			glVertex2d(p.x + red_dot_size, p.y);
+			glVertex2d(p.x + red_dot_size, p.y+red_dot_size);
+			glVertex2d(p.x , p.y+red_dot_size);
+		glEnd();
 	}
 			
 	glFlush();
