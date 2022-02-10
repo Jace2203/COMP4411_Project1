@@ -322,6 +322,12 @@ void ImpressionistUI::cb_angleSlides(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nAngle=int( ((Fl_Slider *)o)->value() ) ;
 }
 
+
+void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nAlpha=double( ((Fl_Slider *)o)->value() ) ;
+}
+
 //-----------------------------------------------------------
 // Updates the status of edge clipping
 // Called by the UI when the edge clipping button is clicked
@@ -601,7 +607,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAlphaSlider->step(0.01);
 		m_BrushAlphaSlider->value(m_nAlpha);
 		m_BrushAlphaSlider->align(FL_ALIGN_RIGHT);
-		m_BrushAlphaSlider->callback(cb_angleSlides);
+		m_BrushAlphaSlider->callback(cb_alphaSlides);
 		
 		m_EdgeClippingButton = new Fl_Light_Button(10, 200, 115, 25,"&Edge Clipping");
 		m_EdgeClippingButton->user_data((void*)(this));
