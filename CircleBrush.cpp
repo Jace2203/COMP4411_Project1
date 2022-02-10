@@ -37,6 +37,7 @@ void CircleBrush::BrushMove( const Point source, const Point target )
 	}
 
     int size = pDoc->getSize();
+	int r = size / 2;
     int triangle_amount = 60;
     double step = M_PI * 2 / triangle_amount;
 	glBegin(GL_TRIANGLE_FAN);
@@ -44,7 +45,7 @@ void CircleBrush::BrushMove( const Point source, const Point target )
 
 		glVertex2d(target.x, target.y);
         for (int i = 0; i <= triangle_amount; i++) {
-            glVertex2d(target.x + size * cos(i * step), target.y + size * sin(i * step));
+            glVertex2d(target.x + r * cos(i * step), target.y + r * sin(i * step));
         }
 	glEnd();
 }

@@ -254,15 +254,17 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 
 	int type=(int)v;
 
-	if (type == BRUSH_LINES)
+	if (type == BRUSH_LINES || type == BRUSH_SCATTERED_LINES)
 	{
 		pUI->m_BrushWidthSlider->activate();
 		pUI->m_BrushAngleSlider->activate();
+		pUI->m_StrokeDirectionChoice->activate();
 	}
 	else
 	{
 		pUI->m_BrushWidthSlider->deactivate();
 		pUI->m_BrushAngleSlider->deactivate();
+		pUI->m_StrokeDirectionChoice->deactivate();
 	}
 
 	pDoc->setBrushType(type);
@@ -546,6 +548,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_StrokeDirectionChoice->user_data((void*)(this));
 		m_StrokeDirectionChoice->menu(strokeDirectionTypeMenu);
 		m_StrokeDirectionChoice->callback(cb_strokeChoice);
+		m_StrokeDirectionChoice->deactivate();
 
 		// Add brush size slider to the dialog 
 		m_BrushSizeSlider = new Fl_Value_Slider(10, 80, 300, 20, "Size");
