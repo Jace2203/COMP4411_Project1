@@ -29,6 +29,7 @@ public:
 	void	setSize(int size);				// set the UI size
 	char*	getImageName();					// get the current image name
 	
+	void 	swap();
 
 // Attributes
 public:
@@ -42,6 +43,7 @@ public:
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
 
+	unsigned char*	m_ucTemp;
 
 	// The current active brush.
 	ImpBrush*			m_pCurrentBrush;	
