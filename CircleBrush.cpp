@@ -40,6 +40,7 @@ void CircleBrush::BrushMove( const Point source, const Point target )
 	int r = size / 2;
     int triangle_amount = 60;
     double step = M_PI * 2 / triangle_amount;
+
 	glBegin(GL_TRIANGLE_FAN);
 		SetColor( source );
 
