@@ -11,6 +11,8 @@
 
 #include <math.h>
 
+void drawRedLine(Point, Point);
+
 StrokeDirection::StrokeDirection()
 : m_pStartMousePos(0, 0), m_pEndMousePos(0, 0)
 {
@@ -20,12 +22,16 @@ StrokeDirection::StrokeDirection()
 void StrokeDirection::StrokeBegin(Point source)
 {
     setStartMousePos(source);
+
+    drawRedLine(m_pStartMousePos, m_pStartMousePos);
 }
 
 // Update stroke direction
 void StrokeDirection::StrokeMove(Point source)
 {
     setEndMousePos(source);
+
+    drawRedLine(m_pStartMousePos, m_pEndMousePos);
 }
 
 // Stop measuring stroke direction, then calculate the angle
@@ -68,4 +74,15 @@ Point StrokeDirection::getEndMousePos()
 int StrokeDirection::getAngle(Point source, Point target, int type)
 {
     return m_nAngle;
+}
+
+void drawRedLine(Point start, Point end)
+{
+    glColor3f(1.0, 0.0, 0.0);
+    
+    glLineWidth(1);
+    glBegin(GL_LINES);
+        glVertex2i(start.x, start.y);
+        glVertex2i(end.x, end.y);
+    glEnd();
 }

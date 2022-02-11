@@ -118,17 +118,29 @@ void PaintView::draw()
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
-			m_pDoc->m_pStrokeDirection->StrokeBegin(source);
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				SaveCurrentContent();
+				m_pDoc->m_pStrokeDirection->StrokeBegin(source);
+			}
 
 			break;
 		case RIGHT_MOUSE_DRAG:
-			m_pDoc->m_pStrokeDirection->StrokeMove(source);
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				m_pDoc->m_pStrokeDirection->StrokeMove(source);
+			}
 
 			break;
 		case RIGHT_MOUSE_UP:
-			m_pDoc->m_pStrokeDirection->StrokeEnd(source);
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				m_pDoc->m_pStrokeDirection->StrokeEnd(source);
 
-			m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(source, target, m_pDoc->m_nStrokeType));
+				m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(source, target, m_pDoc->m_nStrokeType));
+			}
 
 			break;
 

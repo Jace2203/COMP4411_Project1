@@ -50,6 +50,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
 
 	m_pStrokeDirection = new StrokeDirection();
+	m_nStrokeType = 0;
 }
 
 

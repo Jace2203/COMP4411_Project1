@@ -85,6 +85,7 @@ private:
 	int		m_nWidth;
 	int		m_nAngle;
 	double	m_nAlpha;
+	int		m_nStrokeType;
 	int		m_nEdgeClipping;
 	int		m_nAnotherGradient;
 	int		m_nSpacing;
