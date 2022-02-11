@@ -30,6 +30,8 @@ public:
 
 	void RestoreContent();
 
+	void AutoPaint(int spacing);
+
 	ImpressionistDoc *m_pDoc;
 
 private:
@@ -42,6 +44,7 @@ private:
 			m_nEndCol,
 			m_nWindowWidth, 
 			m_nWindowHeight;
+	Point	m_pAutoPaintPoint;
 
 };
 
