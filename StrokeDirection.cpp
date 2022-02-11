@@ -14,7 +14,7 @@
 void drawRedLine(Point, Point);
 
 StrokeDirection::StrokeDirection()
-: m_pStartMousePos(0, 0), m_pEndMousePos(0, 0)
+: m_pStartMousePos(0, 0), m_pEndMousePos(0, 0), m_pLastMousePos(-1, -1), m_nAngle(0)
 {
 }
 
@@ -71,9 +71,48 @@ Point StrokeDirection::getEndMousePos()
     return m_pEndMousePos;
 }
 
+void StrokeDirection::setLastMousePos(Point source)
+{
+    m_pLastMousePos = source;
+}
+
+Point StrokeDirection::getLastMousePos()
+{
+    return m_pLastMousePos;
+}
+
 int StrokeDirection::getAngle(Point source, Point target, int type)
 {
+    if (type == STROKE_GRADIENT)
+    {
+        // Gradient
+    }
+    else if (type == STROKE_BRUSH_DIRECTION)
+    {
+        if (m_pLastMousePos.x == -1 && m_pLastMousePos.y == -1)
+        {
+            m_nAngle = -1;
+        }
+        else
+        {
+            m_nAngle = (int)(atan2f(source.y - m_pLastMousePos.y, source.x - m_pLastMousePos.x) * 180 / M_PI);
+
+            if (m_nAngle < 0)
+            {
+                m_nAngle += 360;
+            }
+
+        }
+
+        m_pLastMousePos = source;
+    }
+
     return m_nAngle;
+}
+
+void StrokeDirection::resetLastMousePos()
+{
+    m_pLastMousePos = Point(-1, -1);
 }
 
 void drawRedLine(Point start, Point end)

@@ -26,11 +26,17 @@ public:
     void    setEndMousePos(Point source);
     Point   getEndMousePos();
 
+    void    setLastMousePos(Point source);
+    Point   getLastMousePos();
+
     int     getAngle(Point source, Point target, int type);
+
+    void    resetLastMousePos();
 
 private:
     Point m_pStartMousePos;
     Point m_pEndMousePos;
+    Point m_pLastMousePos;
 
     int m_nAngle;
 };
