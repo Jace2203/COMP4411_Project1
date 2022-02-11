@@ -9,6 +9,7 @@
 #include "ImpressionistUI.h"
 #include "ScatteredLineBrush.h"
 
+#include "StrokeDirection.h"
 #include <math.h>
 
 extern float frand();
@@ -38,32 +39,33 @@ void ScatteredLineBrush::BrushMove( const Point source, const Point target )
 
     int size = pDoc->getSize();
     int width = pDoc->getWidth();
-    int angle = pDoc->getAngle();
+    int angle = pDoc->m_pStrokeDirection->getAngle(source, target, pDoc->m_nStrokeType);
+	if (angle == -1) return;			// Stroke direction of mouse path, starting point no angle
 
 	int num = (int)(frand() * 2 + 3);
 
-	glPushMatrix();
-	glTranslated(target.x, target.y, 0.0);
-	glRotated(angle, 0.0, 0.0, 1.0);
 	for (int i = 0; i < num; i++)
 	{
 		// double new_size = size - (size * frand() / 2);
-
 		double x_offset = frand() * size - ceil(size / 2);
 		double y_offset = frand() * size - ceil(size / 2);
-		
+
+		glPushMatrix();
+		glTranslated(target.x + x_offset, target.y + y_offset, 0.0);
+		glRotated(angle, 0.0, 0.0, 1.0);
+			
 		glLineWidth(width);
 		glBegin(GL_LINES);
 		{
 
 			SetColor(Point((int)(source.x + x_offset), (int)(source.y + y_offset)));
 
-        	glVertex2d(-size / 2  + x_offset, 0 + y_offset);
-        	glVertex2d(size / 2  + x_offset, 0 + y_offset);
+        	glVertex2d(-size / 2, 0);
+        	glVertex2d(size / 2, 0);
 		}
 		glEnd();
+		glPopMatrix();
 	}
-	glPopMatrix();
 }
 
 void ScatteredLineBrush::BrushEnd( const Point source, const Point target )
