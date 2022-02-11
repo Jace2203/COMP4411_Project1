@@ -433,8 +433,8 @@ void ImpressionistUI::setAngle( int angle )
 {
 	m_nAngle=angle;
 
-	if (angle<=40) 
-		m_BrushSizeSlider->value(m_nAngle);
+	if (angle<=360) 
+		m_BrushAngleSlider->value(m_nAngle);
 }
 
 //------------------------------------------------
@@ -527,6 +527,7 @@ ImpressionistUI::ImpressionistUI() {
 	m_nWidth = 1;
 	m_nAngle = 0;
 	m_nAlpha = 1.0;
+	m_nStrokeType = 0;
 	m_nEdgeClipping = 1;
 	m_nAnotherGradient = 0;
 	m_nSpacing = 4;
@@ -547,6 +548,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_StrokeDirectionChoice = new Fl_Choice(115, 45, 150, 25, "&Stroke Direction");
 		m_StrokeDirectionChoice->user_data((void*)(this));
 		m_StrokeDirectionChoice->menu(strokeDirectionTypeMenu);
+		m_StrokeDirectionChoice->value(m_nStrokeType);
 		m_StrokeDirectionChoice->callback(cb_strokeChoice);
 		m_StrokeDirectionChoice->deactivate();
 
@@ -634,10 +636,10 @@ ImpressionistUI::ImpressionistUI() {
 		// m_PaintButton->callback();
 
 		m_PaintBox = new Fl_Window(10, 230, 380, 40);
-		m_PaintBox->box(FL_UP_BOX);
-		m_PaintBox->add(m_SpacingSlider);
-		m_PaintBox->add(m_SizeRandomButton);
-		m_PaintBox->add(m_PaintButton);
+			m_PaintBox->box(FL_UP_BOX);
+			m_PaintBox->add(m_SpacingSlider);
+			m_PaintBox->add(m_SizeRandomButton);
+			m_PaintBox->add(m_PaintButton);
 		m_PaintBox->end();
 
 		m_EdgeThresholdSlider = new Fl_Value_Slider(10, 8, 200, 20, "Edge Threshold");
@@ -657,9 +659,9 @@ ImpressionistUI::ImpressionistUI() {
 		// m_EdgeDetectionButton->callback();
 
 		m_EdgeDetectionBox = new Fl_Window(10, 275, 380, 40);
-		m_EdgeDetectionBox->box(FL_UP_BOX);
-		m_EdgeDetectionBox->add(m_EdgeThresholdSlider);
-		m_EdgeDetectionBox->add(m_EdgeDetectionButton);
+			m_EdgeDetectionBox->box(FL_UP_BOX);
+			m_EdgeDetectionBox->add(m_EdgeThresholdSlider);
+			m_EdgeDetectionBox->add(m_EdgeDetectionButton);
 		m_EdgeDetectionBox->end();
 
     m_brushDialog->end();	
