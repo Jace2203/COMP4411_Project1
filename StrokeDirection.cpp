@@ -81,6 +81,11 @@ Point StrokeDirection::getLastMousePos()
     return m_pLastMousePos;
 }
 
+void StrokeDirection::setAngle(int angle)
+{
+    m_nAngle = angle;
+}
+
 int StrokeDirection::getAngle(Point source, Point target, int type)
 {
     if (type == STROKE_GRADIENT)

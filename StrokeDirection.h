@@ -29,6 +29,7 @@ public:
     void    setLastMousePos(Point source);
     Point   getLastMousePos();
 
+    void    setAngle(int angle);
     int     getAngle(Point source, Point target, int type);
 
     void    resetLastMousePos();
