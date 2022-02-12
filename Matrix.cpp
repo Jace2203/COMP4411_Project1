@@ -1,10 +1,12 @@
 //
-// PointBrush.cpp
+// Matrix.cpp
 //
 // The implementation of Matrix. Matrix computation for convolution and other matrix operation
 //
 
 #include "Matrix.h"
+
+#include <string.h>
 
 Matrix::Matrix()
 : elements(nullptr), m(0), n(0)
@@ -33,6 +35,17 @@ Matrix::Matrix(int m, int n)
     }
 
     initialize();
+}
+
+Matrix::Matrix(int m, int n, double* values)
+: m(m), n(n)
+{
+    elements = new double*[m];
+    for (int i = 0; i < m; i++)
+    {
+        elements[i] = new double[n];
+        memcpy(elements[i], values + i * n, n);
+    }
 }
 
 Matrix::~Matrix()
@@ -75,4 +88,29 @@ void Matrix::setValue(int x, int y, int num)
 double Matrix::getValue(int x, int y)
 {
     return elements[x][y];
+}
+
+int Matrix::getWidth()
+{
+    return n;
+}
+
+int Matrix::getHeight()
+{
+    return m;
+}
+
+double Matrix::InnerSum()
+{
+    double sum = 0;
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            sum += elements[i][j];
+        }
+    }
+
+    return sum;
 }

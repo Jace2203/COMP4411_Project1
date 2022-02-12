@@ -1,5 +1,5 @@
 //
-// strokedirection.h
+// matrix.h
 //
 // The header file for matrix
 //
@@ -13,6 +13,7 @@ public:
     Matrix();
     Matrix(int size);
     Matrix(int m, int n);
+    Matrix(int m, int n, double* values);
 
     ~Matrix();
 
@@ -21,6 +22,11 @@ public:
 
     void    setValue(int x, int y, int num);
     double  getValue(int x, int y);
+
+    int     getWidth();
+    int     getHeight();
+
+    double  InnerSum();
 
 private:
     int m, n;
