@@ -4,21 +4,29 @@
 // The header file for convolution
 //
 
+#ifndef CONVOLUTION_H
+#define CONVOLUTION_H
+
 #include "Matrix.h"
 
-static class Convolution
+class Convolution
 {
 public:
-    Convolution();
+    Convolution(unsigned char* bmp, int width, int height);
     ~Convolution();
 
-    double XGradient(unsigned char* bmp, int width, int height, int x, int y);
-    double YGradient(unsigned char* bmp, int width, int height, int x, int y);
+    double XGradient(int x, int y);
+    double YGradient(int x, int y);
 
 private:
-    Matrix Sobel_X;
-    Matrix Sobel_Y;
-    Matrix Gaussian;
+    static Matrix Sobel_X;
+    static Matrix Sobel_Y;
+    static Matrix Gaussian;
 
-    void ConvolutionFilter(unsigned char* bmp, int width, int height, Matrix kernel, int x, int y, bool greyscale, double* color);
+    unsigned char* bmp;
+    int width, height;
+
+    void ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, double* color);
 };
+
+#endif

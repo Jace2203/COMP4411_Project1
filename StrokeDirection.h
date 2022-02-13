@@ -7,6 +7,9 @@
 #ifndef STROKEDIRECTION_H
 #define STROKEDIRECTION_H
 
+#include "ImpressionistDoc.h"
+#include "ImpressionistUI.h"
+
 class Point;
 
 class ImpressionistDoc;
@@ -30,7 +33,7 @@ public:
     Point   getLastMousePos();
 
     void    setAngle(int angle);
-    int     getAngle(Point source, Point target, int type);
+    int     getAngle(ImpressionistDoc* bmp, Point source, Point target, int type);
 
     void    resetLastMousePos();
 

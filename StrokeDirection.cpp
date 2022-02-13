@@ -4,10 +4,9 @@
 // The implementation of obtaining stroke direction
 //
 
-#include "impressionistDoc.h"
-#include "impressionistUI.h"
-
 #include "StrokeDirection.h"
+
+#include "Convolution.h"
 
 #include <math.h>
 
@@ -86,11 +85,24 @@ void StrokeDirection::setAngle(int angle)
     m_nAngle = angle;
 }
 
-int StrokeDirection::getAngle(Point source, Point target, int type)
+int StrokeDirection::getAngle(ImpressionistDoc* pDoc, Point source, Point target, int type)
 {
     if (type == STROKE_GRADIENT)
     {
-        // Gradient
+        unsigned char* bmp = pDoc->m_ucBitmap;
+        int width = pDoc->m_nPaintWidth;
+        int height = pDoc->m_nPaintHeight;
+        Convolution con = Convolution(bmp, width, height);
+
+        int d_x = con.XGradient(source.x, source.y);
+        int d_y = con.YGradient(source.x, source.y);
+
+        m_nAngle = (int)(atan2f(d_y, d_x) * 180 / M_PI) + 90;
+
+        if (m_nAngle < 0)
+        {
+            m_nAngle += 360;
+        }
     }
     else if (type == STROKE_BRUSH_DIRECTION)
     {

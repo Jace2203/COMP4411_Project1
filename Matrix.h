@@ -21,10 +21,10 @@ public:
     void    identity(int num);
 
     void    setValue(int x, int y, int num);
-    double  getValue(int x, int y);
+    double  getValue(int x, int y) const;
 
-    int     getWidth();
-    int     getHeight();
+    int     getWidth() const;
+    int     getHeight() const;
 
     double  InnerSum();
 

@@ -44,7 +44,7 @@ Matrix::Matrix(int m, int n, double* values)
     for (int i = 0; i < m; i++)
     {
         elements[i] = new double[n];
-        memcpy(elements[i], values + i * n, n);
+        memcpy(elements[i], values + i * n, n * sizeof(double));
     }
 }
 
@@ -85,17 +85,17 @@ void Matrix::setValue(int x, int y, int num)
     elements[x][y] = num;
 }
 
-double Matrix::getValue(int x, int y)
+double Matrix::getValue(int x, int y) const
 {
     return elements[x][y];
 }
 
-int Matrix::getWidth()
+int Matrix::getWidth() const
 {
     return n;
 }
 
-int Matrix::getHeight()
+int Matrix::getHeight() const
 {
     return m;
 }

@@ -39,7 +39,7 @@ void LineBrush::BrushMove( const Point source, const Point target )
 
     int size = pDoc->getSize();
     int width = pDoc->getWidth();
-    int angle = pDoc->m_pStrokeDirection->getAngle(source, target, pDoc->m_nStrokeType);
+    int angle = pDoc->m_pStrokeDirection->getAngle(pDoc, source, target, pDoc->m_nStrokeType);
 	if (angle == -1) return;			// Stroke direction of mouse path, starting point no angle
 
 	glPushMatrix();
