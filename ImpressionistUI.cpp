@@ -292,6 +292,12 @@ void ImpressionistUI::cb_clear_canvas_button(Fl_Widget* o, void* v)
 }
 
 
+void ImpressionistUI::cb_color_chooser(Fl_Widget* o, void* v)
+{
+	double r = 0, g = 0, b = 0;
+	FL_EXPORT fl_color_chooser("abc", r, g, b, 0);
+}
+
 //-----------------------------------------------------------
 // Updates the brush size to use from the value of the size
 // slider
@@ -463,6 +469,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
+
+		{ "&Colors", FL_ALT + 'k', (Fl_Callback *)ImpressionistUI::cb_color_chooser, 0, FL_MENU_DIVIDER },
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
