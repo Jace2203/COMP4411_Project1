@@ -36,8 +36,15 @@ Convolution::~Convolution()
 
 double Convolution::XGradient(unsigned char* bmp, int width, int height, int x, int y)
 {
-    double color[3] = { '\0', '\0', '\0' };
+    double color[3] = { 0.0, 0.0, 0.0 };
     ConvolutionFilter(bmp, width, height, Sobel_X, x, y, true, color);
+    return (int)color[0];
+}
+
+double Convolution::YGradient(unsigned char* bmp, int width, int height, int x, int y)
+{
+    double color[3] = { 0.0, 0.0, 0.0 };
+    ConvolutionFilter(bmp, width, height, Sobel_Y, x, y, true, color);
     return (int)color[0];
 }
 
