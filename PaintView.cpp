@@ -107,6 +107,7 @@ void PaintView::draw()
 		{
 			m_pAutoPaintPoint.x = x;
 			m_pAutoPaintPoint.y = y;
+			glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
 			m_pDoc->m_pCurrentBrush->BrushBegin( m_pAutoPaintPoint, m_pAutoPaintPoint );
 			if (y > m_nDrawHeight)
 			{
@@ -114,6 +115,7 @@ void PaintView::draw()
 				y = 0;
 			}
 			y = y + autopaintspacing;
+			glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
 		}
 		autopaint = 0;
 
@@ -124,7 +126,8 @@ void PaintView::draw()
 				GL_RGB, 
 				GL_UNSIGNED_BYTE, 
 				m_pPaintBitstart );
-		
+
+		RestoreContent();
 	}
 
 	if ( m_pDoc->m_ucPainting && isAnEvent) 
@@ -179,49 +182,54 @@ void PaintView::draw()
 
 int PaintView::handle(int event)
 {
-	switch(event)
+	coord.x = Fl::event_x();
+	coord.y = Fl::event_y();
+	if (coord.x >= 0 && coord.x < m_nDrawWidth && coord.y >= 0 && coord.y < m_nDrawHeight)
 	{
-	case FL_ENTER:
-	    redraw();
-		break;
-	case FL_PUSH:
-		coord.x = Fl::event_x();
-		coord.y = Fl::event_y();
-		if (Fl::event_button()>1)
-			eventToDo=RIGHT_MOUSE_DOWN;
-		else
-			eventToDo=LEFT_MOUSE_DOWN;
-		isAnEvent=1;
-		redraw();
-		break;
-	case FL_DRAG:
-		coord.x = Fl::event_x();
-		coord.y = Fl::event_y();
-		if (Fl::event_button()>1)
-			eventToDo=RIGHT_MOUSE_DRAG;
-		else
-			eventToDo=LEFT_MOUSE_DRAG;
-		isAnEvent=1;
-		redraw();
-		break;
-	case FL_RELEASE:
-		coord.x = Fl::event_x();
-		coord.y = Fl::event_y();
-		if (Fl::event_button()>1)
-			eventToDo=RIGHT_MOUSE_UP;
-		else
-			eventToDo=LEFT_MOUSE_UP;
-		isAnEvent=1;
-		redraw();
-		break;
-	case FL_MOVE:
-		coord.x = Fl::event_x();
-		coord.y = Fl::event_y();
-		break;
-	default:
-		return 0;
-		break;
+		switch(event)
+		{
+		case FL_ENTER:
+			redraw();
+			break;
+		case FL_PUSH:
+			coord.x = Fl::event_x();
+			coord.y = Fl::event_y();
+			if (Fl::event_button()>1)
+				eventToDo=RIGHT_MOUSE_DOWN;
+			else
+				eventToDo=LEFT_MOUSE_DOWN;
+			isAnEvent=1;
+			redraw();
+			break;
+		case FL_DRAG:
+			coord.x = Fl::event_x();
+			coord.y = Fl::event_y();
+			if (Fl::event_button()>1)
+				eventToDo=RIGHT_MOUSE_DRAG;
+			else
+				eventToDo=LEFT_MOUSE_DRAG;
+			isAnEvent=1;
+			redraw();
+			break;
+		case FL_RELEASE:
+			coord.x = Fl::event_x();
+			coord.y = Fl::event_y();
+			if (Fl::event_button()>1)
+				eventToDo=RIGHT_MOUSE_UP;
+			else
+				eventToDo=LEFT_MOUSE_UP;
+			isAnEvent=1;
+			redraw();
+			break;
+		case FL_MOVE:
+			coord.x = Fl::event_x();
+			coord.y = Fl::event_y();
+			break;
+		default:
+			return 0;
+			break;
 
+		}
 	}
 
 
