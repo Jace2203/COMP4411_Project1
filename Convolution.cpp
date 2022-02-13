@@ -6,7 +6,7 @@
 
 #include "Convolution.h"
 
-#include <cstdio>
+#include <math.h>
 
 static double sobel_x_values[9] = {
     -1.0, 0.0, 1.0,
@@ -41,18 +41,18 @@ Convolution::~Convolution()
 double Convolution::XGradient(int x, int y)
 {
     double color[3] = { 0.0, 0.0, 0.0 };
-    ConvolutionFilter(Sobel_X, x, y, true, color);
+    ConvolutionFilter(Sobel_X, x, y, true, false, color);
     return (int)color[0];
 }
 
 double Convolution::YGradient(int x, int y)
 {
     double color[3] = { 0.0, 0.0, 0.0 };
-    ConvolutionFilter(Sobel_Y, x, y, true, color);
+    ConvolutionFilter(Sobel_Y, x, y, true, false, color);
     return (int)color[0];
 }
 
-void Convolution::ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, double* color)
+void Convolution::ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, bool normalize, double* color)
 {
     int w = kernel.getWidth();
     int h = kernel.getHeight();
@@ -68,8 +68,8 @@ void Convolution::ConvolutionFilter(const Matrix& kernel, int x, int y, bool gre
             int rr = 0;
             int gg = 0;
             int bb = 0;
-            int xx = x + j - 1;
-            int yy = y - i + 1;
+            int xx = x + j - (int)floor(w / 2);
+            int yy = y - i + (int)floor(h / 2);
 
             if (xx >= 0 && xx < width && yy >= 0 && yy < height)
             {

@@ -26,7 +26,7 @@ private:
     unsigned char* bmp;
     int width, height;
 
-    void ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, double* color);
+    void ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, bool normalize, double* color);
 };
 
 #endif
