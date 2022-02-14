@@ -9,10 +9,7 @@
 #include "impressionistUI.h"
 #include "paintview.h"
 #include "ImpBrush.h"
-<<<<<<< HEAD
 #include "StrokeDirection.h"
-=======
->>>>>>> origin/bc/alpha
 
 
 #define LEFT_MOUSE_DOWN		1
@@ -52,13 +49,10 @@ void PaintView::draw()
 	glDrawBuffer(GL_FRONT_AND_BACK);
 	#endif // !MESA
 
-<<<<<<< HEAD
-=======
 	glEnable( GL_BLEND );
 	glBlendFunc(GL_SRC_ALPHA,
 		GL_ONE_MINUS_SRC_ALPHA);
 
->>>>>>> origin/bc/alpha
 	if(!valid())
 	{
 
@@ -219,10 +213,7 @@ int PaintView::handle(int event)
 	}
 
 
-<<<<<<< HEAD
 	m_pDoc->setMousePos(Point(coord.x, coord.y));
-=======
->>>>>>> origin/bc/alpha
 
 	return 1;
 }
