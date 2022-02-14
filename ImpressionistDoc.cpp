@@ -7,14 +7,14 @@
 
 #include <FL/fl_ask.H>
 
-#include "impressionistDoc.h"
-#include "impressionistUI.h"
+#include "ImpressionistDoc.h"
+#include "ImpressionistUI.h"
 
 #include "ImpBrush.h"
+#include "StrokeDirection.h"
 
 // Include individual brush headers here.
-#include "PointBrush.h"
-
+#include "Brushes.h"
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
 
@@ -35,20 +35,22 @@ ImpressionistDoc::ImpressionistDoc()
 	ImpBrush::c_pBrushes[BRUSH_POINTS]	= new PointBrush( this, "Points" );
 
 	// Note: You should implement these 5 brushes.  They are set the same (PointBrush) for now
-	ImpBrush::c_pBrushes[BRUSH_LINES]				
-		= new PointBrush( this, "Lines" );
-	ImpBrush::c_pBrushes[BRUSH_CIRCLES]				
-		= new PointBrush( this, "Circles" );
-	ImpBrush::c_pBrushes[BRUSH_SCATTERED_POINTS]	
-		= new PointBrush( this, "Scattered Points" );
-	ImpBrush::c_pBrushes[BRUSH_SCATTERED_LINES]		
-		= new PointBrush( this, "Scattered Lines" );
-	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]	
-		= new PointBrush( this, "Scattered Circles" );
+	ImpBrush::c_pBrushes[BRUSH_LINES]			
+		= new LineBrush( this, "Lines" );
+	ImpBrush::c_pBrushes[BRUSH_CIRCLES]
+		= new CircleBrush( this, "Circles" );
+	ImpBrush::c_pBrushes[BRUSH_SCATTERED_POINTS]
+		= new ScatteredPointBrush( this, "Scattered Points" );
+	ImpBrush::c_pBrushes[BRUSH_SCATTERED_LINES]
+		= new ScatteredLineBrush( this, "Scattered Lines" );
+	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]
+		= new ScatteredCircleBrush( this, "Scattered Circles" );
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
 
+	m_pStrokeDirection = new StrokeDirection();
+	m_nStrokeType = 0;
 }
 
 
@@ -78,11 +80,76 @@ void ImpressionistDoc::setBrushType(int type)
 }
 
 //---------------------------------------------------------
+// Called by the UI when the user changes the stroke type.
+// type: one of the defined stoke types.
+//---------------------------------------------------------
+void ImpressionistDoc::setStrokeType(int type)
+{
+	m_nStrokeType = type;
+}
+
+//---------------------------------------------------------
 // Returns the size of the brush.
 //---------------------------------------------------------
 int ImpressionistDoc::getSize()
 {
 	return m_pUI->getSize();
+}
+
+//---------------------------------------------------------
+// Sets the size of the brush.
+//---------------------------------------------------------
+void ImpressionistDoc::setSize(int size)
+{
+	m_pUI->setSize(size);
+}
+
+//---------------------------------------------------------
+// Returns the width of the brush.
+//---------------------------------------------------------
+int ImpressionistDoc::getWidth()
+{
+	return m_pUI->getWidth();
+}
+
+//---------------------------------------------------------
+// Sets the width of the brush.
+//---------------------------------------------------------
+void ImpressionistDoc::setWidth(int width)
+{
+	m_pUI->setWidth(width);
+}
+
+//---------------------------------------------------------
+// Returns the angle of the brush.
+//---------------------------------------------------------
+int ImpressionistDoc::getAngle()
+{
+	return m_pUI->getAngle();
+}
+
+//---------------------------------------------------------
+// Sets the size of the brush.
+//---------------------------------------------------------
+void ImpressionistDoc::setAngle(int angle)
+{
+	m_pUI->setAngle(angle);
+}
+
+//---------------------------------------------------------
+// Returns the alpha of the brush.
+//---------------------------------------------------------
+double ImpressionistDoc::getAlpha()
+{
+	return m_pUI->getAlpha();
+}
+
+//---------------------------------------------------------
+// Sets the size of the brush.
+//---------------------------------------------------------
+void ImpressionistDoc::setAlpha(double alpha)
+{
+	m_pUI->setAlpha(alpha);
 }
 
 //---------------------------------------------------------
@@ -180,6 +247,24 @@ void ImpressionistDoc::loadForUndo()
 	m_pUI->m_paintView->LoadForUndo();
 }
 
+void ImpressionistDoc::swap()
+{
+	if (m_ucBitmap != NULL)
+	{
+		m_ucTemp = new unsigned char [m_nWidth*m_nHeight*3];
+		memcpy(m_ucTemp, m_ucPainting, m_nWidth*m_nHeight*3);
+		memcpy(m_ucPainting, m_ucBitmap, m_nWidth*m_nHeight*3);
+		memcpy(m_ucBitmap, m_ucTemp, m_nWidth*m_nHeight*3);
+		delete [] m_ucTemp;
+		m_pUI->m_paintView->redraw();
+		m_pUI->m_origView->redraw();
+	}
+	else
+	{
+		// Send warning
+	}
+}
+
 //------------------------------------------------------------------
 // Get the color of the pixel in the original image at coord x and y
 //------------------------------------------------------------------
@@ -206,3 +291,14 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 	return GetOriginalPixel( p.x, p.y );
 }
 
+void ImpressionistDoc::setMousePos(Point source)
+{
+	m_pMousePos = source;
+	m_pUI->m_origView->refresh();
+
+}
+
+Point ImpressionistDoc::getMousePos()
+{
+	return m_pMousePos;
+}

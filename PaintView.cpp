@@ -9,6 +9,7 @@
 #include "impressionistUI.h"
 #include "paintview.h"
 #include "ImpBrush.h"
+#include "StrokeDirection.h"
 
 
 #define LEFT_MOUSE_DOWN		1
@@ -57,6 +58,10 @@ void PaintView::draw()
 	// To avoid flicker on some machines.
 	glDrawBuffer(GL_FRONT_AND_BACK);
 	#endif // !MESA
+
+	glEnable( GL_BLEND );
+	glBlendFunc(GL_SRC_ALPHA,
+		GL_ONE_MINUS_SRC_ALPHA);
 
 	if(!valid())
 	{
@@ -122,17 +127,35 @@ void PaintView::draw()
 			break;
 		case LEFT_MOUSE_UP:
 			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
+			m_pDoc->m_pStrokeDirection->resetLastMousePos();
 
 			SaveCurrentContent();
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				SaveCurrentContent();
+				m_pDoc->m_pStrokeDirection->StrokeBegin(source);
+			}
 
 			break;
 		case RIGHT_MOUSE_DRAG:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				m_pDoc->m_pStrokeDirection->StrokeMove(source);
+			}
 
 			break;
 		case RIGHT_MOUSE_UP:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				m_pDoc->m_pStrokeDirection->StrokeEnd(source);
+
+				m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(m_pDoc, source, target, m_pDoc->m_nStrokeType));
+			}
 
 			break;
 
@@ -201,6 +224,7 @@ int PaintView::handle(int event)
 	}
 
 
+	m_pDoc->setMousePos(Point(coord.x, coord.y));
 
 	return 1;
 }
@@ -272,14 +296,17 @@ void PaintView::SaveForUndo()
 
 void PaintView::LoadForUndo()
 {
-	if (m_SavedPhoto->next != nullptr)
+	if (m_SavedPhoto !=nullptr)
 	{
-		LinkedList* temp = m_SavedPhoto;
-		while (temp->next->next != nullptr)
-			temp = temp->next;
-		memcpy(m_pPaintBitstart, temp->next->photo, m_nDrawWidth*m_nDrawHeight*3);
-		delete temp->next;
-		temp->next = nullptr;
-		redraw();
+		if (m_SavedPhoto->next != nullptr)
+		{
+			LinkedList* temp = m_SavedPhoto;
+			while (temp->next->next != nullptr)
+				temp = temp->next;
+			memcpy(m_pPaintBitstart, temp->next->photo, m_nDrawWidth*m_nDrawHeight*3);
+			delete temp->next;
+			temp->next = nullptr;
+			redraw();
+		}
 	}
 }
