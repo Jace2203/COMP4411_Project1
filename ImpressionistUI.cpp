@@ -12,6 +12,8 @@
 #include "ImpressionistUI.h"
 #include "ImpressionistDoc.h"
 
+#include "StrokeDirection.h"
+
 /*
 //------------------------------ Widget Examples -------------------------------------------------
 Here is some example code for all of the widgets that you may need to add to the 
@@ -319,7 +321,9 @@ void ImpressionistUI::cb_widthSlides(Fl_Widget* o, void* v)
 //-----------------------------------------------------------
 void ImpressionistUI::cb_angleSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nAngle=int( ((Fl_Slider *)o)->value() ) ;
+	int value = int( ((Fl_Slider *)o)->value() );
+	((ImpressionistUI*)(o->user_data()))->m_nAngle= value;
+	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->m_pStrokeDirection->setAngle(value);
 }
 
 //-----------------------------------------------------------

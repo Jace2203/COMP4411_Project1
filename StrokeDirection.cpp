@@ -4,17 +4,16 @@
 // The implementation of obtaining stroke direction
 //
 
-#include "impressionistDoc.h"
-#include "impressionistUI.h"
-
 #include "StrokeDirection.h"
+
+#include "Convolution.h"
 
 #include <math.h>
 
 void drawRedLine(Point, Point);
 
 StrokeDirection::StrokeDirection()
-: m_pStartMousePos(0, 0), m_pEndMousePos(0, 0)
+: m_pStartMousePos(0, 0), m_pEndMousePos(0, 0), m_pLastMousePos(-1, -1), m_nAngle(0)
 {
 }
 
@@ -71,9 +70,72 @@ Point StrokeDirection::getEndMousePos()
     return m_pEndMousePos;
 }
 
-int StrokeDirection::getAngle(Point source, Point target, int type)
+void StrokeDirection::setLastMousePos(Point source)
 {
+    m_pLastMousePos = source;
+}
+
+Point StrokeDirection::getLastMousePos()
+{
+    return m_pLastMousePos;
+}
+
+void StrokeDirection::setAngle(int angle)
+{
+    m_nAngle = angle;
+}
+
+int StrokeDirection::getAngle(ImpressionistDoc* pDoc, Point source, Point target, int type)
+{
+    if (type == STROKE_GRADIENT)
+    {
+        unsigned char* bmp = pDoc->m_ucBitmap;
+        int width = pDoc->m_nPaintWidth;
+        int height = pDoc->m_nPaintHeight;
+        Convolution con = Convolution(bmp, width, height);
+
+        int d_x = con.XGradient(source.x, source.y);
+        int d_y = con.YGradient(source.x, source.y);
+
+        int angle = (int)(atan2f(d_y, d_x) * 180 / M_PI) + 90;
+
+        if (angle < 0)
+        {
+            angle += 360;
+        }
+
+        return angle;
+    }
+    else if (type == STROKE_BRUSH_DIRECTION)
+    {
+        int angle = 0;
+
+        if (m_pLastMousePos.x == -1 && m_pLastMousePos.y == -1)
+        {
+            angle = -1;
+        }
+        else
+        {
+            angle = (int)(atan2f(source.y - m_pLastMousePos.y, source.x - m_pLastMousePos.x) * 180 / M_PI);
+
+            if (angle < 0)
+            {
+                angle += 360;
+            }
+
+        }
+
+        m_pLastMousePos = source;
+
+        return angle;
+    }
+
     return m_nAngle;
+}
+
+void StrokeDirection::resetLastMousePos()
+{
+    m_pLastMousePos = Point(-1, -1);
 }
 
 void drawRedLine(Point start, Point end)
