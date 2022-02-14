@@ -97,31 +97,37 @@ int StrokeDirection::getAngle(ImpressionistDoc* pDoc, Point source, Point target
         int d_x = con.XGradient(source.x, source.y);
         int d_y = con.YGradient(source.x, source.y);
 
-        m_nAngle = (int)(atan2f(d_y, d_x) * 180 / M_PI) + 90;
+        int angle = (int)(atan2f(d_y, d_x) * 180 / M_PI) + 90;
 
-        if (m_nAngle < 0)
+        if (angle < 0)
         {
-            m_nAngle += 360;
+            angle += 360;
         }
+
+        return angle;
     }
     else if (type == STROKE_BRUSH_DIRECTION)
     {
+        int angle = 0;
+
         if (m_pLastMousePos.x == -1 && m_pLastMousePos.y == -1)
         {
-            m_nAngle = -1;
+            angle = -1;
         }
         else
         {
-            m_nAngle = (int)(atan2f(source.y - m_pLastMousePos.y, source.x - m_pLastMousePos.x) * 180 / M_PI);
+            angle = (int)(atan2f(source.y - m_pLastMousePos.y, source.x - m_pLastMousePos.x) * 180 / M_PI);
 
-            if (m_nAngle < 0)
+            if (angle < 0)
             {
-                m_nAngle += 360;
+                angle += 360;
             }
 
         }
 
         m_pLastMousePos = source;
+
+        return angle;
     }
 
     return m_nAngle;
