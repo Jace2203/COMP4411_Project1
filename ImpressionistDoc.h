@@ -42,6 +42,8 @@ public:
 	
 	void	setMousePos(Point source);
 	Point	getMousePos();
+	
+	void 	swap();
 
 // Attributes
 public:
@@ -54,6 +56,7 @@ public:
 	// Bitmaps for original image and painting.
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
+	unsigned char*	m_ucTemp;
 
 	// mouse coordinates
 	Point			m_pMousePos = Point(0, 0);

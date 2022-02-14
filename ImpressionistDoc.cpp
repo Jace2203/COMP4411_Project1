@@ -241,6 +241,24 @@ int ImpressionistDoc::clearCanvas()
 	return 0;
 }
 
+void ImpressionistDoc::swap()
+{
+	if (m_ucBitmap != NULL)
+	{
+		m_ucTemp = new unsigned char [m_nWidth*m_nHeight*3];
+		memcpy(m_ucTemp, m_ucPainting, m_nWidth*m_nHeight*3);
+		memcpy(m_ucPainting, m_ucBitmap, m_nWidth*m_nHeight*3);
+		memcpy(m_ucBitmap, m_ucTemp, m_nWidth*m_nHeight*3);
+		delete [] m_ucTemp;
+		m_pUI->m_paintView->redraw();
+		m_pUI->m_origView->redraw();
+	}
+	else
+	{
+		// Send warning
+	}
+}
+
 //------------------------------------------------------------------
 // Get the color of the pixel in the original image at coord x and y
 //------------------------------------------------------------------

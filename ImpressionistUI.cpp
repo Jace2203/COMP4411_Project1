@@ -232,7 +232,12 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 
 }
 
+void ImpressionistUI::cb_swap(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
 
+	pDoc->swap();
+}
 
 //-----------------------------------------------------------
 // Brings up an about dialog box
@@ -476,7 +481,9 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
-
+	{ "&Edit",		0, 0, 0, FL_SUBMENU },
+		{ "&Swap", 's', (Fl_Callback *)ImpressionistUI::cb_swap},
+		{ 0 },
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
 		{ "&About",	FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_about },
 		{ 0 },
