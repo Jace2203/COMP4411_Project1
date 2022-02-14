@@ -101,3 +101,12 @@ void OriginalView::resizeWindow(int	width,
 	resize(x(), y(), width, height);
 }
 
+
+int OriginalView::isSameSize(int width, int height)
+{
+	int drawWidth	= min( m_nWindowWidth, m_pDoc->m_nWidth );
+	int drawHeight	= min( m_nWindowHeight, m_pDoc->m_nHeight );
+	if (width == drawWidth && height == drawHeight)
+		return 1;
+	return 0;
+}
