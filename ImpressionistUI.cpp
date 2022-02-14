@@ -230,7 +230,12 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 
 }
 
+void ImpressionistUI::cb_swap(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
 
+	pDoc->swap();
+}
 
 //-----------------------------------------------------------
 // Brings up an about dialog box
@@ -278,13 +283,6 @@ void ImpressionistUI::cb_clear_canvas_button(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_sizeSlides(Fl_Widget* o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_nSize=int( ((Fl_Slider *)o)->value() ) ;
-}
-
-void ImpressionistUI::cb_swap_button(Fl_Widget* o, void* v)
-{
-	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
-
-	pDoc->swap();
 }
 
 //---------------------------------- per instance functions --------------------------------------
@@ -356,7 +354,9 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
-
+	{ "&Edit",		0, 0, 0, FL_SUBMENU },
+		{ "&Swap", 's', (Fl_Callback *)ImpressionistUI::cb_swap},
+		{ 0 },
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
 		{ "&About",	FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_about },
 		{ 0 },
@@ -421,11 +421,6 @@ ImpressionistUI::ImpressionistUI() {
 		m_ClearCanvasButton = new Fl_Button(240,10,150,25,"&Clear Canvas");
 		m_ClearCanvasButton->user_data((void*)(this));
 		m_ClearCanvasButton->callback(cb_clear_canvas_button);
-
-		m_SwapButton = new Fl_Button(240,45,150,25,"&Swap");
-		m_SwapButton->user_data((void*)(this));
-		m_SwapButton->callback(cb_swap_button);
-
 
 		// Add brush size slider to the dialog 
 		m_BrushSizeSlider = new Fl_Value_Slider(10, 80, 300, 20, "Size");
