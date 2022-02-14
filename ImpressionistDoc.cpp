@@ -214,6 +214,41 @@ int ImpressionistDoc::saveImage(char *iname)
 	return 1;
 }
 
+
+int ImpressionistDoc::newMuralImage(char *iname) 
+{
+	// try to open the image to read
+	unsigned char*	data;
+	int				width, 
+					height;
+
+	if ( (data=readBMP(iname, width, height))==NULL ) 
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	if (m_pUI->m_origView->isSameSize(width, height))
+	{
+		if ( m_ucBitmap ) delete [] m_ucBitmap;
+
+		m_ucBitmap	= data;
+
+		m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
+							m_pUI->m_mainWindow->y(), 
+							width*2, 
+							height+25);
+		
+		m_pUI->m_origView->resizeWindow(width, height);	
+		m_pUI->m_origView->refresh();
+
+		m_pUI->m_paintView->resizeWindow(width, height);	
+		m_pUI->m_paintView->refresh();
+	}
+
+	return 1;
+}
+
 //----------------------------------------------------------------
 // Clear the drawing canvas
 // This is called by the UI when the clear canvas menu item is 

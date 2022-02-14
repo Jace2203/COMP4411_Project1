@@ -30,6 +30,8 @@ public:
 
 	void resizeWindow(int width, int height);
 
+	int	isSameSize(int width, int height);
+
 	ImpressionistDoc*	m_pDoc;
 
 private:
