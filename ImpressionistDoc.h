@@ -28,17 +28,20 @@ public:
 	int		newMuralImage(char *iname);	
 
 
-	int     clearCanvas();                  // called by the UI to clear the drawing canvas
-	void	setBrushType(int type);			// called by the UI to set the brushType
-	void	setStrokeType(int type);		// called by the UI to set the strokeType
-	int		getSize();						// get the brush size
-	void	setSize(int size);				// set the brush size
-	int		getWidth();						// get the brush width
-	void	setWidth(int width);			// set the brush width
-	int		getAngle();						// get the brush angle
-	void	setAngle(int angle);			// set the brush anlge
-	double	getAlpha();						// get the brush alpha
-	void	setAlpha(double alpha);			// set the brush alpha
+	int     clearCanvas();                  	// called by the UI to clear the drawing canvas
+	void	setBrushType(int type);				// called by the UI to set the brushType
+	void	setStrokeType(int type);			// called by the UI to set the strokeType
+	int		getSize();							// get the brush size
+	void	setSize(int size);					// set the brush size
+	int		getWidth();							// get the brush width
+	void	setWidth(int width);				// set the brush width
+	int		getAngle();							// get the brush angle
+	void	setAngle(int angle);				// set the brush anlge
+	double	getAlpha();							// get the brush alpha
+	void	setAlpha(double alpha);				// set the brush alpha
+	int		getEdgeThreashold();				// get the edge threashold
+	void	setEdgeThreashold(int threashold);	// set the edge threashold
+
 	char*	getImageName();					// get the current image name
 	
 	void	setMousePos(Point source);

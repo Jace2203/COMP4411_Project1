@@ -375,6 +375,18 @@ void ImpressionistUI::cb_another_gradient_button(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nAnotherGradient=int( ((Fl_Light_Button *)o)->value() ) ;
 }
 
+void ImpressionistUI::cb_edgeThreasholdSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nEdgeThreshold=int( ((Fl_Slider *)o)->value() ) ;
+}
+
+void ImpressionistUI::cb_edge_detection_button(Fl_Widget* o, void* v)
+{
+	// call edge detection function
+	int value = ((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->getEdgeThreashold();
+	printf("Edge Detection!!! Value: %d\n", value);
+}
+
 //---------------------------------- per instance functions --------------------------------------
 
 //------------------------------------------------
@@ -490,6 +502,26 @@ void ImpressionistUI::setAlpha( double alpha )
 	if (alpha<=1.0)
 		m_BrushAlphaSlider->value(m_nAlpha);
 }
+
+//------------------------------------------------
+// Return the edge threashold
+//------------------------------------------------
+int ImpressionistUI::getEdgeThreashold()
+{
+	return m_nEdgeThreshold;
+}
+
+//-------------------------------------------------
+// Set the edge threashold
+//-------------------------------------------------
+void ImpressionistUI::setEdgeThreashold(int threashold)
+{
+	m_nEdgeThreshold=threashold;
+
+	if (threashold<=1.0)
+		m_EdgeThresholdSlider->value(m_nEdgeThreshold);
+}
+
 
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
@@ -692,11 +724,11 @@ ImpressionistUI::ImpressionistUI() {
 		m_EdgeThresholdSlider->step(1);
 		m_EdgeThresholdSlider->value(m_nEdgeThreshold);
 		m_EdgeThresholdSlider->align(FL_ALIGN_RIGHT);
-		// m_EdgeThresholdSlider->callback();
+		m_EdgeThresholdSlider->callback(cb_edgeThreasholdSlides);
 
 		m_EdgeDetectionButton = new Fl_Button(320, 8, 50, 20, "&Do it");
 		m_EdgeDetectionButton->user_data((void*)(this));
-		// m_EdgeDetectionButton->callback();
+		m_EdgeDetectionButton->callback(cb_edge_detection_button);
 
 		m_EdgeDetectionBox = new Fl_Window(10, 275, 380, 40);
 			m_EdgeDetectionBox->box(FL_UP_BOX);

@@ -69,13 +69,16 @@ public:
 	void				setSize(int size);
 
 	int					getWidth();
-	void				setWidth(int size);
+	void				setWidth(int width);
 
 	int					getAngle();
-	void				setAngle(int size);
+	void				setAngle(int angle);
 
 	double				getAlpha();
-	void				setAlpha(double size);
+	void				setAlpha(double alpha);
+
+	int					getEdgeThreashold();
+	void				setEdgeThreashold(int threashold);
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
@@ -118,6 +121,8 @@ private:
 	static void cb_alphaSlides(Fl_Widget* o, void* v);
 	static void cb_edge_clipping_button(Fl_Widget* o, void* v);
 	static void cb_another_gradient_button(Fl_Widget* o, void* v);
+	static void cb_edgeThreasholdSlides(Fl_Widget* o, void* v);
+	static void cb_edge_detection_button(Fl_Widget* o, void* v);
 
 };
 

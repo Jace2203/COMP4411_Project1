@@ -153,6 +153,22 @@ void ImpressionistDoc::setAlpha(double alpha)
 }
 
 //---------------------------------------------------------
+// Returns the edge threashold.
+//---------------------------------------------------------
+int ImpressionistDoc::getEdgeThreashold()
+{
+	return m_pUI->getEdgeThreashold();
+}
+
+//---------------------------------------------------------
+// Sets the edge threashold.
+//---------------------------------------------------------
+void ImpressionistDoc::setEdgeThreashold(int threashold)
+{
+	m_pUI->setEdgeThreashold(threashold);
+}
+
+//---------------------------------------------------------
 // Load the specified image
 // This is called by the UI when the load image button is 
 // pressed.
