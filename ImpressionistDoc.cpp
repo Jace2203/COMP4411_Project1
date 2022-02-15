@@ -23,9 +23,13 @@ ImpressionistDoc::ImpressionistDoc()
 	// Set NULL image name as init. 
 	m_imageName[0]	='\0';	
 
-	m_nWidth		= -1;
-	m_ucBitmap		= NULL;
-	m_ucPainting	= NULL;
+	m_nWidth			= -1;
+	m_ucBitmap			= NULL;
+	m_ucPainting		= NULL;
+	m_ucOriginal		= NULL;
+	m_ucTemp			= NULL;
+	m_ucEdge			= NULL;
+	m_ucAnotherImage	= NULL;
 
 
 	// create one instance of each brush
@@ -195,8 +199,12 @@ int ImpressionistDoc::loadImage(char *iname)
 	// release old storage
 	if ( m_ucBitmap ) delete [] m_ucBitmap;
 	if ( m_ucPainting ) delete [] m_ucPainting;
+	if ( m_ucOriginal ) delete [] m_ucOriginal;
+	if ( m_ucEdge ) delete [] m_ucEdge;
+	if ( m_ucAnotherImage ) delete [] m_ucAnotherImage;
 
 	m_ucBitmap		= data;
+	m_ucOriginal	= m_ucBitmap;
 
 	// allocate space for draw view
 	m_ucPainting	= new unsigned char [width*height*3];
@@ -302,13 +310,13 @@ void ImpressionistDoc::swap()
 {
 	if (m_ucBitmap != NULL)
 	{
-		m_ucTemp = new unsigned char [m_nWidth*m_nHeight*3];
-		memcpy(m_ucTemp, m_ucPainting, m_nWidth*m_nHeight*3);
-		memcpy(m_ucPainting, m_ucBitmap, m_nWidth*m_nHeight*3);
-		memcpy(m_ucBitmap, m_ucTemp, m_nWidth*m_nHeight*3);
-		delete [] m_ucTemp;
-		m_pUI->m_paintView->redraw();
-		m_pUI->m_origView->redraw();
+		if (m_ucOriginal == m_ucBitmap)
+			m_ucOriginal = m_ucPainting;
+
+		m_ucTemp = m_ucPainting;
+		m_ucPainting = m_ucBitmap;
+		m_ucBitmap = m_ucTemp;
+		refresh();
 	}
 	else
 	{
@@ -352,4 +360,10 @@ void ImpressionistDoc::setMousePos(Point source)
 Point ImpressionistDoc::getMousePos()
 {
 	return m_pMousePos;
+}
+
+void ImpressionistDoc::refresh()
+{
+	m_pUI->m_paintView->redraw();
+	m_pUI->m_origView->redraw();
 }

@@ -257,6 +257,39 @@ void ImpressionistUI::cb_undo(Fl_Menu_* o, void* v)
 	pDoc->loadForUndo();
 }
 
+void ImpressionistUI::cb_view_original(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
+
+	if (pDoc->m_ucBitmap != NULL)
+	{
+		pDoc->m_ucOriginal = pDoc->m_ucBitmap;
+		pDoc->refresh();
+	}
+}
+
+void ImpressionistUI::cb_view_edge(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
+
+	if (pDoc->m_ucEdge != NULL)
+	{
+		pDoc->m_ucOriginal = pDoc->m_ucEdge;
+		pDoc->refresh();
+	}
+}
+
+void ImpressionistUI::cb_view_another(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
+
+	if (pDoc->m_ucAnotherImage != NULL)
+	{
+		pDoc->m_ucOriginal = pDoc->m_ucAnotherImage;
+		pDoc->refresh();
+	}
+}
+
 //-----------------------------------------------------------
 // Brings up an about dialog box
 // Called by the UI when the about menu item is chosen
@@ -538,6 +571,11 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&Edit",		0, 0, 0, FL_SUBMENU },
 		{ "&Swap", 's',				(Fl_Callback *)ImpressionistUI::cb_swap },
 		{ "Undo",	FL_CTRL + 'z',	(Fl_Callback *)ImpressionistUI::cb_undo },
+		{ 0 },
+	{ "&View",		0, 0, 0, FL_SUBMENU },
+		{ "&Original View",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_view_original },
+		{ "&Edge View",		FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_view_edge },
+		{ "&Another Image",	FL_ALT + 'i', (Fl_Callback *)ImpressionistUI::cb_view_another },
 		{ 0 },
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
 		{ "&About",	FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_about },

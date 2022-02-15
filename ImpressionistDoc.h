@@ -49,6 +49,7 @@ public:
 	
 	void 	swap();
 	void	loadForUndo();
+	void	refresh();
 
 // Attributes
 public:
@@ -59,9 +60,12 @@ public:
 	int				m_nPaintWidth, 
 					m_nPaintHeight;	
 	// Bitmaps for original image and painting.
+	unsigned char*	m_ucOriginal;
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
 	unsigned char*	m_ucTemp;
+	unsigned char*	m_ucEdge;
+	unsigned char*	m_ucAnotherImage;
 
 	// mouse coordinates
 	Point			m_pMousePos = Point(0, 0);
