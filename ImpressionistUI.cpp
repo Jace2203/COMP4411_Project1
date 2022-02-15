@@ -415,9 +415,7 @@ void ImpressionistUI::cb_edgeThreasholdSlides(Fl_Widget* o, void* v)
 
 void ImpressionistUI::cb_edge_detection_button(Fl_Widget* o, void* v)
 {
-	// call edge detection function
-	int value = ((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->getEdgeThreashold();
-	printf("Edge Detection!!! Value: %d\n", value);
+	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->edgeDetection();
 }
 
 //---------------------------------- per instance functions --------------------------------------

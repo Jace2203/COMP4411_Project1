@@ -51,6 +51,8 @@ public:
 	void	loadForUndo();
 	void	refresh();
 
+	void	edgeDetection();
+
 // Attributes
 public:
 	// Dimensions of original window.
