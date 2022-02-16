@@ -202,7 +202,6 @@ int ImpressionistDoc::loadImage(char *iname)
 	// release old storage
 	if ( m_ucBitmap ) delete [] m_ucBitmap;
 	if ( m_ucPainting ) delete [] m_ucPainting;
-	if ( m_ucOriginal ) delete [] m_ucOriginal;
 	if ( m_ucEdge ) delete [] m_ucEdge;
 	if ( m_ucAnotherImage ) delete [] m_ucAnotherImage;
 	
