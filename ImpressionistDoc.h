@@ -25,8 +25,8 @@ public:
 
 	int		loadImage(char *iname);			// called by the UI to load image
 	int		saveImage(char *iname);			// called by the UI to save image
-	int		newMuralImage(char *iname);	
-
+	int		newMuralImage(char *iname);
+	int		dissolve(char *iname);
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType

@@ -257,6 +257,17 @@ void ImpressionistUI::cb_undo(Fl_Menu_* o, void* v)
 	pDoc->loadForUndo();
 }
 
+
+void ImpressionistUI::cb_dissolve(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc *pDoc=whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName() );
+	if (newfile != NULL) {
+		pDoc->dissolve(newfile);
+	}
+}
+
 //-----------------------------------------------------------
 // Brings up an about dialog box
 // Called by the UI when the about menu item is chosen
@@ -520,6 +531,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&Edit",		0, 0, 0, FL_SUBMENU },
 		{ "&Swap", 's',				(Fl_Callback *)ImpressionistUI::cb_swap },
 		{ "Undo",	FL_CTRL + 'z',	(Fl_Callback *)ImpressionistUI::cb_undo },
+		{ "Dissolve",	FL_CTRL + 'd',	(Fl_Callback *)ImpressionistUI::cb_dissolve },
 		{ 0 },
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
 		{ "&About",	FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_about },

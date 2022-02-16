@@ -253,6 +253,82 @@ int ImpressionistDoc::newMuralImage(char *iname)
 	return 1;
 }
 
+
+int ImpressionistDoc::dissolve(char *iname) 
+{
+	unsigned char*	data;
+	int				width, 
+					height;
+
+	if ( (data=readBMP(iname, width, height))==NULL ) 
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	if (!m_pUI->m_origView->isSameSize(width, height))
+	{
+		printf("no\n");
+		return 0;
+	}
+
+	//m_pUI->m_origView->refresh();
+
+	GLubyte color[4];
+
+	//glTranslated(0, m_pUI->m_origView->h() - height, 0);
+
+	glEnable( GL_BLEND );
+	glBlendFunc(GL_SRC_ALPHA,
+				GL_ONE_MINUS_SRC_ALPHA);
+	glPointSize(1);
+
+	//
+	// glRasterPos2i( 0, m_pUI->m_origView->h() - height );
+	// glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	// glPixelStorei( GL_UNPACK_ROW_LENGTH, width);
+	//
+
+	// writeBMP(iname, width, height, m_ucPainting);
+	// m_ucBitmap = readBMP("temp.bmp", width, height);
+
+	for(int y = 0; y < height; ++y)
+		for(int x = 0; x < width; ++x)
+		{
+			memcpy ( color,  m_ucBitmap + 3 * (y*width + x), 3 );
+			glColor3ubv( color );
+			glBegin(GL_POINTS);
+				glVertex2d(x, y);
+			glEnd();
+
+			memcpy ( color, data + 3 * (y*width + x), 3 );
+			memset( color+3, 0.5*255, 1);
+			glColor4ubv( color );
+			glBegin(GL_POINTS);
+				glVertex2d(x, y);
+			glEnd();
+		}
+	glDisable( GL_BLEND );
+
+	//glTranslated(0, -(m_pUI->m_origView->h() - height), 0);
+
+	glReadPixels( 0, 
+				  0, 
+				  width, 
+				  height, 
+				  GL_RGB, 
+				  GL_UNSIGNED_BYTE, 
+				  m_ucBitmap );
+
+	m_pUI->m_origView->refresh();
+	m_pUI->m_paintView->refresh();
+
+	delete data;
+	
+	return 1;
+	
+}
+
 //----------------------------------------------------------------
 // Clear the drawing canvas
 // This is called by the UI when the clear canvas menu item is 

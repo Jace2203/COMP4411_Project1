@@ -77,17 +77,22 @@ void OriginalView::draw()
 
 		Point p = m_pDoc->getMousePos();
 		p.y = m_pDoc->m_nHeight-p.y;
-		int red_dot_size = 5; //side length
-		glColor4f(1, 0, 0, 1);
-		glBegin(GL_QUADS);
-			glVertex2d(p.x, p.y);
-			glVertex2d(p.x + red_dot_size, p.y);
-			glVertex2d(p.x + red_dot_size, p.y+red_dot_size);
-			glVertex2d(p.x , p.y+red_dot_size);
-		glEnd();
+		if (p.x >= 0 && p.x < drawWidth && p.y >= 0 && p.y < drawHeight)
+		{
+			int red_dot_size = 5; //side length
+			glColor4f(1, 0, 0, 1);
+			glTranslated(0, m_nWindowHeight - drawHeight, 0);
+			glBegin(GL_QUADS);
+				glVertex2d(p.x, p.y);
+				glVertex2d(p.x + red_dot_size, p.y);
+				glVertex2d(p.x + red_dot_size, p.y+red_dot_size);
+				glVertex2d(p.x , p.y+red_dot_size);
+			glEnd();
+			glTranslated(0, -(m_nWindowHeight - drawHeight), 0);
+		}
 	}
 			
-	glFlush();
+	//glFlush();
 }
 
 void OriginalView::refresh()
