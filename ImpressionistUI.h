@@ -16,6 +16,7 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Color_Chooser.H>
+#include <FL/Fl_Multiline_Input.H>
 
 #include "Impressionist.h"
 #include "OriginalView.h"
@@ -61,6 +62,13 @@ public:
 	Fl_Window*			m_colorDialog;
 
 	Fl_Color_Chooser*	m_colorChooser;
+
+// for customize kernel
+	Fl_Window*			m_kernelDialog;
+
+	Fl_Multiline_Input*	m_kernelInput;
+	Fl_Button*			m_kernelApplyButton;
+	Fl_Button*			m_normalizeButton;
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -113,6 +121,7 @@ private:
 	static void	cb_save_image(Fl_Menu_* o, void* v);
 	static void	cb_brushes(Fl_Menu_* o, void* v);
 	static void cb_colors(Fl_Menu_* o, void* v);
+	static void cb_kernel(Fl_Menu_* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_mural_image(Fl_Menu_* o, void* v);
 	static void	cb_exit(Fl_Menu_* o, void* v);

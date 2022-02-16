@@ -215,6 +215,11 @@ void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 	whoami(o)->m_colorDialog->show();
 }
 
+void ImpressionistUI::cb_kernel(Fl_Menu_* o, void* v)
+{
+	whoami(o)->m_kernelDialog->show();
+}
+
 //------------------------------------------------------------
 // Clears the paintview canvas.
 // Called by the UI when the clear canvas menu item is chosen
@@ -578,6 +583,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
 		{ "&Color...",		FL_ALT + 'k', (Fl_Callback *)ImpressionistUI::cb_colors },
+		{ "&Kernel...",		FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_kernel },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 
 		{ "&New Mural Image", FL_ALT + 'n', (Fl_Callback *)ImpressionistUI::cb_mural_image, 0, FL_MENU_DIVIDER },
@@ -796,4 +802,17 @@ ImpressionistUI::ImpressionistUI() {
 		m_colorChooser = new Fl_Color_Chooser(10, 10, 280, 180);
 		m_colorChooser->hsv(0.0, 0.0, 1.0);
 	m_colorDialog->end();
+
+	m_kernelDialog = new Fl_Window(300, 330, "Customize Kernel Dialog");
+		m_kernelInput = new Fl_Multiline_Input(10, 10, 280, 280);
+		
+		m_kernelApplyButton = new Fl_Button(20, 300, 100, 20, "Apply Kernel");
+		m_kernelApplyButton->user_data((void*)(this));
+		// m_kernelApplyButton->callback();
+
+		m_normalizeButton = new Fl_Light_Button(180, 300, 100, 20, "Normalized");
+		m_normalizeButton->user_data((void*)(this));
+		m_normalizeButton->value(1);
+		// m_normalizeButton->callback();
+	m_kernelDialog->end();
 }
