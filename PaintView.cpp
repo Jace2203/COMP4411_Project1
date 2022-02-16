@@ -119,20 +119,34 @@ void PaintView::draw()
 		glPixelStorei( GL_PACK_ALIGNMENT, 1 );
 		glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
 
-		while (x < m_nDrawWidth)
+		int count = 0, temp = 0;
+		for (int y = 0; y < m_nDrawHeight; y += autopaintspacing)
+			for(int x = 0; x < m_nDrawWidth; x += autopaintspacing)
+				++count;
+
+		Point* xy = new Point [count];
+		for (int y = 0; y < m_nDrawHeight; y += autopaintspacing)
+			for(int x = 0; x < m_nDrawWidth; x += autopaintspacing)
+				xy[temp++] = Point(x, y);
+
+		Point temp_p;
+		for(int i = 0; i < count; ++i)
 		{
-			m_pAutoPaintPoint.x = x;
-			m_pAutoPaintPoint.y = y;
-			glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
-			m_pDoc->m_pCurrentBrush->BrushBegin( m_pAutoPaintPoint, m_pAutoPaintPoint );
-			if (y > m_nDrawHeight)
-			{
-				x = x + autopaintspacing;
-				y = 0;
-			}
-			y = y + autopaintspacing;
-			glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
+			temp = rand() % (count);
+			temp_p = xy[temp];
+			xy[temp] = xy[i];
+			xy[i] = temp_p;
+			m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
 		}
+
+		glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
+		for(int i = 0; i < count; ++i)
+			m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
+
+		glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
+
+		delete [] xy;
+
 		autopaint = 0;
 
 		glReadPixels( 0, 
