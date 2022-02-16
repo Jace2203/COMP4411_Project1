@@ -15,6 +15,7 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Light_Button.H>
+#include <FL/Fl_Color_Chooser.H>
 
 #include "Impressionist.h"
 #include "OriginalView.h"
@@ -55,6 +56,11 @@ public:
 
 	Fl_Window*			m_PaintBox;
 	Fl_Window*			m_EdgeDetectionBox;
+
+// for color dialog
+	Fl_Window*			m_colorDialog;
+
+	Fl_Color_Chooser*	m_colorChooser;
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -106,6 +112,7 @@ private:
 	static void	cb_load_image(Fl_Menu_* o, void* v);
 	static void	cb_save_image(Fl_Menu_* o, void* v);
 	static void	cb_brushes(Fl_Menu_* o, void* v);
+	static void cb_colors(Fl_Menu_* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_mural_image(Fl_Menu_* o, void* v);
 	static void	cb_exit(Fl_Menu_* o, void* v);
