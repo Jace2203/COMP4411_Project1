@@ -257,6 +257,39 @@ void ImpressionistUI::cb_undo(Fl_Menu_* o, void* v)
 	pDoc->loadForUndo();
 }
 
+void ImpressionistUI::cb_view_original(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
+
+	if (pDoc->m_ucBitmap != NULL)
+	{
+		pDoc->m_ucOriginal = pDoc->m_ucBitmap;
+		pDoc->refresh();
+	}
+}
+
+void ImpressionistUI::cb_view_edge(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
+
+	if (pDoc->m_ucEdge != NULL)
+	{
+		pDoc->m_ucOriginal = pDoc->m_ucEdge;
+		pDoc->refresh();
+	}
+}
+
+void ImpressionistUI::cb_view_another(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
+
+	if (pDoc->m_ucAnotherImage != NULL)
+	{
+		pDoc->m_ucOriginal = pDoc->m_ucAnotherImage;
+		pDoc->refresh();
+	}
+}
+
 //-----------------------------------------------------------
 // Brings up an about dialog box
 // Called by the UI when the about menu item is chosen
@@ -375,18 +408,26 @@ void ImpressionistUI::cb_another_gradient_button(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nAnotherGradient=int( ((Fl_Light_Button *)o)->value() ) ;
 }
 
-
 void ImpressionistUI::cb_set_spacing(Fl_Widget* o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_nSpacing=int( ((Fl_Slider *)o)->value() );
 }
-
 
 void ImpressionistUI::cb_auto_paint(Fl_Widget* o, void* v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
 
 	pDoc->m_pUI->m_paintView->AutoPaint(((ImpressionistUI*)(o->user_data()))->m_nSpacing);
+}
+
+void ImpressionistUI::cb_edgeThreasholdSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nEdgeThreshold=int( ((Fl_Slider *)o)->value() ) ;
+}
+
+void ImpressionistUI::cb_edge_detection_button(Fl_Widget* o, void* v)
+{
+	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->edgeDetection();
 }
 
 //---------------------------------- per instance functions --------------------------------------
@@ -505,6 +546,26 @@ void ImpressionistUI::setAlpha( double alpha )
 		m_BrushAlphaSlider->value(m_nAlpha);
 }
 
+//------------------------------------------------
+// Return the edge threashold
+//------------------------------------------------
+int ImpressionistUI::getEdgeThreashold()
+{
+	return m_nEdgeThreshold;
+}
+
+//-------------------------------------------------
+// Set the edge threashold
+//-------------------------------------------------
+void ImpressionistUI::setEdgeThreashold(int threashold)
+{
+	m_nEdgeThreshold=threashold;
+
+	if (threashold<=1.0)
+		m_EdgeThresholdSlider->value(m_nEdgeThreshold);
+}
+
+
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
@@ -520,6 +581,11 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&Edit",		0, 0, 0, FL_SUBMENU },
 		{ "&Swap", 's',				(Fl_Callback *)ImpressionistUI::cb_swap },
 		{ "Undo",	FL_CTRL + 'z',	(Fl_Callback *)ImpressionistUI::cb_undo },
+		{ 0 },
+	{ "&View",		0, 0, 0, FL_SUBMENU },
+		{ "&Original View",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_view_original },
+		{ "&Edge View",		FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_view_edge },
+		{ "&Another Image",	FL_ALT + 'i', (Fl_Callback *)ImpressionistUI::cb_view_another },
 		{ 0 },
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
 		{ "&About",	FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_about },
@@ -706,11 +772,11 @@ ImpressionistUI::ImpressionistUI() {
 		m_EdgeThresholdSlider->step(1);
 		m_EdgeThresholdSlider->value(m_nEdgeThreshold);
 		m_EdgeThresholdSlider->align(FL_ALIGN_RIGHT);
-		// m_EdgeThresholdSlider->callback();
+		m_EdgeThresholdSlider->callback(cb_edgeThreasholdSlides);
 
 		m_EdgeDetectionButton = new Fl_Button(320, 8, 50, 20, "&Do it");
 		m_EdgeDetectionButton->user_data((void*)(this));
-		// m_EdgeDetectionButton->callback();
+		m_EdgeDetectionButton->callback(cb_edge_detection_button);
 
 		m_EdgeDetectionBox = new Fl_Window(10, 275, 380, 40);
 			m_EdgeDetectionBox->box(FL_UP_BOX);

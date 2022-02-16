@@ -69,13 +69,16 @@ public:
 	void				setSize(int size);
 
 	int					getWidth();
-	void				setWidth(int size);
+	void				setWidth(int width);
 
 	int					getAngle();
-	void				setAngle(int size);
+	void				setAngle(int angle);
 
 	double				getAlpha();
-	void				setAlpha(double size);
+	void				setAlpha(double alpha);
+
+	int					getEdgeThreashold();
+	void				setEdgeThreashold(int threashold);
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
@@ -108,6 +111,9 @@ private:
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_swap(Fl_Menu_* o, void* v);
 	static void	cb_undo(Fl_Menu_* o, void* v);
+	static void cb_view_original(Fl_Menu_* o, void* v);
+	static void cb_view_edge(Fl_Menu_* o, void* v);
+	static void cb_view_another(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void cb_strokeChoice(Fl_Widget* o, void* v);
@@ -120,6 +126,8 @@ private:
 	static void cb_another_gradient_button(Fl_Widget* o, void* v);
 	static void cb_set_spacing(Fl_Widget* o, void* v);
 	static void cb_auto_paint(Fl_Widget* o, void* v);
+	static void cb_edgeThreasholdSlides(Fl_Widget* o, void* v);
+	static void cb_edge_detection_button(Fl_Widget* o, void* v);
 
 };
 

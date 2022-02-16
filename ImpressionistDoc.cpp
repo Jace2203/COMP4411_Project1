@@ -10,8 +10,11 @@
 #include "ImpressionistDoc.h"
 #include "ImpressionistUI.h"
 
+#include <math.h>
+
 #include "ImpBrush.h"
 #include "StrokeDirection.h"
+#include "Convolution.h"
 
 // Include individual brush headers here.
 #include "Brushes.h"
@@ -23,9 +26,13 @@ ImpressionistDoc::ImpressionistDoc()
 	// Set NULL image name as init. 
 	m_imageName[0]	='\0';	
 
-	m_nWidth		= -1;
-	m_ucBitmap		= NULL;
-	m_ucPainting	= NULL;
+	m_nWidth			= -1;
+	m_ucBitmap			= NULL;
+	m_ucPainting		= NULL;
+	m_ucOriginal		= NULL;
+	m_ucTemp			= NULL;
+	m_ucEdge			= NULL;
+	m_ucAnotherImage	= NULL;
 
 
 	// create one instance of each brush
@@ -153,6 +160,22 @@ void ImpressionistDoc::setAlpha(double alpha)
 }
 
 //---------------------------------------------------------
+// Returns the edge threashold.
+//---------------------------------------------------------
+int ImpressionistDoc::getEdgeThreashold()
+{
+	return m_pUI->getEdgeThreashold();
+}
+
+//---------------------------------------------------------
+// Sets the edge threashold.
+//---------------------------------------------------------
+void ImpressionistDoc::setEdgeThreashold(int threashold)
+{
+	m_pUI->setEdgeThreashold(threashold);
+}
+
+//---------------------------------------------------------
 // Load the specified image
 // This is called by the UI when the load image button is 
 // pressed.
@@ -179,8 +202,18 @@ int ImpressionistDoc::loadImage(char *iname)
 	// release old storage
 	if ( m_ucBitmap ) delete [] m_ucBitmap;
 	if ( m_ucPainting ) delete [] m_ucPainting;
+	if ( m_ucOriginal ) delete [] m_ucOriginal;
+	if ( m_ucEdge ) delete [] m_ucEdge;
+	if ( m_ucAnotherImage ) delete [] m_ucAnotherImage;
+	
+	m_ucBitmap = NULL;
+	m_ucPainting = NULL;
+	m_ucOriginal = NULL;
+	m_ucEdge = NULL;
+	m_ucAnotherImage = NULL;
 
 	m_ucBitmap		= data;
+	m_ucOriginal	= m_ucBitmap;
 
 	// allocate space for draw view
 	m_ucPainting	= new unsigned char [width*height*3];
@@ -286,13 +319,13 @@ void ImpressionistDoc::swap()
 {
 	if (m_ucBitmap != NULL)
 	{
-		m_ucTemp = new unsigned char [m_nWidth*m_nHeight*3];
-		memcpy(m_ucTemp, m_ucPainting, m_nWidth*m_nHeight*3);
-		memcpy(m_ucPainting, m_ucBitmap, m_nWidth*m_nHeight*3);
-		memcpy(m_ucBitmap, m_ucTemp, m_nWidth*m_nHeight*3);
-		delete [] m_ucTemp;
-		m_pUI->m_paintView->redraw();
-		m_pUI->m_origView->redraw();
+		if (m_ucOriginal == m_ucBitmap)
+			m_ucOriginal = m_ucPainting;
+
+		m_ucTemp = m_ucPainting;
+		m_ucPainting = m_ucBitmap;
+		m_ucBitmap = m_ucTemp;
+		refresh();
 	}
 	else
 	{
@@ -336,4 +369,41 @@ void ImpressionistDoc::setMousePos(Point source)
 Point ImpressionistDoc::getMousePos()
 {
 	return m_pMousePos;
+}
+
+void ImpressionistDoc::refresh()
+{
+	m_pUI->m_paintView->redraw();
+	m_pUI->m_origView->redraw();
+}
+
+void ImpressionistDoc::edgeDetection()
+{
+	if (m_ucEdge) delete[] m_ucEdge;
+	m_ucEdge = new unsigned char[m_nWidth * m_nHeight * 3];
+
+	Convolution con = Convolution(m_ucBitmap, m_nWidth, m_nHeight);
+
+	double threashold_sq = powf(m_pUI->getEdgeThreashold(), 2);
+
+	for (int i = 0; i < m_nHeight; i++)
+	{
+		for (int j = 0; j < m_nWidth; j++)
+		{
+			double d_x = con.XGradient(j, i);
+			double d_y = con.YGradient(j, i);
+
+			if (powf(d_x, 2) + powf(d_y, 2) > threashold_sq)
+			{
+				m_ucEdge[(i * m_nWidth + j) * 3] = m_ucEdge[(i * m_nWidth + j) * 3 + 1] = m_ucEdge[(i * m_nWidth + j) * 3 + 2] = 255;
+			}
+			else
+			{
+				m_ucEdge[(i * m_nWidth + j) * 3] = m_ucEdge[(i * m_nWidth + j) * 3 + 1] = m_ucEdge[(i * m_nWidth + j) * 3 + 2] = 0;
+			}
+		}
+	}
+	
+	m_ucOriginal = m_ucEdge;
+	refresh();
 }
