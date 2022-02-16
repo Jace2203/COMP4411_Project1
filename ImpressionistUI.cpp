@@ -375,6 +375,20 @@ void ImpressionistUI::cb_another_gradient_button(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nAnotherGradient=int( ((Fl_Light_Button *)o)->value() ) ;
 }
 
+
+void ImpressionistUI::cb_set_spacing(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nSpacing=int( ((Fl_Slider *)o)->value() );
+}
+
+
+void ImpressionistUI::cb_auto_paint(Fl_Widget* o, void* v)
+{
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+
+	pDoc->m_pUI->m_paintView->AutoPaint(((ImpressionistUI*)(o->user_data()))->m_nSpacing);
+}
+
 //---------------------------------- per instance functions --------------------------------------
 
 //------------------------------------------------
@@ -664,7 +678,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_SpacingSlider->step(1);
 		m_SpacingSlider->value(m_nSpacing);
 		m_SpacingSlider->align(FL_ALIGN_RIGHT);
-		// m_SpacingSlider->callback();
+		m_SpacingSlider->callback(cb_set_spacing);
 
 		m_SizeRandomButton = new Fl_Light_Button(210, 10, 100, 20, "&Size Rand.");
 		m_SizeRandomButton->user_data((void*)(this));
@@ -673,7 +687,7 @@ ImpressionistUI::ImpressionistUI() {
 
 		m_PaintButton = new Fl_Button(320, 10, 50, 20, "&Paint");
 		m_PaintButton->user_data((void*)(this));
-		// m_PaintButton->callback();
+		m_PaintButton->callback(cb_auto_paint);
 
 		m_PaintBox = new Fl_Window(10, 230, 380, 40);
 			m_PaintBox->box(FL_UP_BOX);

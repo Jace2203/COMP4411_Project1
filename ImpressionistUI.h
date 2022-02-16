@@ -118,6 +118,8 @@ private:
 	static void cb_alphaSlides(Fl_Widget* o, void* v);
 	static void cb_edge_clipping_button(Fl_Widget* o, void* v);
 	static void cb_another_gradient_button(Fl_Widget* o, void* v);
+	static void cb_set_spacing(Fl_Widget* o, void* v);
+	static void cb_auto_paint(Fl_Widget* o, void* v);
 
 };
 

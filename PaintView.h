@@ -42,6 +42,7 @@ public:
 	void CreateSavedPhoto();
 	void SaveForUndo();
 	void LoadForUndo();
+	void AutoPaint(int spacing);
 
 	ImpressionistDoc *m_pDoc;
 
@@ -55,6 +56,7 @@ private:
 			m_nEndCol,
 			m_nWindowWidth, 
 			m_nWindowHeight;
+	Point	m_pAutoPaintPoint;
 
 	LinkedList* m_SavedPhoto;
 };

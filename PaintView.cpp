@@ -39,6 +39,9 @@ LinkedList::~LinkedList()
 {
 }
 
+static int		autopaint = 0;
+static int		autopaintspacing = 0;
+
 PaintView::PaintView(int			x, 
 					 int			y, 
 					 int			w, 
@@ -105,6 +108,42 @@ void PaintView::draw()
 	{
 		RestoreContent();
 
+	}
+
+	if (autopaint == 1)
+	{
+		int x = 0, y = 0;
+
+		glReadBuffer(GL_BACK);
+
+		glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+		glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+
+		while (x < m_nDrawWidth)
+		{
+			m_pAutoPaintPoint.x = x;
+			m_pAutoPaintPoint.y = y;
+			glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
+			m_pDoc->m_pCurrentBrush->BrushBegin( m_pAutoPaintPoint, m_pAutoPaintPoint );
+			if (y > m_nDrawHeight)
+			{
+				x = x + autopaintspacing;
+				y = 0;
+			}
+			y = y + autopaintspacing;
+			glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
+		}
+		autopaint = 0;
+
+		glReadPixels( 0, 
+				m_nWindowHeight - m_nDrawHeight, 
+				m_nDrawWidth, 
+				m_nDrawHeight, 
+				GL_RGB, 
+				GL_UNSIGNED_BYTE, 
+				m_pPaintBitstart );
+
+		RestoreContent();
 	}
 
 	if ( m_pDoc->m_ucPainting && isAnEvent) 
@@ -309,4 +348,11 @@ void PaintView::LoadForUndo()
 			redraw();
 		}
 	}
+}
+
+void PaintView::AutoPaint(int spacing)
+{
+	autopaintspacing = spacing;
+	autopaint = 1;
+	redraw();
 }
