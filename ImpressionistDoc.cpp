@@ -315,6 +315,11 @@ int ImpressionistDoc::dissolve(char *iname)
 				GL_ONE_MINUS_SRC_ALPHA);
 	glPointSize(1);
 
+	glReadBuffer(GL_BACK);
+
+	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+	glPixelStorei( GL_PACK_ROW_LENGTH, width );
+
 	//
 	// glRasterPos2i( 0, m_pUI->m_origView->h() - height );
 	// glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );

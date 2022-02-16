@@ -119,20 +119,20 @@ void PaintView::draw()
 		glPixelStorei( GL_PACK_ALIGNMENT, 1 );
 		glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
 
+		glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
 		while (x < m_nDrawWidth)
 		{
 			m_pAutoPaintPoint.x = x;
-			m_pAutoPaintPoint.y = y;
-			glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
+			m_pAutoPaintPoint.y = m_nDrawHeight - y;
 			m_pDoc->m_pCurrentBrush->BrushBegin( m_pAutoPaintPoint, m_pAutoPaintPoint );
-			if (y > m_nDrawHeight)
+			if (y >= m_nDrawHeight)
 			{
 				x = x + autopaintspacing;
 				y = 0;
 			}
 			y = y + autopaintspacing;
-			glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
 		}
+		glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
 		autopaint = 0;
 
 		glReadPixels( 0, 
@@ -148,60 +148,72 @@ void PaintView::draw()
 
 	if ( m_pDoc->m_ucPainting && isAnEvent) 
 	{
-
 		// Clear it after processing.
 		isAnEvent	= 0;	
 
-		Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
-		Point target( coord.x, m_nWindowHeight - coord.y );
-		
-		// This is the event handler
-		switch (eventToDo) 
+		if (coord.x >= 0 && coord.x < m_nDrawWidth && coord.y >= 0 && coord.y < m_nDrawHeight)
 		{
-		case LEFT_MOUSE_DOWN:
-			m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
-			break;
-		case LEFT_MOUSE_DRAG:
-			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
-			break;
-		case LEFT_MOUSE_UP:
-			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
-			m_pDoc->m_pStrokeDirection->resetLastMousePos();
 
+			Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
+			Point target( coord.x, m_nWindowHeight - coord.y );
+			
+			coord.x = Fl::event_x();
+			coord.y = Fl::event_y();
+
+			// This is the event handler
+			switch (eventToDo) 
+			{
+			case LEFT_MOUSE_DOWN:
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+				break;
+			case LEFT_MOUSE_DRAG:
+				m_pDoc->m_pCurrentBrush->BrushMove( source, target );
+				break;
+			case LEFT_MOUSE_UP:
+				m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
+				m_pDoc->m_pStrokeDirection->resetLastMousePos();
+
+				SaveCurrentContent();
+				RestoreContent();
+				break;
+			case RIGHT_MOUSE_DOWN:
+				if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+				{
+					SaveCurrentContent();
+					m_pDoc->m_pStrokeDirection->StrokeBegin(source);
+				}
+
+				break;
+			case RIGHT_MOUSE_DRAG:
+				if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+				{
+					RestoreContent();
+					m_pDoc->m_pStrokeDirection->StrokeMove(source);
+				}
+
+				break;
+			case RIGHT_MOUSE_UP:
+				if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+				{
+					RestoreContent();
+					m_pDoc->m_pStrokeDirection->StrokeEnd(source);
+
+					m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(m_pDoc, source, target, m_pDoc->m_nStrokeType));
+				}
+
+				break;
+
+			default:
+				printf("Unknown event!!\n");		
+				break;
+			}
+		}
+		else
+		{
 			SaveCurrentContent();
 			RestoreContent();
-			break;
-		case RIGHT_MOUSE_DOWN:
-			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-			{
-				SaveCurrentContent();
-				m_pDoc->m_pStrokeDirection->StrokeBegin(source);
-			}
-
-			break;
-		case RIGHT_MOUSE_DRAG:
-			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-			{
-				RestoreContent();
-				m_pDoc->m_pStrokeDirection->StrokeMove(source);
-			}
-
-			break;
-		case RIGHT_MOUSE_UP:
-			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-			{
-				RestoreContent();
-				m_pDoc->m_pStrokeDirection->StrokeEnd(source);
-
-				m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(m_pDoc, source, target, m_pDoc->m_nStrokeType));
-			}
-
-			break;
-
-		default:
-			printf("Unknown event!!\n");		
-			break;
 		}
+		
 	}
 
 	glFlush();
