@@ -26,7 +26,9 @@ public:
     int     getWidth() const;
     int     getHeight() const;
 
-    double  InnerSum();
+    double  InnerSum() const;
+
+    static Matrix* String2Matrix(const char* string);
 
 private:
     int m, n;

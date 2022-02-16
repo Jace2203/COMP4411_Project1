@@ -406,3 +406,29 @@ void ImpressionistDoc::edgeDetection()
 	m_ucOriginal = m_ucEdge;
 	refresh();
 }
+
+void ImpressionistDoc::applyKernel()
+{
+	Convolution	con = Convolution(m_ucBitmap, m_nWidth, m_nHeight);
+
+	if (m_pUI->getCustomKernel() == NULL)
+	{
+		// MessageBox("Wrong Kernel Format!!!");
+		return;
+	}
+
+	double color[3] = { 0.0, 0.0, 0.0 };
+
+	for (int i = 0; i < m_nHeight; i++)
+	{
+		for (int j = 0; j < m_nWidth; j++)
+		{
+			con.ConvolutionFilter(*(m_pUI->getCustomKernel()), j, i, false, m_pUI->getIsNormalized(), color);
+			m_ucPainting[(j + i * m_nWidth) * 3] = color[0];
+			m_ucPainting[(j + i * m_nWidth) * 3 + 1] = color[1];
+			m_ucPainting[(j + i * m_nWidth) * 3 + 2] = color[2];
+		}
+	}
+
+	refresh();
+}

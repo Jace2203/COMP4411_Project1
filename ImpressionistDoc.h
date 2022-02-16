@@ -42,7 +42,7 @@ public:
 	int		getEdgeThreashold();				// get the edge threashold
 	void	setEdgeThreashold(int threashold);	// set the edge threashold
 
-	char*	getImageName();					// get the current image name
+	char*	getImageName();						// get the current image name
 	
 	void	setMousePos(Point source);
 	Point	getMousePos();
@@ -52,6 +52,7 @@ public:
 	void	refresh();
 
 	void	edgeDetection();
+	void	applyKernel();
 
 // Attributes
 public:

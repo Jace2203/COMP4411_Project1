@@ -18,6 +18,8 @@ public:
     double XGradient(int x, int y);
     double YGradient(int x, int y);
 
+    void ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, bool normalize, double* color);
+
 private:
     static Matrix Sobel_X;
     static Matrix Sobel_Y;
@@ -25,8 +27,6 @@ private:
 
     unsigned char* bmp;
     int width, height;
-
-    void ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, bool normalize, double* color);
 };
 
 #endif

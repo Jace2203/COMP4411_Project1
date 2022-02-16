@@ -89,7 +89,17 @@ void Convolution::ConvolutionFilter(const Matrix& kernel, int x, int y, bool gre
         }
     }
 
-    color[0] = r;
-    color[1] = g;
-    color[2] = b;
+    if (normalize)
+    {
+        double sum = kernel.InnerSum();
+        color[0] = r / sum;
+        color[1] = g / sum;
+        color[2] = b / sum;
+    }
+    else
+    {
+        color[0] = r;
+        color[1] = g;
+        color[2] = b;
+    }
 }

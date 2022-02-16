@@ -24,6 +24,8 @@
 
 #include "ImpBrush.h"
 
+#include "Matrix.h"
+
 class ImpressionistUI {
 public:
 	ImpressionistUI();
@@ -94,6 +96,10 @@ public:
 	int					getEdgeThreashold();
 	void				setEdgeThreashold(int threashold);
 
+	bool				getIsNormalized();
+
+	Matrix*				getCustomKernel();
+
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
 
@@ -107,6 +113,8 @@ private:
 	int		m_nAnotherGradient;
 	int		m_nSpacing;
 	int		m_nEdgeThreshold;
+	int		m_nIsNormalized;
+	Matrix*	m_pCustomKernel;
 
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
@@ -144,6 +152,9 @@ private:
 	static void cb_auto_paint(Fl_Widget* o, void* v);
 	static void cb_edgeThreasholdSlides(Fl_Widget* o, void* v);
 	static void cb_edge_detection_button(Fl_Widget* o, void* v);
+
+	static void cb_apply_kernel(Fl_Widget* o, void* v);
+	static void cb_kernel_normalize(Fl_Widget* o, void* v);
 
 };
 

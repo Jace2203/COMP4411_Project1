@@ -6,7 +6,9 @@
 
 #include "Matrix.h"
 
-#include <string.h>
+#include <iostream>
+#include <string>
+#include <cstdio>
 
 Matrix::Matrix()
 : elements(nullptr), m(0), n(0)
@@ -100,7 +102,7 @@ int Matrix::getHeight() const
     return m;
 }
 
-double Matrix::InnerSum()
+double Matrix::InnerSum() const
 {
     double sum = 0;
 
@@ -113,4 +115,80 @@ double Matrix::InnerSum()
     }
 
     return sum;
+}
+
+Matrix* Matrix::String2Matrix(const char* string)
+{
+    int length = strlen(string);
+    char* str = new char[length + 1];
+    double* values = new double[length + 1];
+
+    strcpy(str, string);
+    str[length] = '\0';
+
+    int row = 0;
+    int col = 0;
+    int counter = 0;
+
+    int temp_col = 0;
+
+    char* token = strtok(str, ",");
+    while (token != NULL)
+    {
+        if (row != 0)
+        {
+            if (token[0] == '\n')
+            {
+                if (temp_col + 1 != col)
+                {
+                    delete[] str;
+                    delete[] values;
+
+                    return NULL;
+                }
+                else
+                {
+                    row++;
+                    temp_col = 0;
+                }
+            }
+            else
+            {
+                temp_col++;
+            }
+        }
+        else
+        {
+            if (token[0] == '\n')
+            {
+                row++;
+            }
+            else
+            {
+                col++;
+            }
+        }
+
+        if (token[0] == '\n')
+        {
+            values[counter] = std::stod(token + 1);
+        }
+        else
+        {
+            values[counter] = std::stod(token);
+        }
+
+        token = strtok(NULL, ",");
+        counter++;
+    }
+
+    if (temp_col != col) return NULL;
+
+    row++;
+
+    Matrix* result = new Matrix(row, col, values);
+    delete[] values;
+    delete[] str;
+
+    return result;
 }

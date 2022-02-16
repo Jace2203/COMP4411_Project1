@@ -440,6 +440,20 @@ void ImpressionistUI::cb_edge_detection_button(Fl_Widget* o, void* v)
 	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->edgeDetection();
 }
 
+void ImpressionistUI::cb_apply_kernel(Fl_Widget* o, void* v)
+{
+	ImpressionistUI* pUI = (ImpressionistUI *)(o->user_data());
+	if (pUI->m_pCustomKernel) delete pUI->m_pCustomKernel;
+
+	pUI->m_pCustomKernel = Matrix::String2Matrix(pUI->m_kernelInput->value());
+	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->applyKernel();
+}
+
+void ImpressionistUI::cb_kernel_normalize(Fl_Widget*o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nIsNormalized=int( ((Fl_Light_Button *)o)->value() );
+}
+
 //---------------------------------- per instance functions --------------------------------------
 
 //------------------------------------------------
@@ -575,6 +589,15 @@ void ImpressionistUI::setEdgeThreashold(int threashold)
 		m_EdgeThresholdSlider->value(m_nEdgeThreshold);
 }
 
+bool ImpressionistUI::getIsNormalized()
+{
+	return (bool)m_nIsNormalized;
+}
+
+Matrix* ImpressionistUI::getCustomKernel()
+{
+	return m_pCustomKernel;
+}
 
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
@@ -664,6 +687,8 @@ ImpressionistUI::ImpressionistUI() {
 	m_nAnotherGradient = 0;
 	m_nSpacing = 4;
 	m_nEdgeThreshold = 200;
+	m_nIsNormalized = 1;
+	m_pCustomKernel = NULL;
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(400, 325, "Brush Dialog");
@@ -808,11 +833,11 @@ ImpressionistUI::ImpressionistUI() {
 		
 		m_kernelApplyButton = new Fl_Button(20, 300, 100, 20, "Apply Kernel");
 		m_kernelApplyButton->user_data((void*)(this));
-		// m_kernelApplyButton->callback();
+		m_kernelApplyButton->callback(cb_apply_kernel);
 
 		m_normalizeButton = new Fl_Light_Button(180, 300, 100, 20, "Normalized");
 		m_normalizeButton->user_data((void*)(this));
 		m_normalizeButton->value(1);
-		// m_normalizeButton->callback();
+		m_normalizeButton->callback(cb_kernel_normalize);
 	m_kernelDialog->end();
 }
