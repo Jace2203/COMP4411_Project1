@@ -264,6 +264,27 @@ int ImpressionistDoc::saveImage(char *iname)
 	return 1;
 }
 
+int ImpressionistDoc::anotherImage(char *iname)
+{
+	unsigned char*	data;
+	int				width,
+					height;
+	
+	if ( (data=readBMP(iname, width, height)) == NULL )
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	if (m_pUI->m_origView->isSameSize(width, height))
+	{
+		if ( m_ucAnotherImage ) delete[] m_ucAnotherImage;
+
+		m_ucAnotherImage = data;
+	}
+
+	return 1;
+}
 
 int ImpressionistDoc::newMuralImage(char *iname) 
 {

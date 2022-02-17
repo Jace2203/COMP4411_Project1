@@ -25,6 +25,7 @@ public:
 
 	int		loadImage(char *iname);			// called by the UI to load image
 	int		saveImage(char *iname);			// called by the UI to save image
+	int		anotherImage(char *iname);
 	int		newMuralImage(char *iname);	
 
 
