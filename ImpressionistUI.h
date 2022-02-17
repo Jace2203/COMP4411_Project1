@@ -72,6 +72,10 @@ public:
 	Fl_Button*			m_kernelApplyButton;
 	Fl_Button*			m_normalizeButton;
 
+//for faded dialog
+	Fl_Window*			m_fadeDialog;
+	Fl_Slider*			m_FadeSlider;
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -100,6 +104,8 @@ public:
 
 	Matrix*				getCustomKernel();
 
+	double				getFadeAlpha();
+
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
 
@@ -112,6 +118,7 @@ private:
 	int		m_nEdgeClipping;
 	int		m_nAnotherGradient;
 	int		m_nSpacing;
+	double	m_nfadeAlpha;
 	int		m_nEdgeThreshold;
 	int		m_nIsNormalized;
 	Matrix*	m_pCustomKernel;
@@ -130,6 +137,8 @@ private:
 	static void	cb_brushes(Fl_Menu_* o, void* v);
 	static void cb_colors(Fl_Menu_* o, void* v);
 	static void cb_kernel(Fl_Menu_* o, void* v);
+	static void cb_fade(Fl_Menu_* o, void* v);
+	static void cb_fade_in(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_mural_image(Fl_Menu_* o, void* v);
 	static void	cb_exit(Fl_Menu_* o, void* v);

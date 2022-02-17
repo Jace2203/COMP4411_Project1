@@ -352,7 +352,46 @@ void PaintView::LoadForUndo()
 
 void PaintView::AutoPaint(int spacing)
 {
+	printf("autopaint : %1f\n", m_pDoc->getAlpha());
 	autopaintspacing = spacing;
 	autopaint = 1;
+	redraw();
+}
+
+void PaintView::fade_in()
+{
+	memset(m_pDoc->m_ucPainting, 0, m_nDrawWidth*m_nDrawHeight*3);
+	draw();
+	
+	glReadBuffer(GL_BACK);
+
+	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+	glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+
+	double temp = m_pDoc->getAlpha();
+	int temp_size = m_pDoc->getSize();
+
+	m_pDoc->setAlpha(m_pDoc->m_pUI->getFadeAlpha());
+	m_pDoc->setSize(1);
+
+	glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
+
+	for (int y = 0; y < m_nDrawHeight ; ++y)
+		for(int x = 0; x < m_nDrawWidth; ++x)
+			m_pDoc->m_pCurrentBrush->BrushBegin( Point(x, y), Point(x, y) );
+
+	glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
+
+	m_pDoc->setAlpha(temp);
+	m_pDoc->setSize(temp_size);
+
+	glReadPixels( 0, 
+			m_nWindowHeight - m_nDrawHeight, 
+			m_nDrawWidth, 
+			m_nDrawHeight, 
+			GL_RGB, 
+			GL_UNSIGNED_BYTE, 
+			m_pPaintBitstart );
+
 	redraw();
 }

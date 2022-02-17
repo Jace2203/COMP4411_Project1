@@ -433,3 +433,9 @@ void ImpressionistDoc::applyKernel()
 
 	refresh();
 }
+
+void ImpressionistDoc::fade_in()
+{
+	m_pUI->m_paintView->fade_in();
+}
+

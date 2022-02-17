@@ -54,6 +54,8 @@ public:
 	void	edgeDetection();
 	void	applyKernel();
 
+	void	fade_in();
+
 // Attributes
 public:
 	// Dimensions of original window.

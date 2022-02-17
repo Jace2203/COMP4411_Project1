@@ -220,6 +220,21 @@ void ImpressionistUI::cb_kernel(Fl_Menu_* o, void* v)
 	whoami(o)->m_kernelDialog->show();
 }
 
+void ImpressionistUI::cb_fade(Fl_Menu_* o, void* v) 
+{
+	whoami(o)->m_fadeDialog->show();
+}
+
+void ImpressionistUI::cb_fade_in(Fl_Widget* o, void* v) 
+{
+	((ImpressionistUI*)(o->user_data()))->m_nfadeAlpha=double( ((Fl_Slider *)o)->value() ) ;
+	
+	ImpressionistUI* pUI=((ImpressionistUI *)(o->user_data()));
+	ImpressionistDoc* pDoc=pUI->getDocument();
+
+	pDoc->fade_in();
+}
+
 //------------------------------------------------------------
 // Clears the paintview canvas.
 // Called by the UI when the clear canvas menu item is chosen
@@ -599,6 +614,11 @@ Matrix* ImpressionistUI::getCustomKernel()
 	return m_pCustomKernel;
 }
 
+double ImpressionistUI::getFadeAlpha()
+{
+	return m_nfadeAlpha;
+}
+
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
@@ -607,6 +627,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
 		{ "&Color...",		FL_ALT + 'k', (Fl_Callback *)ImpressionistUI::cb_colors },
 		{ "&Kernel...",		FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_kernel },
+		{ "&Add Faded Background...",		FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_fade },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 
 		{ "&New Mural Image", FL_ALT + 'n', (Fl_Callback *)ImpressionistUI::cb_mural_image, 0, FL_MENU_DIVIDER },
@@ -689,6 +710,7 @@ ImpressionistUI::ImpressionistUI() {
 	m_nEdgeThreshold = 200;
 	m_nIsNormalized = 1;
 	m_pCustomKernel = NULL;
+	m_nfadeAlpha = 0;
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(400, 325, "Brush Dialog");
@@ -840,4 +862,18 @@ ImpressionistUI::ImpressionistUI() {
 		m_normalizeButton->value(1);
 		m_normalizeButton->callback(cb_kernel_normalize);
 	m_kernelDialog->end();
+
+	m_fadeDialog = new Fl_Window(240, 40, "Fade Dialog");
+		m_FadeSlider = new Fl_Value_Slider(10, 10, 140, 20, "Fade In");
+		m_FadeSlider->user_data((void*)(this));
+		m_FadeSlider->type(FL_HOR_NICE_SLIDER);
+        m_FadeSlider->labelfont(FL_COURIER);
+        m_FadeSlider->labelsize(12);
+		m_FadeSlider->minimum(0);
+		m_FadeSlider->maximum(1);
+		m_FadeSlider->step(0.01);
+		m_FadeSlider->value(m_nfadeAlpha);
+		m_FadeSlider->align(FL_ALIGN_RIGHT);
+		m_FadeSlider->callback(cb_fade_in);
+	m_fadeDialog->end();
 }

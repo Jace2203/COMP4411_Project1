@@ -43,6 +43,7 @@ public:
 	void SaveForUndo();
 	void LoadForUndo();
 	void AutoPaint(int spacing);
+	void fade_in();
 
 	ImpressionistDoc *m_pDoc;
 
