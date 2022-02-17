@@ -33,6 +33,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_ucTemp			= NULL;
 	m_ucEdge			= NULL;
 	m_ucAnotherImage	= NULL;
+	m_ucAlphaMap		= NULL;
 
 
 	// create one instance of each brush
@@ -56,6 +57,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new BlurBrush( this, "Blurring" );
 	ImpBrush::c_pBrushes[BRUSH_SHARP]
 		= new SharpBrush( this, "Sharpening" );
+	ImpBrush::c_pBrushes[BRUSH_ALPHA_MAPPED]
+		= new AlphaMappedBrush( this, "Alpha Mapped" );
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
@@ -278,6 +281,8 @@ int ImpressionistDoc::alphaMappedBrush(char *iname)
 
 	if ( m_ucAlphaMap ) delete[] m_ucAlphaMap;
 	m_ucAlphaMap = data;
+	m_nAlphaMapWidth = width;
+	m_nAlphaMapHeight = height;
 
 	// if (m_pUI->m_alphaMapBMP) delete[] m_pUI->m_alphaMapBMP;
 	// m_pUI->m_alphaMapBMP = new Fl_BMP_Image(iname);

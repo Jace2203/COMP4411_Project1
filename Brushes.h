@@ -9,5 +9,6 @@
 #include "ScatteredCircleBrush.h"
 #include "BlurBrush.h"
 #include "SharpBrush.h"
+#include "AlphaMappedBrush.h"
 
 #endif

@@ -65,6 +65,9 @@ public:
 	// Dimensions of the paint window.
 	int				m_nPaintWidth, 
 					m_nPaintHeight;	
+	// Dimensions of the alpha mapped image
+	int				m_nAlphaMapWidth,
+					m_nAlphaMapHeight;
 	// Bitmaps for original image and painting.
 	unsigned char*	m_ucOriginal;
 	unsigned char*	m_ucBitmap;
