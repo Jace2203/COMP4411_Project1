@@ -26,6 +26,7 @@ public:
 	int		loadImage(char *iname);			// called by the UI to load image
 	int		saveImage(char *iname);			// called by the UI to save image
 	int		newMuralImage(char *iname);	
+	int		alphaMappedBrush(char *iname);
 
 
 	int     clearCanvas();                  	// called by the UI to clear the drawing canvas
@@ -71,6 +72,7 @@ public:
 	unsigned char*	m_ucTemp;
 	unsigned char*	m_ucEdge;
 	unsigned char*	m_ucAnotherImage;
+	unsigned char*	m_ucAlphaMap;
 
 	// mouse coordinates
 	Point			m_pMousePos = Point(0, 0);

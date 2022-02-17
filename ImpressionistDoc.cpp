@@ -264,6 +264,29 @@ int ImpressionistDoc::saveImage(char *iname)
 	return 1;
 }
 
+int ImpressionistDoc::alphaMappedBrush(char *iname)
+{
+	unsigned char*	data;
+	int				width,
+					height;
+
+	if ( (data=readBMP(iname, width, height))==NULL )
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	if ( m_ucAlphaMap ) delete[] m_ucAlphaMap;
+	m_ucAlphaMap = data;
+
+	// if (m_pUI->m_alphaMapBMP) delete[] m_pUI->m_alphaMapBMP;
+	// m_pUI->m_alphaMapBMP = new Fl_BMP_Image(iname);
+
+	// m_pUI->m_alphaMapBox->image(m_pUI->m_alphaMapBMP);
+	// m_pUI->m_alphaMapBox->redraw();
+	// m_pUI->m_alphaMapDialog->show();
+}
+
 
 int ImpressionistDoc::newMuralImage(char *iname) 
 {

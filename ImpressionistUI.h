@@ -17,6 +17,7 @@
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/Fl_Multiline_Input.H>
+#include <FL/Fl_BMP_Image.H>
 
 #include "Impressionist.h"
 #include "OriginalView.h"
@@ -72,6 +73,12 @@ public:
 	Fl_Multiline_Input*	m_kernelInput;
 	Fl_Button*			m_kernelApplyButton;
 	Fl_Button*			m_normalizeButton;
+
+// for alpha mapped brush
+	// Fl_Window*			m_alphaMapDialog;
+
+	// Fl_BMP_Image*		m_alphaMapBMP;
+	// Fl_Box*				m_alphaMapBox;
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -137,6 +144,7 @@ private:
 	static void cb_colors(Fl_Menu_* o, void* v);
 	static void cb_kernel(Fl_Menu_* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
+	static void cb_alpha_mapped(Fl_Menu_* o, void* v);
 	static void	cb_mural_image(Fl_Menu_* o, void* v);
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_swap(Fl_Menu_* o, void* v);
