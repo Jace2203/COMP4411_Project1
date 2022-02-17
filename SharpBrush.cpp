@@ -1,25 +1,25 @@
 //
-// BlurBrush.cpp
+// SharpBrush.cpp
 //
-// The implementation of Blur Brush. It is a kind of ImpBrush. All your brush implementations
+// The implementation of Sharp Brush. It is a kind of ImpBrush. All your brush implementations
 // will look like the file with the different GL primitive calls.
 //
 
 #include "ImpressionistDoc.h"
 #include "ImpressionistUI.h"
-#include "BlurBrush.h"
+#include "SharpBrush.h"
 
 #include "Matrix.h"
 #include "Convolution.h"
 
 extern float frand();
 
-BlurBrush::BlurBrush( ImpressionistDoc* pDoc, char* name )
+SharpBrush::SharpBrush( ImpressionistDoc* pDoc, char* name )
 : ImpBrush(pDoc,name), con(NULL), kernel(NULL)
 {
 }
 
-void BlurBrush::BrushBegin( const Point source, const Point target )
+void SharpBrush::BrushBegin( const Point source, const Point target )
 {
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg=pDoc->m_pUI;
@@ -31,13 +31,13 @@ void BlurBrush::BrushBegin( const Point source, const Point target )
 	BrushMove( source, target );
 }
 
-void BlurBrush::BrushMove( const Point source, const Point target )
+void SharpBrush::BrushMove( const Point source, const Point target )
 {
 	ImpressionistDoc* pDoc = GetDocument();
 	ImpressionistUI* dlg=pDoc->m_pUI;
 
 	if ( pDoc == NULL ) {
-		printf( "BlurBrush::BrushMove  document is NULL\n" );
+		printf( "SharpBrush::BrushMove  document is NULL\n" );
 		return;
 	}
 
@@ -48,6 +48,7 @@ void BlurBrush::BrushMove( const Point source, const Point target )
 	{
 		int k_size = pDoc->getBlurSharpLevel() * 2 + 1;
 		kernel = new Matrix(k_size, k_size, 1);
+		kernel->setValue(pDoc->getBlurSharpLevel(), pDoc->getBlurSharpLevel(), -kernel->InnerSum());
 	}
 
 	double color[3] = { 0.0, 0.0, 0.0 };
@@ -62,9 +63,11 @@ void BlurBrush::BrushMove( const Point source, const Point target )
 	glEnd();
 }
 
-void BlurBrush::BrushEnd( const Point source, const Point target )
+void SharpBrush::BrushEnd( const Point source, const Point target )
 {
 	delete con;
 	con = NULL;
+	delete kernel;
+	kernel = NULL;
 }
 

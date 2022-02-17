@@ -8,5 +8,6 @@
 #include "ScatteredLineBrush.h"
 #include "ScatteredCircleBrush.h"
 #include "BlurBrush.h"
+#include "SharpBrush.h"
 
 #endif

@@ -335,7 +335,7 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_StrokeDirectionChoice->deactivate();
 	}
 
-	if (type == BRUSH_BLUR)
+	if (type == BRUSH_BLUR || type == BRUSH_SHARP)
 	{
 		pUI->m_BlurSharpSlider->activate();
 	}
@@ -666,6 +666,7 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Scattered Lines",	FL_ALT+'m', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_LINES},
   {"Scattered Circles",	FL_ALT+'d', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_CIRCLES},
   {"Blurring",			FL_ALT+'r', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_BLUR},
+  {"Sharpening",		FL_ALT+'f', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SHARP},
   {0}
 };
 
@@ -878,7 +879,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_kernelApplyButton->user_data((void*)(this));
 		m_kernelApplyButton->callback(cb_apply_kernel);
 
-		m_normalizeButton = new Fl_Light_Button(180, 300, 100, 20, "Normalized");
+		m_normalizeButton = new Fl_Light_Button(180, 305, 100, 20, "Normalized");
 		m_normalizeButton->user_data((void*)(this));
 		m_normalizeButton->value(1);
 		m_normalizeButton->callback(cb_kernel_normalize);

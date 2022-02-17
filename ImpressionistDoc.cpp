@@ -54,6 +54,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new ScatteredCircleBrush( this, "Scattered Circles" );
 	ImpBrush::c_pBrushes[BRUSH_BLUR]
 		= new BlurBrush( this, "Blurring" );
+	ImpBrush::c_pBrushes[BRUSH_SHARP]
+		= new SharpBrush( this, "Sharpening" );
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];

@@ -19,6 +19,7 @@ enum
 	BRUSH_SCATTERED_LINES,
 	BRUSH_SCATTERED_CIRCLES,
 	BRUSH_BLUR,
+	BRUSH_SHARP,
 	NUM_BRUSH_TYPE // Make sure this stays at the end!
 };
 
