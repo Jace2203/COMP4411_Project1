@@ -269,6 +269,7 @@ int ImpressionistDoc::newMuralImage(char *iname)
 		if ( m_ucBitmap ) delete [] m_ucBitmap;
 
 		m_ucBitmap	= data;
+		m_ucOriginal = m_ucBitmap;
 
 		m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
 							m_pUI->m_mainWindow->y(), 
