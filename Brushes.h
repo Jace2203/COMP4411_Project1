@@ -7,5 +7,6 @@
 #include "ScatteredPointBrush.h"
 #include "ScatteredLineBrush.h"
 #include "ScatteredCircleBrush.h"
+#include "BlurBrush.h"
 
 #endif

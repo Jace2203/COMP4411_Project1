@@ -49,6 +49,7 @@ public:
 	Fl_Slider*			m_BrushAlphaSlider;
 	Fl_Slider*			m_SpacingSlider;
 	Fl_Slider*			m_EdgeThresholdSlider;
+	Fl_Slider*			m_BlurSharpSlider;
 
 	Fl_Button*          m_ClearCanvasButton;
 	Fl_Button*			m_EdgeClippingButton;
@@ -96,6 +97,9 @@ public:
 	int					getEdgeThreashold();
 	void				setEdgeThreashold(int threashold);
 
+	int					getBlurSharpLevel();
+	void				setBlurSharpLevel(int level);
+
 	bool				getIsNormalized();
 
 	Matrix*				getCustomKernel();
@@ -113,6 +117,8 @@ private:
 	int		m_nAnotherGradient;
 	int		m_nSpacing;
 	int		m_nEdgeThreshold;
+	int		m_nBlurSharpLevel;
+
 	int		m_nIsNormalized;
 	Matrix*	m_pCustomKernel;
 
@@ -152,6 +158,7 @@ private:
 	static void cb_auto_paint(Fl_Widget* o, void* v);
 	static void cb_edgeThreasholdSlides(Fl_Widget* o, void* v);
 	static void cb_edge_detection_button(Fl_Widget* o, void* v);
+	static void cb_blursharpSlides(Fl_Widget* o, void* v);
 
 	static void cb_apply_kernel(Fl_Widget* o, void* v);
 	static void cb_kernel_normalize(Fl_Widget* o, void* v);

@@ -7,6 +7,7 @@
 #include "Convolution.h"
 
 #include <math.h>
+#include <cstdio>
 
 static double sobel_x_values[9] = {
     -1.0, 0.0, 1.0,
@@ -50,6 +51,11 @@ double Convolution::YGradient(int x, int y)
     double color[3] = { 0.0, 0.0, 0.0 };
     ConvolutionFilter(Sobel_Y, x, y, true, false, color);
     return (int)color[0];
+}
+
+void Convolution::GaussianBlur(int x, int y, double* color)
+{
+    ConvolutionFilter(Gaussian, x, y, false, true, color);
 }
 
 void Convolution::ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, bool normalize, double* color)

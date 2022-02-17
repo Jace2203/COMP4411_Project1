@@ -41,6 +41,8 @@ public:
 	void	setAlpha(double alpha);				// set the brush alpha
 	int		getEdgeThreashold();				// get the edge threashold
 	void	setEdgeThreashold(int threashold);	// set the edge threashold
+	int		getBlurSharpLevel();
+	void	setBlurSharpLevel(int level);
 
 	char*	getImageName();						// get the current image name
 	

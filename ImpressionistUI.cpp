@@ -335,6 +335,15 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_StrokeDirectionChoice->deactivate();
 	}
 
+	if (type == BRUSH_BLUR)
+	{
+		pUI->m_BlurSharpSlider->activate();
+	}
+	else
+	{
+		pUI->m_BlurSharpSlider->deactivate();
+	}
+
 	pDoc->setBrushType(type);
 }
 
@@ -440,12 +449,18 @@ void ImpressionistUI::cb_edge_detection_button(Fl_Widget* o, void* v)
 	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->edgeDetection();
 }
 
+void ImpressionistUI::cb_blursharpSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nBlurSharpLevel=int( ((Fl_Slider *)o)->value() );
+}
+
 void ImpressionistUI::cb_apply_kernel(Fl_Widget* o, void* v)
 {
 	ImpressionistUI* pUI = (ImpressionistUI *)(o->user_data());
 	if (pUI->m_pCustomKernel) delete pUI->m_pCustomKernel;
 
 	pUI->m_pCustomKernel = Matrix::String2Matrix(pUI->m_kernelInput->value());
+	if (pUI->m_pCustomKernel == NULL) printf("NO NO NO\n");
 	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->applyKernel();
 }
 
@@ -589,6 +604,19 @@ void ImpressionistUI::setEdgeThreashold(int threashold)
 		m_EdgeThresholdSlider->value(m_nEdgeThreshold);
 }
 
+int ImpressionistUI::getBlurSharpLevel()
+{
+	return m_nBlurSharpLevel;
+}
+
+void ImpressionistUI::setBlurSharpLevel(int level)
+{
+	m_nBlurSharpLevel = level;
+	
+	if (level <= 7)
+		m_BlurSharpSlider->value(m_nBlurSharpLevel);
+}
+
 bool ImpressionistUI::getIsNormalized()
 {
 	return (bool)m_nIsNormalized;
@@ -637,6 +665,7 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Scattered Points",	FL_ALT+'q', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_POINTS},
   {"Scattered Lines",	FL_ALT+'m', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_LINES},
   {"Scattered Circles",	FL_ALT+'d', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_CIRCLES},
+  {"Blurring",			FL_ALT+'r', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_BLUR},
   {0}
 };
 
@@ -689,9 +718,10 @@ ImpressionistUI::ImpressionistUI() {
 	m_nEdgeThreshold = 200;
 	m_nIsNormalized = 1;
 	m_pCustomKernel = NULL;
+	m_nBlurSharpLevel = 1;
 
 	// brush dialog definition
-	m_brushDialog = new Fl_Window(400, 325, "Brush Dialog");
+	m_brushDialog = new Fl_Window(400, 360, "Brush Dialog");
 		// Add a brush type choice to the dialog
 		m_BrushTypeChoice = new Fl_Choice(50,10,150,25,"&Brush");
 		m_BrushTypeChoice->user_data((void*)(this));	// record self to be used by static callback functions
@@ -820,6 +850,19 @@ ImpressionistUI::ImpressionistUI() {
 			m_EdgeDetectionBox->add(m_EdgeThresholdSlider);
 			m_EdgeDetectionBox->add(m_EdgeDetectionButton);
 		m_EdgeDetectionBox->end();
+
+		m_BlurSharpSlider = new Fl_Value_Slider(10, 320, 300, 20, "Blurring/Sharpening Level");
+		m_BlurSharpSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BlurSharpSlider->type(FL_HOR_NICE_SLIDER);
+        m_BlurSharpSlider->labelfont(FL_COURIER);
+        m_BlurSharpSlider->labelsize(12);
+		m_BlurSharpSlider->minimum(1);
+		m_BlurSharpSlider->maximum(4);
+		m_BlurSharpSlider->step(1);
+		m_BlurSharpSlider->value(m_nBlurSharpLevel);
+		m_BlurSharpSlider->align(FL_ALIGN_RIGHT);
+		m_BlurSharpSlider->callback(cb_blursharpSlides);
+		m_BlurSharpSlider->deactivate();
 
     m_brushDialog->end();	
 

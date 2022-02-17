@@ -52,6 +52,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new ScatteredLineBrush( this, "Scattered Lines" );
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]
 		= new ScatteredCircleBrush( this, "Scattered Circles" );
+	ImpBrush::c_pBrushes[BRUSH_BLUR]
+		= new BlurBrush( this, "Blurring" );
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
@@ -173,6 +175,16 @@ int ImpressionistDoc::getEdgeThreashold()
 void ImpressionistDoc::setEdgeThreashold(int threashold)
 {
 	m_pUI->setEdgeThreashold(threashold);
+}
+
+int ImpressionistDoc::getBlurSharpLevel()
+{
+	return m_pUI->getBlurSharpLevel();
+}
+
+void ImpressionistDoc::setBlurSharpLevel(int level)
+{
+	m_pUI->setBlurSharpLevel(level);
 }
 
 //---------------------------------------------------------

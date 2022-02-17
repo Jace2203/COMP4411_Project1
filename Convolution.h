@@ -18,6 +18,8 @@ public:
     double XGradient(int x, int y);
     double YGradient(int x, int y);
 
+    void GaussianBlur(int x, int y, double* color);
+
     void ConvolutionFilter(const Matrix& kernel, int x, int y, bool greyscale, bool normalize, double* color);
 
 private:

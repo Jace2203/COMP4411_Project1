@@ -12,12 +12,12 @@ class Matrix
 public:
     Matrix();
     Matrix(int size);
-    Matrix(int m, int n);
+    Matrix(int m, int n, double value = 0.0);
     Matrix(int m, int n, double* values);
 
     ~Matrix();
 
-    void    initialize();
+    void    initialize(double value = 0.0);
     void    identity(int num);
 
     void    setValue(int x, int y, int num);

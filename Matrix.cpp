@@ -27,7 +27,7 @@ Matrix::Matrix(int size)
     initialize();
 }
 
-Matrix::Matrix(int m, int n)
+Matrix::Matrix(int m, int n, double value)
 : m(m), n(n)
 {
     elements = new double*[m];
@@ -36,7 +36,7 @@ Matrix::Matrix(int m, int n)
         elements[i] = new double[n];
     }
 
-    initialize();
+    initialize(value);
 }
 
 Matrix::Matrix(int m, int n, double* values)
@@ -60,13 +60,13 @@ Matrix::~Matrix()
     delete[] elements;
 }
 
-void Matrix::initialize()
+void Matrix::initialize(double value)
 {
     for (int i = 0; i < m; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            elements[i][j] = 0.0;
+            elements[i][j] = value;
         }
     }
 }
@@ -182,7 +182,7 @@ Matrix* Matrix::String2Matrix(const char* string)
         counter++;
     }
 
-    if (temp_col != col) return NULL;
+    if (temp_col + 1 != col) return NULL;
 
     row++;
 
