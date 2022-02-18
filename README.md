@@ -28,9 +28,9 @@ To create an impressionistic picture, the user loads an existing image and paint
 | BW alpha brush | ✔ |
 | BW automatic paint whole image |
 | BW gradient from user-specified image | ✔ |
-| BW edge clipping |
+| BW edge clipping | ✔ |
 | 2B user-specified kernel | ✔ |
-| 2B edge detection + user-specified edge clipping |
+| 2B edge detection + user-specified edge clipping | ✔ |
 | 2B multiresolution |
 | 2B warp brush |
 | 2B curved brush following image gradient |
