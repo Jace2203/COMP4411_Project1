@@ -231,6 +231,15 @@ void ImpressionistUI::cb_clear_canvas(Fl_Menu_* o, void* v)
 	pDoc->clearCanvas();
 }
 
+void ImpressionistUI::cb_another_image(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc* pDoc=whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName() );
+	if (newfile != NULL) {
+		pDoc->anotherImage(newfile);
+	}
+}
 
 void ImpressionistUI::cb_mural_image(Fl_Menu_* o, void* v)
 {
@@ -585,6 +594,18 @@ void ImpressionistUI::setAlpha( double alpha )
 		m_BrushAlphaSlider->value(m_nAlpha);
 }
 
+int ImpressionistUI::getAnotherGradient()
+{
+	return m_nAnotherGradient;
+}
+
+void ImpressionistUI::setAnotherGradient(int value)
+{
+	m_nAnotherGradient = value;
+
+	m_AnotherGradientButton->value(value);
+}
+
 //------------------------------------------------
 // Return the edge threashold
 //------------------------------------------------
@@ -637,7 +658,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Kernel...",		FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_kernel },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 
-		{ "&New Mural Image", FL_ALT + 'n', (Fl_Callback *)ImpressionistUI::cb_mural_image, 0, FL_MENU_DIVIDER },
+		{ "&Another Image",		NULL		, (Fl_Callback *)ImpressionistUI::cb_another_image},
+		{ "&New Mural Image",	FL_ALT + 'n', (Fl_Callback *)ImpressionistUI::cb_mural_image, 0, FL_MENU_DIVIDER },
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },

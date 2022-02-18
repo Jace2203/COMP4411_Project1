@@ -94,6 +94,9 @@ public:
 	double				getAlpha();
 	void				setAlpha(double alpha);
 
+	int					getAnotherGradient();
+	void				setAnotherGradient(int value);
+
 	int					getEdgeThreashold();
 	void				setEdgeThreashold(int threashold);
 
@@ -137,6 +140,7 @@ private:
 	static void cb_colors(Fl_Menu_* o, void* v);
 	static void cb_kernel(Fl_Menu_* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
+	static void cb_another_image(Fl_Menu_* o, void* v);
 	static void	cb_mural_image(Fl_Menu_* o, void* v);
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_swap(Fl_Menu_* o, void* v);
