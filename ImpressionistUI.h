@@ -150,6 +150,7 @@ private:
 	static void cb_colors(Fl_Menu_* o, void* v);
 	static void cb_kernel(Fl_Menu_* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
+	static void cb_edge_image(Fl_Menu_* o, void* v);
 	static void cb_another_image(Fl_Menu_* o, void* v);
 	static void cb_alpha_mapped(Fl_Menu_* o, void* v);
 	static void	cb_mural_image(Fl_Menu_* o, void* v);

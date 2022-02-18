@@ -231,6 +231,16 @@ void ImpressionistUI::cb_clear_canvas(Fl_Menu_* o, void* v)
 	pDoc->clearCanvas();
 }
 
+void ImpressionistUI::cb_edge_image(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc* pDoc=whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName() );
+	if (newfile != NULL) {
+		pDoc->edgeImage(newfile);
+	}	
+}
+
 void ImpressionistUI::cb_another_image(Fl_Menu_* o, void* v)
 {
 	ImpressionistDoc* pDoc=whoami(o)->getDocument();
@@ -684,9 +694,10 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Kernel...",		FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_kernel },
 		{ "&Clear Canvas",	FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 
-		{ "&Another Image",		NULL		, (Fl_Callback *)ImpressionistUI::cb_another_image},
-		{ "&Alpha Mapped Brush",FL_ALT + 'm', (Fl_Callback *)ImpressionistUI::cb_alpha_mapped},
-		{ "&New Mural Image",	FL_ALT + 'n', (Fl_Callback *)ImpressionistUI::cb_mural_image, 0, FL_MENU_DIVIDER },
+		{ "&Load Edge Image",		NULL,			(Fl_Callback *)ImpressionistUI::cb_edge_image},
+		{ "&Load Another Image",	NULL,			(Fl_Callback *)ImpressionistUI::cb_another_image},
+		{ "&Alpha Mapped Brush",	NULL,			(Fl_Callback *)ImpressionistUI::cb_alpha_mapped},
+		{ "&New Mural Image",		FL_ALT + 'n',	(Fl_Callback *)ImpressionistUI::cb_mural_image, 0, FL_MENU_DIVIDER },
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
