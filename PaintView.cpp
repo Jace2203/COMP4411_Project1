@@ -129,8 +129,6 @@ void PaintView::draw()
 			for(int x = 0; x < m_nDrawWidth; x += autopaintspacing)
 				xy[temp++] = Point(x, y);
 
-		printf("%d\n", m_pDoc->m_pUI->EnableRandomSize());
-
 		Point temp_p;
 		for(int i = 0; i < count; ++i)
 		{
@@ -148,7 +146,7 @@ void PaintView::draw()
 		{
 			if (m_pDoc->m_pUI->EnableRandomSize())
 			{
-				temp = size / 2 + rand() % (size + 1);
+				temp = size / 2 + rand() % (size);
 				if (temp == 0) temp = 1;
 				m_pDoc->setSize(temp);
 				m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
