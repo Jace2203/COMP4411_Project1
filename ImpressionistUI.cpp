@@ -241,6 +241,16 @@ void ImpressionistUI::cb_another_image(Fl_Menu_* o, void* v)
 	}
 }
 
+void ImpressionistUI::cb_alpha_mapped(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc *pDoc=whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName() );
+	if (newfile != NULL) {
+		pDoc->alphaMappedBrush(newfile);
+	}
+}
+
 void ImpressionistUI::cb_mural_image(Fl_Menu_* o, void* v)
 {
 	ImpressionistDoc *pDoc=whoami(o)->getDocument();
@@ -656,16 +666,17 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
 		{ "&Color...",		FL_ALT + 'k', (Fl_Callback *)ImpressionistUI::cb_colors },
 		{ "&Kernel...",		FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_kernel },
-		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
+		{ "&Clear Canvas",	FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 
 		{ "&Another Image",		NULL		, (Fl_Callback *)ImpressionistUI::cb_another_image},
+		{ "&Alpha Mapped Brush",FL_ALT + 'm', (Fl_Callback *)ImpressionistUI::cb_alpha_mapped},
 		{ "&New Mural Image",	FL_ALT + 'n', (Fl_Callback *)ImpressionistUI::cb_mural_image, 0, FL_MENU_DIVIDER },
 		
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 	{ "&Edit",		0, 0, 0, FL_SUBMENU },
 		{ "&Swap", 's',				(Fl_Callback *)ImpressionistUI::cb_swap },
-		{ "Undo",	FL_CTRL + 'z',	(Fl_Callback *)ImpressionistUI::cb_undo },
+		{ "&Undo",	FL_CTRL + 'z',	(Fl_Callback *)ImpressionistUI::cb_undo },
 		{ 0 },
 	{ "&View",		0, 0, 0, FL_SUBMENU },
 		{ "&Original View",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_view_original },
@@ -689,6 +700,7 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Scattered Circles",	FL_ALT+'d', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_CIRCLES},
   {"Blurring",			FL_ALT+'r', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_BLUR},
   {"Sharpening",		FL_ALT+'f', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SHARP},
+  {"Alpha Mapped",		FL_ALT+'a', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_ALPHA_MAPPED},
   {0}
 };
 
@@ -906,4 +918,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_normalizeButton->value(1);
 		m_normalizeButton->callback(cb_kernel_normalize);
 	m_kernelDialog->end();
+
+	// m_alphaMapDialog = new Fl_Window(300, 300, "Alpha Map Dialog");
+	// 	m_alphaMapBox = new Fl_Box(10, 10, 280, 280);
+	// 	m_alphaMapBMP = NULL;
+	// m_alphaMapDialog->end();
 }

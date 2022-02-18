@@ -33,6 +33,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_ucTemp			= NULL;
 	m_ucEdge			= NULL;
 	m_ucAnotherImage	= NULL;
+	m_ucAlphaMap		= NULL;
 
 
 	// create one instance of each brush
@@ -56,6 +57,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new BlurBrush( this, "Blurring" );
 	ImpBrush::c_pBrushes[BRUSH_SHARP]
 		= new SharpBrush( this, "Sharpening" );
+	ImpBrush::c_pBrushes[BRUSH_ALPHA_MAPPED]
+		= new AlphaMappedBrush( this, "Alpha Mapped" );
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
@@ -264,6 +267,7 @@ int ImpressionistDoc::saveImage(char *iname)
 	return 1;
 }
 
+
 int ImpressionistDoc::anotherImage(char *iname)
 {
 	unsigned char*	data;
@@ -285,6 +289,34 @@ int ImpressionistDoc::anotherImage(char *iname)
 
 	return 1;
 }
+
+int ImpressionistDoc::alphaMappedBrush(char *iname)
+{
+	unsigned char*	data;
+	int				width,
+					height;
+	
+	if ( (data=readBMP(iname, width, height)) == NULL )
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	if ( m_ucAlphaMap ) delete[] m_ucAlphaMap;
+	m_ucAlphaMap = data;
+	m_nAlphaMapWidth = width;
+	m_nAlphaMapHeight = height;
+
+	// if (m_pUI->m_alphaMapBMP) delete[] m_pUI->m_alphaMapBMP;
+	// m_pUI->m_alphaMapBMP = new Fl_BMP_Image(iname);
+
+	// m_pUI->m_alphaMapBox->image(m_pUI->m_alphaMapBMP);
+	// m_pUI->m_alphaMapBox->redraw();
+	// m_pUI->m_alphaMapDialog->show();
+
+	return 1;
+}
+
 
 int ImpressionistDoc::newMuralImage(char *iname) 
 {

@@ -27,6 +27,7 @@ public:
 	int		saveImage(char *iname);			// called by the UI to save image
 	int		anotherImage(char *iname);
 	int		newMuralImage(char *iname);	
+	int		alphaMappedBrush(char *iname);
 
 
 	int     clearCanvas();                  	// called by the UI to clear the drawing canvas
@@ -65,6 +66,9 @@ public:
 	// Dimensions of the paint window.
 	int				m_nPaintWidth, 
 					m_nPaintHeight;	
+	// Dimensions of the alpha mapped image
+	int				m_nAlphaMapWidth,
+					m_nAlphaMapHeight;
 	// Bitmaps for original image and painting.
 	unsigned char*	m_ucOriginal;
 	unsigned char*	m_ucBitmap;
@@ -72,6 +76,7 @@ public:
 	unsigned char*	m_ucTemp;
 	unsigned char*	m_ucEdge;
 	unsigned char*	m_ucAnotherImage;
+	unsigned char*	m_ucAlphaMap;
 
 	// mouse coordinates
 	Point			m_pMousePos = Point(0, 0);
