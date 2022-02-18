@@ -376,7 +376,7 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 void ImpressionistDoc::setMousePos(Point source)
 {
 	m_pMousePos = source;
-	m_pUI->m_origView->refresh();
+	m_pUI->m_origView->redraw();
 
 }
 
