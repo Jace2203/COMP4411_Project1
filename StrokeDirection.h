@@ -19,8 +19,8 @@ class StrokeDirection
 public:
     StrokeDirection();
 
-    void    StrokeBegin(Point source);
-    void    StrokeMove(Point source);
+    void    StrokeBegin(Point source, int offset);
+    void    StrokeMove(Point source, int offset);
     void    StrokeEnd(Point source);
 
     void    setStartMousePos(Point source);
