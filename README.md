@@ -17,15 +17,15 @@ To create an impressionistic picture, the user loads an existing image and paint
 | Task      | Done |
 | -| -- |
 | W per new brush |
-| W border clipping |
+| W border clipping | ✔ |
 | W (red) marker | 	✔ |
 | W swap | 	✔ |
-| B RGB scale |
+| B RGB scale | ✔ |
 | B 1 level undo | 	✔ |
 | B dissolve |
 | BW fade in/out input on output canvas |
-| BW mural (blending) |
-| BW alpha brush |
+| BW mural (blending) | ✔ |
+| BW alpha brush | ✔ |
 | BW automatic paint whole image |
 | BW gradient from user-specified image |
 | BW edge clipping |
