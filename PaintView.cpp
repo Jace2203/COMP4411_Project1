@@ -119,7 +119,7 @@ void PaintView::draw()
 		glPixelStorei( GL_PACK_ALIGNMENT, 1 );
 		glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
 
-		int count = 0, temp = 0, temp_size = m_pDoc->getSize();
+		int count = 0, temp = 0;
 		for (int y = 0; y < m_nDrawHeight; y += autopaintspacing)
 			for(int x = 0; x < m_nDrawWidth; x += autopaintspacing)
 				++count;
@@ -129,6 +129,8 @@ void PaintView::draw()
 			for(int x = 0; x < m_nDrawWidth; x += autopaintspacing)
 				xy[temp++] = Point(x, y);
 
+		printf("%d\n", m_pDoc->m_pUI->EnableRandomSize());
+
 		Point temp_p;
 		for(int i = 0; i < count; ++i)
 		{
@@ -136,25 +138,25 @@ void PaintView::draw()
 			temp_p = xy[temp];
 			xy[temp] = xy[i];
 			xy[i] = temp_p;
-			if (m_pDoc->m_pUI->getRandomSize())
+		}
+
+		int size = m_pDoc->getSize();
+		
+		glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
+
+		for(int i = 0; i < count; ++i)
+		{
+			if (m_pDoc->m_pUI->EnableRandomSize())
 			{
-				temp = temp_size;
-				if (temp != 1)
-				{
-					temp = temp / 2 + temp % 2;
-					temp = rand() % (temp + 1) + (temp_size - temp);
-				}
+				temp = size / 2 + rand() % (size + 1);
+				if (temp == 0) temp = 1;
 				m_pDoc->setSize(temp);
 				m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
 			}
 			else
 				m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
 		}
-		m_pDoc->setSize(temp_size);
-
-		glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
-		for(int i = 0; i < count; ++i)
-			m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
+		m_pDoc->setSize(size);
 
 		glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
 

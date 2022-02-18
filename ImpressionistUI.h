@@ -80,7 +80,7 @@ public:
 	int					getEdgeThreashold();
 	void				setEdgeThreashold(int threashold);
 
-	int 				getRandomSize();
+	int 				EnableRandomSize();
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
@@ -95,7 +95,7 @@ private:
 	int		m_nAnotherGradient;
 	int		m_nSpacing;
 	int		m_nEdgeThreshold;
-	int		m_nRandomSize;
+	int		m_nEnableRandomSize;
 
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
@@ -128,7 +128,7 @@ private:
 	static void cb_edge_clipping_button(Fl_Widget* o, void* v);
 	static void cb_another_gradient_button(Fl_Widget* o, void* v);
 	static void cb_set_spacing(Fl_Widget* o, void* v);
-	static void cb_random_size(Fl_Widget* o, void* v);
+	static void cb_enable_random_size(Fl_Widget* o, void* v);
 	static void cb_auto_paint(Fl_Widget* o, void* v);
 	static void cb_edgeThreasholdSlides(Fl_Widget* o, void* v);
 	static void cb_edge_detection_button(Fl_Widget* o, void* v);
