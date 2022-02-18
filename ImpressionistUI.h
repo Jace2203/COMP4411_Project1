@@ -101,6 +101,9 @@ public:
 	double				getAlpha();
 	void				setAlpha(double alpha);
 
+	int					getEdgeClipping();
+	void				setEdgeClipping(int value);
+
 	int					getAnotherGradient();
 	void				setAnotherGradient(int value);
 

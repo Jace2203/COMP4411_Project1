@@ -41,6 +41,8 @@ public:
 	void	setAngle(int angle);				// set the brush anlge
 	double	getAlpha();							// get the brush alpha
 	void	setAlpha(double alpha);				// set the brush alpha
+	int		getEdgeClipping();
+	void	setEdgeClipping(int value);
 	int		getEdgeThreashold();				// get the edge threashold
 	void	setEdgeThreashold(int threashold);	// set the edge threashold
 	int		getBlurSharpLevel();

@@ -10,6 +10,7 @@
 #include "LineBrush.h"
 
 #include "StrokeDirection.h"
+#include "EdgeClipping.h"
 #include <math.h>
 
 extern float frand();
@@ -48,9 +49,12 @@ void LineBrush::BrushMove( const Point source, const Point target )
 	glLineWidth(width);
 	glBegin(GL_LINES);
 		SetColor( source );
+		int length[2] = {-size / 2, size / 2};
+		if (pDoc->getEdgeClipping())
+			EdgeClipping::clip(pDoc->m_ucEdge, pDoc->m_nPaintWidth, pDoc->m_nPaintHeight, source.x, source.y, angle, length);
 
-		glVertex2d(-size / 2, 0);
-		glVertex2d(size / 2, 0);
+		glVertex2d(length[0], 0);
+		glVertex2d(length[1], 0);
 		
 	glEnd();
 	glPopMatrix(); 

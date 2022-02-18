@@ -10,6 +10,7 @@
 #include "ScatteredLineBrush.h"
 
 #include "StrokeDirection.h"
+#include "EdgeClipping.h"
 #include <math.h>
 
 extern float frand();
@@ -59,9 +60,12 @@ void ScatteredLineBrush::BrushMove( const Point source, const Point target )
 		{
 
 			SetColor(Point((int)(source.x + x_offset), (int)(source.y + y_offset)));
+			int length[2] = {-size / 2, size / 2};
+			if (pDoc->getEdgeClipping())
+				EdgeClipping::clip(pDoc->m_ucEdge, pDoc->m_nPaintWidth, pDoc->m_nPaintHeight, source.x + x_offset, source.y + y_offset, angle, length);
 
-        	glVertex2d(-size / 2, 0);
-        	glVertex2d(size / 2, 0);
+        	glVertex2d(length[0], 0);
+        	glVertex2d(length[1], 0);
 		}
 		glEnd();
 		glPopMatrix();

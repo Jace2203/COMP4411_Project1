@@ -166,6 +166,16 @@ void ImpressionistDoc::setAlpha(double alpha)
 	m_pUI->setAlpha(alpha);
 }
 
+int ImpressionistDoc::getEdgeClipping()
+{
+	return m_pUI->getEdgeClipping();
+}
+
+void ImpressionistDoc::setEdgeClipping(int value)
+{
+	m_pUI->setEdgeClipping(value);
+}
+
 //---------------------------------------------------------
 // Returns the edge threashold.
 //---------------------------------------------------------

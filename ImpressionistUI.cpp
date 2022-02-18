@@ -346,12 +346,16 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_BrushWidthSlider->activate();
 		pUI->m_BrushAngleSlider->activate();
 		pUI->m_StrokeDirectionChoice->activate();
+		pUI->m_EdgeClippingButton->activate();
+		pUI->m_AnotherGradientButton->activate();
 	}
 	else
 	{
 		pUI->m_BrushWidthSlider->deactivate();
 		pUI->m_BrushAngleSlider->deactivate();
 		pUI->m_StrokeDirectionChoice->deactivate();
+		pUI->m_EdgeClippingButton->deactivate();
+		pUI->m_AnotherGradientButton->deactivate();
 	}
 
 	if (type == BRUSH_BLUR || type == BRUSH_SHARP)
@@ -604,6 +608,18 @@ void ImpressionistUI::setAlpha( double alpha )
 		m_BrushAlphaSlider->value(m_nAlpha);
 }
 
+int ImpressionistUI::getEdgeClipping()
+{
+	return m_nEdgeClipping;
+}
+
+void ImpressionistUI::setEdgeClipping(int value)
+{
+	m_nEdgeClipping = value;
+
+	m_EdgeClippingButton->value(value);
+}
+
 int ImpressionistUI::getAnotherGradient()
 {
 	return m_nAnotherGradient;
@@ -829,12 +845,14 @@ ImpressionistUI::ImpressionistUI() {
 		
 		m_EdgeClippingButton = new Fl_Light_Button(10, 200, 115, 25,"&Edge Clipping");
 		m_EdgeClippingButton->user_data((void*)(this));
-		m_EdgeClippingButton->set();
-		// m_EdgeClippingButton->callback();
+		m_EdgeClippingButton->value(m_nEdgeClipping);
+		m_EdgeClippingButton->callback(cb_edge_clipping_button);
+		m_EdgeClippingButton->deactivate();
 		
 		m_AnotherGradientButton = new Fl_Light_Button(240, 200, 150, 25, "&Another Gradient");
 		m_AnotherGradientButton->user_data((void*)(this));
 		m_AnotherGradientButton->callback(cb_another_gradient_button);
+		m_AnotherGradientButton->deactivate();
 
 		m_SpacingSlider = new Fl_Value_Slider(10, 10, 140, 20, "Spacing");
 		m_SpacingSlider->user_data((void*)(this));
