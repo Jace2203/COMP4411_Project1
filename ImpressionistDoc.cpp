@@ -239,7 +239,6 @@ int ImpressionistDoc::loadImage(char *iname)
 	m_ucAnotherImage = NULL;
 
 	m_ucBitmap		= data;
-	m_ucOriginal	= m_ucBitmap;
 
 	// allocate space for draw view
 	m_ucPainting	= new unsigned char [width*height*3];
@@ -249,6 +248,9 @@ int ImpressionistDoc::loadImage(char *iname)
 								m_pUI->m_mainWindow->y(), 
 								width*2, 
 								height+25);
+
+	edgeDetection();
+	m_ucOriginal = m_ucBitmap;
 
 	// display it on origView
 	m_pUI->m_origView->resizeWindow(width, height);	
