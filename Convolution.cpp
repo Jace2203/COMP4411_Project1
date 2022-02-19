@@ -77,16 +77,18 @@ void Convolution::ConvolutionFilter(const Matrix& kernel, int x, int y, bool gre
             int xx = x + j - (int)floor(w / 2);
             int yy = y - i + (int)floor(h / 2);
 
-            if (xx >= 0 && xx < width && yy >= 0 && yy < height)
-            {
-                rr = bmp[(yy * width + xx) * 3];
-                gg = bmp[(yy * width + xx) * 3 + 1];
-                bb = bmp[(yy * width + xx) * 3 + 2];
+            if (xx < 0) xx = 0;
+            if (xx >= width) xx = width - 1;
+            if (yy < 0) yy = 0;
+            if (yy >= height) yy = height - 1;
+            
+            rr = bmp[(yy * width + xx) * 3];
+            gg = bmp[(yy * width + xx) * 3 + 1];
+            bb = bmp[(yy * width + xx) * 3 + 2];
 
-                if (greyscale)
-                {
-                    rr = gg = bb = (29.9 * rr + 58.7 * gg + 11.4 * bb) / 100;
-                }
+            if (greyscale)
+            {
+                rr = gg = bb = (29.9 * rr + 58.7 * gg + 11.4 * bb) / 100;
             }
 
             r += rr * kernel.getValue(i, j);
