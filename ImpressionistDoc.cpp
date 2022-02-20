@@ -29,6 +29,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth			= -1;
 	m_ucBitmap			= NULL;
 	m_ucPainting		= NULL;
+	m_ucFadePainting	= NULL;
 	m_ucOriginal		= NULL;
 	m_ucTemp			= NULL;
 	m_ucEdge			= NULL;
@@ -433,9 +434,3 @@ void ImpressionistDoc::applyKernel()
 
 	refresh();
 }
-
-void ImpressionistDoc::fade_in()
-{
-	m_pUI->m_paintView->fade_in();
-}
-

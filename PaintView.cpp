@@ -4,6 +4,7 @@
 // The code maintaining the painting view of the input images
 //
 
+#include <iostream>
 #include "impressionist.h"
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
@@ -28,6 +29,7 @@
 static int		eventToDo;
 static int		isAnEvent=0;
 static Point	coord;
+static int a;
 
 LinkedList::LinkedList(int w, int h)
 {
@@ -41,6 +43,7 @@ LinkedList::~LinkedList()
 
 static int		autopaint = 0;
 static int		autopaintspacing = 0;
+static int		isFade = 0;
 
 PaintView::PaintView(int			x, 
 					 int			y, 
@@ -52,6 +55,7 @@ PaintView::PaintView(int			x,
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
 	m_SavedPhoto = nullptr;
+
 }
 
 
@@ -61,10 +65,6 @@ void PaintView::draw()
 	// To avoid flicker on some machines.
 	glDrawBuffer(GL_FRONT_AND_BACK);
 	#endif // !MESA
-
-	glEnable( GL_BLEND );
-	glBlendFunc(GL_SRC_ALPHA,
-		GL_ONE_MINUS_SRC_ALPHA);
 
 	if(!valid())
 	{
@@ -114,7 +114,7 @@ void PaintView::draw()
 	{
 		int x = 0, y = 0;
 
-		glReadBuffer(GL_BACK);
+		//glReadBuffer(GL_BACK);
 
 		glPixelStorei( GL_PACK_ALIGNMENT, 1 );
 		glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
@@ -146,6 +146,8 @@ void PaintView::draw()
 		RestoreContent();
 	}
 
+	int originalSize = m_pDoc->getSize();
+
 	if ( m_pDoc->m_ucPainting && isAnEvent) 
 	{
 
@@ -159,10 +161,56 @@ void PaintView::draw()
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
-			m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+			if (m_pDoc->m_ucFadePainting)
+			{
+				glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+				glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+				glDrawPixels( m_nDrawWidth, 
+							m_nDrawHeight, 
+							GL_RGB, 
+							GL_UNSIGNED_BYTE, 
+							m_pDoc->m_ucFadePainting);
+
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+
+				glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+				glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+				glReadPixels( 0, 
+							m_nWindowHeight - m_nDrawHeight, 
+							m_nDrawWidth, 
+							m_nDrawHeight, 
+							GL_RGB, 
+							GL_UNSIGNED_BYTE, 
+							m_pDoc->m_ucFadePainting );
+			}
+			else
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
 			break;
 		case LEFT_MOUSE_DRAG:
-			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
+			if (m_pDoc->m_ucFadePainting)
+			{
+				glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+				glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+				glDrawPixels( m_nDrawWidth, 
+							m_nDrawHeight, 
+							GL_RGB, 
+							GL_UNSIGNED_BYTE, 
+							m_pDoc->m_ucFadePainting);
+
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+
+				glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+				glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+				glReadPixels( 0, 
+							m_nWindowHeight - m_nDrawHeight, 
+							m_nDrawWidth, 
+							m_nDrawHeight, 
+							GL_RGB, 
+							GL_UNSIGNED_BYTE, 
+							m_pDoc->m_ucFadePainting );
+			}
+			else
+				m_pDoc->m_pCurrentBrush->BrushMove( source, target );
 			break;
 		case LEFT_MOUSE_UP:
 			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
@@ -204,13 +252,46 @@ void PaintView::draw()
 		}
 	}
 
+	if (isFade)
+	{
+		m_pDoc->setSize(1);
+
+		glTranslated(0, (m_nWindowHeight - m_nDrawHeight), 0);
+
+		for (int y = 0; y < m_nDrawHeight ; ++y)
+			for(int x = 0; x < m_nDrawWidth; ++x)
+				m_pDoc->m_pCurrentBrush->BrushBegin( Point(x, y), Point(x, y) );
+
+		glEnable( GL_BLEND );
+		glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
+		GLubyte color[4];
+		glPointSize(1);
+		for (int y = 0; y < m_nDrawHeight ; ++y)
+			for(int x = 0; x < m_nDrawWidth; ++x)
+			{
+				memcpy ( color, m_pDoc->m_ucFadePainting  + 3 * (y*m_nDrawWidth + x), 3 );
+				memset ( color+3, m_pDoc->m_pUI->getFadeAlpha()*255, 1);
+				glColor4ubv( color );
+				glBegin( GL_POINTS );
+					glVertex2d( x, y );
+				glEnd();
+			}
+
+		glDisable(GL_BLEND);
+
+		glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
+
+		m_pDoc->setSize(originalSize);
+
+		SaveCurrentContent();
+	}
+
 	glFlush();
 
 	#ifndef MESA
 	// To avoid flicker on some machines.
 	glDrawBuffer(GL_BACK);
 	#endif // !MESA
-
 }
 
 
@@ -352,7 +433,6 @@ void PaintView::LoadForUndo()
 
 void PaintView::AutoPaint(int spacing)
 {
-	printf("autopaint : %1f\n", m_pDoc->getAlpha());
 	autopaintspacing = spacing;
 	autopaint = 1;
 	redraw();
@@ -360,38 +440,12 @@ void PaintView::AutoPaint(int spacing)
 
 void PaintView::fade_in()
 {
-	memset(m_pDoc->m_ucPainting, 0, m_nDrawWidth*m_nDrawHeight*3);
-	draw();
-	
-	glReadBuffer(GL_BACK);
-
-	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-	glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-
-	double temp = m_pDoc->getAlpha();
-	int temp_size = m_pDoc->getSize();
-
-	m_pDoc->setAlpha(m_pDoc->m_pUI->getFadeAlpha());
-	m_pDoc->setSize(1);
-
-	glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
-
-	for (int y = 0; y < m_nDrawHeight ; ++y)
-		for(int x = 0; x < m_nDrawWidth; ++x)
-			m_pDoc->m_pCurrentBrush->BrushBegin( Point(x, y), Point(x, y) );
-
-	glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
-
-	m_pDoc->setAlpha(temp);
-	m_pDoc->setSize(temp_size);
-
-	glReadPixels( 0, 
-			m_nWindowHeight - m_nDrawHeight, 
-			m_nDrawWidth, 
-			m_nDrawHeight, 
-			GL_RGB, 
-			GL_UNSIGNED_BYTE, 
-			m_pPaintBitstart );
-
+	isFade = 1;
+	if (!m_pDoc->m_ucFadePainting)
+	{
+		glReadBuffer(GL_FRONT);
+		m_pDoc->m_ucFadePainting = new unsigned char [m_nDrawWidth*m_nDrawHeight*3];
+		memcpy (m_pDoc->m_ucFadePainting, m_pDoc->m_ucPainting, m_nDrawWidth*m_nDrawHeight*3);
+	}
 	redraw();
 }

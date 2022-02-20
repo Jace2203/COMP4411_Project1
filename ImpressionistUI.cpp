@@ -232,7 +232,7 @@ void ImpressionistUI::cb_fade_in(Fl_Widget* o, void* v)
 	ImpressionistUI* pUI=((ImpressionistUI *)(o->user_data()));
 	ImpressionistDoc* pDoc=pUI->getDocument();
 
-	pDoc->fade_in();
+	pDoc->m_pUI->m_paintView->fade_in();
 }
 
 //------------------------------------------------------------
