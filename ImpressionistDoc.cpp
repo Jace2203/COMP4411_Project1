@@ -11,6 +11,7 @@
 #include "ImpressionistUI.h"
 
 #include <math.h>
+#include <iostream>
 
 #include "ImpBrush.h"
 #include "StrokeDirection.h"
@@ -289,66 +290,57 @@ int ImpressionistDoc::newMuralImage(char *iname)
 int ImpressionistDoc::dissolve(char *iname) 
 {
 	unsigned char*	data;
-	int				width, 
-					height;
+	int				new_width, 
+					new_height;
 
-	if ( (data=readBMP(iname, width, height))==NULL ) 
+	if ( (data=readBMP(iname, new_width, new_height))==NULL ) 
 	{
 		fl_alert("Can't load bitmap file");
 		return 0;
 	}
 
-	if (!m_pUI->m_origView->isSameSize(width, height))
-	{
-		printf("no\n");
-		return 0;
-	}
+	int old_width = m_nWidth,
+		old_height = m_nHeight;
 
-	//m_pUI->m_origView->refresh();
+	int width = max(old_width, new_width),
+		height = max(old_height, new_height);
 
-	GLubyte color[4];
+	m_nWidth		= width;
+	m_nPaintWidth	= width;
+	m_nHeight		= height;
+	m_nPaintHeight	= height;
 
-	//glTranslated(0, m_pUI->m_origView->h() - height, 0);
+	m_ucBitmap = new unsigned char [width*height*3];
+	memset(m_ucBitmap, 255, width*height*3);
+	m_ucOriginal = m_ucBitmap;
 
-	glEnable( GL_BLEND );
-	glBlendFunc(GL_SRC_ALPHA,
-				GL_ONE_MINUS_SRC_ALPHA);
-	glPointSize(1);
+	m_ucPainting = new unsigned char [width*height*3];
+	memset(m_ucPainting, 255, width*height*3);
 
-	glReadBuffer(GL_BACK);
+	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
+								m_pUI->m_mainWindow->y(), 
+								width*2, 
+								height+25);
+
+	m_pUI->m_origView->resizeWindow(width, height);	
+	m_pUI->m_origView->refresh();
+
+	m_pUI->m_paintView->resizeWindow(width, height);	
+	m_pUI->m_paintView->refresh();
+
+	// glPointSize(1);
+	// for(int y = 0; y < height; ++y)
+	// 	for(int x = 0; x < width; ++x)
+	// 	{
+	// 		glColor3f(1, 0, 0);
+	// 		glBegin(GL_POINT);
+	// 			glVertex2d(x, y);
+	// 		glEnd();
+	// 	}
 
 	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
 	glPixelStorei( GL_PACK_ROW_LENGTH, width );
-
-	//
-	// glRasterPos2i( 0, m_pUI->m_origView->h() - height );
-	// glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	// glPixelStorei( GL_UNPACK_ROW_LENGTH, width);
-	//
-
-	// writeBMP(iname, width, height, m_ucPainting);
-	// m_ucBitmap = readBMP("temp.bmp", width, height);
-
-	for(int y = 0; y < height; ++y)
-		for(int x = 0; x < width; ++x)
-		{
-			memcpy ( color,  m_ucBitmap + 3 * (y*width + x), 3 );
-			glColor3ubv( color );
-			glBegin(GL_POINTS);
-				glVertex2d(x, y);
-			glEnd();
-
-			memcpy ( color, data + 3 * (y*width + x), 3 );
-			memset( color+3, 0.5*255, 1);
-			glColor4ubv( color );
-			glBegin(GL_POINTS);
-				glVertex2d(x, y);
-			glEnd();
-		}
-	glDisable( GL_BLEND );
-
-	//glTranslated(0, -(m_pUI->m_origView->h() - height), 0);
-
+	
 	glReadPixels( 0, 
 				  0, 
 				  width, 
@@ -357,11 +349,31 @@ int ImpressionistDoc::dissolve(char *iname)
 				  GL_UNSIGNED_BYTE, 
 				  m_ucBitmap );
 
-	m_pUI->m_origView->refresh();
-	m_pUI->m_paintView->refresh();
-
-	delete data;
+	int a;
+	std::cin >> a;
 	
+	// glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+	// glPixelStorei( GL_PACK_ROW_LENGTH, width );
+	
+	// glReadPixels( 0, 
+	// 			  0, 
+	// 			  width, 
+	// 			  height, 
+	// 			  GL_RGB, 
+	// 			  GL_UNSIGNED_BYTE, 
+	// 			  m_ucBitmap );
+				
+	// glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+	// glPixelStorei( GL_PACK_ROW_LENGTH, width );
+	
+	// glReadPixels( 0, 
+	// 			  0, 
+	// 			  width, 
+	// 			  height, 
+	// 			  GL_RGB, 
+	// 			  GL_UNSIGNED_BYTE, 
+	// 			  m_ucPainting );
+
 	return 1;
 	
 }
