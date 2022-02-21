@@ -541,6 +541,7 @@ void ImpressionistDoc::applyKernel()
 void ImpressionistDoc::preprocess()
 {
 	// preprocess
+	imageprocess::preprocessImage(920, 690);
 }
 
 void ImpressionistDoc::doMosaic()
