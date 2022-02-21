@@ -49,12 +49,29 @@ int ThreeDTree::Color::b() const
 }
 
 ThreeDTree::ThreeDTree(Color** colors, int size, RGB rgb)
+: left(NULL), right(NULL)
 {
-    sortColor(colors, size, rgb);
+    if (size > 1)
+        sortColor(colors, size, rgb);
 
-    for (int i = 0; i < size; i++)
+    color = colors[size / 2];
+
+    if (size == 1) return;
+
+    int size_l = int(size / 2);
+    int size_r = size - int(size / 2) - 1;
+
+    RGB next_dim = RGB((rgb + 1) % 3);
+    if (size_l > 0)
     {
-        std::cout << colors[i]->r() << std::endl;
+        Color** l = colors;
+        left = new ThreeDTree(l, size_l, next_dim);
+    }
+
+    if (size_r > 0)
+    {
+        Color** r = colors + size_l + 1;
+        right = new ThreeDTree(r, size_r, next_dim);
     }
 }
 
