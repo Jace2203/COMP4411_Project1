@@ -18,6 +18,8 @@ public:
         int g() const;
         int b() const;
 
+        int dist(Color* another);
+
     private:
         unsigned char* rgb;
     };
@@ -30,14 +32,20 @@ public:
     };
 
     ThreeDTree(Color** colors, int size, RGB rgb = R);
+    Color* SearchNearest(Color* target);
 
 private:
     ThreeDTree *left, *right;
     Color* color;
+    RGB dim;
+
+    int dist(ThreeDTree* another);
 
     static void sortColor(Color** colors, int size, RGB rgb);
     static void split(Color** colors, int size, int& size_l, int& size_r, Color** &l, Color** &r);
     static void merge(Color** &colors, int size_l, int size_r, Color** l, Color** r, RGB rgb);
+
+    static ThreeDTree* search(ThreeDTree* root, Color* target);
 };
 
 #endif

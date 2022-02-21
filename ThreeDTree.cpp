@@ -5,7 +5,7 @@
 #include <string.h>
 
 ThreeDTree::Color::Color()
-: rgb(NULL)
+    : rgb(NULL)
 {
 }
 
@@ -19,10 +19,10 @@ ThreeDTree::Color::Color(int r, int g, int b)
 
 // ThreeDTree::Color::Color(char* name)
 // {
-    
+
 // }
 
-ThreeDTree::Color::Color(unsigned char* color)
+ThreeDTree::Color::Color(unsigned char *color)
 {
     rgb = new unsigned char[3];
     memcpy(rgb, color, 3);
@@ -48,15 +48,21 @@ int ThreeDTree::Color::b() const
     return int(rgb[2]);
 }
 
-ThreeDTree::ThreeDTree(Color** colors, int size, RGB rgb)
-: left(NULL), right(NULL)
+int ThreeDTree::Color::dist(Color *another)
+{
+    return pow((r() - another->r()), 2) + pow((g() - another->g()), 2) + pow((b() - another->b()), 2);
+}
+
+ThreeDTree::ThreeDTree(Color **colors, int size, RGB rgb)
+    : left(NULL), right(NULL), dim(rgb)
 {
     if (size > 1)
         sortColor(colors, size, rgb);
 
     color = colors[size / 2];
 
-    if (size == 1) return;
+    if (size == 1)
+        return;
 
     int size_l = int(size / 2);
     int size_r = size - int(size / 2) - 1;
@@ -64,20 +70,31 @@ ThreeDTree::ThreeDTree(Color** colors, int size, RGB rgb)
     RGB next_dim = RGB((rgb + 1) % 3);
     if (size_l > 0)
     {
-        Color** l = colors;
+        Color **l = colors;
         left = new ThreeDTree(l, size_l, next_dim);
     }
 
     if (size_r > 0)
     {
-        Color** r = colors + size_l + 1;
+        Color **r = colors + size_l + 1;
         right = new ThreeDTree(r, size_r, next_dim);
     }
 }
 
-void ThreeDTree::sortColor(Color** colors, int size, RGB rgb)
+ThreeDTree::Color *ThreeDTree::SearchNearest(Color *target)
 {
-    if (size == 1) return;
+    return search(this, target)->color;
+}
+
+int ThreeDTree::dist(ThreeDTree *another)
+{
+    return color->dist(another->color);
+}
+
+void ThreeDTree::sortColor(Color **colors, int size, RGB rgb)
+{
+    if (size == 1)
+        return;
 
     int size_l, size_r;
     Color **l = NULL, **r = NULL;
@@ -93,25 +110,25 @@ void ThreeDTree::sortColor(Color** colors, int size, RGB rgb)
     delete[] r;
 }
 
-void ThreeDTree::split(Color** colors, int size, int& size_l, int& size_r, Color** &l, Color** &r)
+void ThreeDTree::split(Color **colors, int size, int &size_l, int &size_r, Color **&l, Color **&r)
 {
     size_l = floor(double(size) / 2);
     size_r = ceil(double(size) / 2);
 
-    l = new Color*[size_l];
+    l = new Color *[size_l];
     for (int i = 0; i < size_l; i++)
     {
         l[i] = colors[i];
     }
 
-    r = new Color*[size_r];
+    r = new Color *[size_r];
     for (int i = 0; i < size_r; i++)
     {
         r[i] = colors[size_l + i];
     }
 }
 
-void ThreeDTree::merge(Color** &colors, int size_l, int size_r, Color** l, Color** r, RGB rgb)
+void ThreeDTree::merge(Color **&colors, int size_l, int size_r, Color **l, Color **r, RGB rgb)
 {
     int a = 0, b = 0;
 
@@ -123,13 +140,16 @@ void ThreeDTree::merge(Color** &colors, int size_l, int size_r, Color** l, Color
             switch (rgb)
             {
             case R:
-                if (l[a]->r() > r[b]->r()) larger = true;
+                if (l[a]->r() > r[b]->r())
+                    larger = true;
                 break;
             case G:
-                if (l[a]->g() > r[b]->g()) larger = true;
+                if (l[a]->g() > r[b]->g())
+                    larger = true;
                 break;
             case B:
-                if (l[a]->b() > r[b]->b()) larger = true;
+                if (l[a]->b() > r[b]->b())
+                    larger = true;
                 break;
             default:
                 break;
@@ -151,4 +171,94 @@ void ThreeDTree::merge(Color** &colors, int size_l, int size_r, Color** l, Color
             a++;
         }
     }
+}
+
+ThreeDTree *ThreeDTree::search(ThreeDTree *root, Color *target)
+{
+    if (root == NULL)
+        return NULL;
+
+    ThreeDTree *nextBranch = NULL, *otherBranch = NULL;
+
+    switch (root->dim)
+    {
+    case R:
+        if (target->r() < root->color->r())
+        {
+            nextBranch = root->left;
+            otherBranch = root->right;
+        }
+        else
+        {
+            nextBranch = root->right;
+            otherBranch = root->left;
+        }
+        break;
+    case G:
+        if (target->g() < root->color->g())
+        {
+            nextBranch = root->left;
+            otherBranch = root->right;
+        }
+        else
+        {
+            nextBranch = root->right;
+            otherBranch = root->left;
+        }
+        break;
+    case B:
+        if (target->b() < root->color->b())
+        {
+            nextBranch = root->left;
+            otherBranch = root->right;
+        }
+        else
+        {
+            nextBranch = root->right;
+            otherBranch = root->left;
+        }
+        break;
+    }
+
+    ThreeDTree *temp = search(nextBranch, target);
+    ThreeDTree *best = NULL;
+    if (temp->color->dist(target) < root->color->dist(target))
+    {
+        best = temp;
+    }
+    else
+    {
+        best = root;
+    }
+
+    int radiusSquared = best->color->dist(target);
+    int distance;
+    switch (root->dim)
+    {
+    case R:
+        distance = target->r() - root->color->r();
+        break;
+    case G:
+        distance = target->g() - root->color->g();
+        break;
+    case B:
+        distance = target->b() - root->color->b();
+        break;
+    }
+
+    if (radiusSquared >= distance * distance)
+    {
+        temp = search(otherBranch, target);
+
+        if (temp->color->dist(target) < best->color->dist(target))
+        {
+            best = temp;
+        }
+        else
+        {
+            best = best;
+        }
+    }
+
+    return best;
 }
