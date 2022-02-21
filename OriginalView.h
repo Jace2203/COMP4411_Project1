@@ -34,6 +34,8 @@ public:
 
 	ImpressionistDoc*	m_pDoc;
 
+	int draw_fade(int old_width, int old_height, int new_width, int new_height, unsigned char* data, unsigned char* old_original);
+
 private:
 	int	m_nWindowWidth, 
 		m_nWindowHeight;

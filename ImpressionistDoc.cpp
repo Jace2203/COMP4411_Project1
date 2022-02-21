@@ -310,12 +310,15 @@ int ImpressionistDoc::dissolve(char *iname)
 	m_nHeight		= height;
 	m_nPaintHeight	= height;
 
+	unsigned char* old_original = m_ucBitmap;
+	unsigned char* old_painting = m_ucPainting;
+
 	m_ucBitmap = new unsigned char [width*height*3];
-	memset(m_ucBitmap, 255, width*height*3);
+	memset(m_ucBitmap, 0, width*height*3);
 	m_ucOriginal = m_ucBitmap;
 
 	m_ucPainting = new unsigned char [width*height*3];
-	memset(m_ucPainting, 255, width*height*3);
+	memset(m_ucPainting, 0, width*height*3);
 
 	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
 								m_pUI->m_mainWindow->y(), 
@@ -328,54 +331,14 @@ int ImpressionistDoc::dissolve(char *iname)
 	m_pUI->m_paintView->resizeWindow(width, height);	
 	m_pUI->m_paintView->refresh();
 
-	// glPointSize(1);
-	// for(int y = 0; y < height; ++y)
-	// 	for(int x = 0; x < width; ++x)
-	// 	{
-	// 		glColor3f(1, 0, 0);
-	// 		glBegin(GL_POINT);
-	// 			glVertex2d(x, y);
-	// 		glEnd();
-	// 	}
+	glDrawBuffer(GL_FRONT_AND_BACK);
+	glRasterPos2i( 0, 0);
 
-	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-	glPixelStorei( GL_PACK_ROW_LENGTH, width );
-	
-	glReadPixels( 0, 
-				  0, 
-				  width, 
-				  height, 
-				  GL_RGB, 
-				  GL_UNSIGNED_BYTE, 
-				  m_ucBitmap );
+	m_pUI->m_origView->draw_fade( old_width, old_height, new_width,  new_height, data, old_original);
 
-	int a;
-	std::cin >> a;
-	
-	// glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-	// glPixelStorei( GL_PACK_ROW_LENGTH, width );
-	
-	// glReadPixels( 0, 
-	// 			  0, 
-	// 			  width, 
-	// 			  height, 
-	// 			  GL_RGB, 
-	// 			  GL_UNSIGNED_BYTE, 
-	// 			  m_ucBitmap );
-				
-	// glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-	// glPixelStorei( GL_PACK_ROW_LENGTH, width );
-	
-	// glReadPixels( 0, 
-	// 			  0, 
-	// 			  width, 
-	// 			  height, 
-	// 			  GL_RGB, 
-	// 			  GL_UNSIGNED_BYTE, 
-	// 			  m_ucPainting );
+	m_pUI->m_paintView->draw_fade( old_width,  old_height, old_painting);
 
 	return 1;
-	
 }
 
 //----------------------------------------------------------------

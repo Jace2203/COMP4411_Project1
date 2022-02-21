@@ -10,7 +10,7 @@
 #include "paintview.h"
 #include "ImpBrush.h"
 #include "StrokeDirection.h"
-
+#include <iostream>
 
 #define LEFT_MOUSE_DOWN		1
 #define LEFT_MOUSE_DRAG		2
@@ -113,8 +113,8 @@ void PaintView::draw()
 	if (autopaint == 1)
 	{
 		int x = 0, y = 0;
-
-		glReadBuffer(GL_BACK);
+		// glReadBuffer(GL_BACK);
+		glDrawBuffer(GL_FRONT_AND_BACK);
 
 		glPixelStorei( GL_PACK_ALIGNMENT, 1 );
 		glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
@@ -135,14 +135,17 @@ void PaintView::draw()
 		glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
 		autopaint = 0;
 
-		glReadPixels( 0, 
-				m_nWindowHeight - m_nDrawHeight, 
-				m_nDrawWidth, 
-				m_nDrawHeight, 
-				GL_RGB, 
-				GL_UNSIGNED_BYTE, 
-				m_pPaintBitstart );
+		// glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+		// glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+		// glReadPixels( 0, 
+		// 		m_nWindowHeight - m_nDrawHeight, 
+		// 		m_nDrawWidth, 
+		// 		m_nDrawHeight, 
+		// 		GL_RGB, 
+		// 		GL_UNSIGNED_BYTE, 
+		// 		m_pPaintBitstart );
 
+		SaveCurrentContent();
 		RestoreContent();
 	}
 
@@ -215,6 +218,8 @@ void PaintView::draw()
 		}
 		
 	}
+
+	glDisable(GL_BLEND);
 
 	glFlush();
 
@@ -367,4 +372,46 @@ void PaintView::AutoPaint(int spacing)
 	autopaintspacing = spacing;
 	autopaint = 1;
 	redraw();
+}
+
+void PaintView::draw_fade(int old_width, int old_height, unsigned char* old_painting)
+{
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+	glDrawPixels(  m_pDoc->m_nPaintWidth, 
+				   m_pDoc->m_nPaintHeight, 
+				  GL_RGB, 
+				  GL_UNSIGNED_BYTE, 
+				   m_pDoc->m_ucPainting);
+				
+	glFlush();
+
+	if (old_painting)
+	{
+		GLubyte color[3];
+		for(int y = 0; y < old_height; ++y)
+			for(int x = 0; x < old_width; ++x)
+			{
+				memcpy (color, old_painting+3*(x+y*old_width), 3);
+				glColor3ubv(color);
+				glBegin(GL_POLYGON);
+					glVertex2f(x, y);
+					glVertex2f(x, y+1);
+					glVertex2f(x+1, y+1);
+					glVertex2f(x+1, y);
+				glEnd();
+			}
+
+		glFlush();
+	}
+
+	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+	glPixelStorei( GL_PACK_ROW_LENGTH,  m_pDoc->m_nPaintWidth );
+	glReadPixels( 0, 
+				  0, 
+				   m_pDoc->m_nPaintWidth, 
+				   m_pDoc->m_nPaintHeight, 
+				  GL_RGB, 
+				  GL_UNSIGNED_BYTE, 
+				   m_pDoc->m_ucPainting );	
 }
