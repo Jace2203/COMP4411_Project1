@@ -10,6 +10,7 @@
 #include "paintview.h"
 #include "ImpBrush.h"
 #include "StrokeDirection.h"
+#include <math.h>
 
 
 #define LEFT_MOUSE_DOWN		1
@@ -355,4 +356,29 @@ void PaintView::AutoPaint(int spacing)
 	autopaintspacing = spacing;
 	autopaint = 1;
 	redraw();
+}
+
+void PaintView::DrawPaintly()
+{
+	unsigned char* canvas = new unsigned char [m_nDrawWidth*m_nDrawHeight*3];
+
+	int size = 4;
+	for(int i = 0; i < m_nPaintlyR0Level; ++i) size *= 2;
+	for(int layer = 0; layer < m_nPaintlyLayer; ++layer)
+	{
+		size /= 2;
+		m_pDoc->setSize(size);
+
+		/*apply blur - need to be added*/
+
+		float D[m_nDrawWidth*m_nDrawHeight] = {};
+		for(int y = 0; y < m_nDrawHeight; ++y)
+			for(int x = 0; x < m_nDrawWidth; ++x)
+			{
+				int color1[3]; memcpy(color1, canvas+3*(x+y*m_nDrawWidth), 3);
+				int color2[3]; memcpy(color1, canvas+3*(x+y*m_nDrawWidth), 3);
+			}
+			D[x+y*m_nDrawWidth] = sqrt(canvas+3*(x+y*m_nDrawWidth))
+	}
+
 }

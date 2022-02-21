@@ -44,6 +44,8 @@ public:
 	void LoadForUndo();
 	void AutoPaint(int spacing);
 
+	void DrawPaintly();
+
 	ImpressionistDoc *m_pDoc;
 
 private:

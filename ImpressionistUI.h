@@ -116,6 +116,16 @@ private:
 	int		m_nIsNormalized;
 	Matrix*	m_pCustomKernel;
 
+	int 	m_nPaintlyTheshold;
+	double 	m_nPaintlyCurvature;
+	double	m_nPaintlyBlur;
+	double	m_nPaintlyGridSize;
+	int		m_nPaintlyMinStrokeL;
+	int		m_nPaintlyMaxStrokeL;
+	double	m_nPaintlyAlpha;
+	int		m_nPaintlyLayer;
+	int		m_nPaintlyR0Level;
+
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
 	static Fl_Menu_Item		brushTypeMenu[NUM_BRUSH_TYPE+1];
