@@ -50,76 +50,88 @@ int ThreeDTree::Color::b() const
 
 ThreeDTree::ThreeDTree(Color** colors, int size, RGB rgb)
 {
-    Color** sorted_colors = new Color*[size];
-
-    sortColor(colors, sorted_colors, size, rgb);
+    sortColor(colors, size, rgb);
 
     for (int i = 0; i < size; i++)
     {
-        std::cout << sorted_colors[i]->r() << std::endl;
+        std::cout << colors[i]->r() << std::endl;
     }
-
-    // delete[] sorted_colors;
-    // idk Y this causing error
 }
 
-void ThreeDTree::sortColor(Color** colors, Color** sorted_colors, int size, RGB rgb)
+void ThreeDTree::sortColor(Color** colors, int size, RGB rgb)
 {
-    sorted_colors[0] = colors[0];
+    if (size == 1) return;
 
-    for (int i = 1; i < size; i++)
+    int size_l, size_r;
+    Color **l = NULL, **r = NULL;
+
+    split(colors, size, size_l, size_r, l, r);
+
+    sortColor(l, size_l, rgb);
+    sortColor(r, size_r, rgb);
+
+    merge(colors, size_l, size_r, l, r, rgb);
+
+    delete[] l;
+    delete[] r;
+}
+
+void ThreeDTree::split(Color** colors, int size, int& size_l, int& size_r, Color** &l, Color** &r)
+{
+    size_l = floor(double(size) / 2);
+    size_r = ceil(double(size) / 2);
+
+    l = new Color*[size_l];
+    for (int i = 0; i < size_l; i++)
     {
-        int head = 0, tail = i - 1;
-        int middle = (head + tail) / 2;
+        l[i] = colors[i];
+    }
 
-        while (head <= tail)
+    r = new Color*[size_r];
+    for (int i = 0; i < size_r; i++)
+    {
+        r[i] = colors[size_l + i];
+    }
+}
+
+void ThreeDTree::merge(Color** &colors, int size_l, int size_r, Color** l, Color** r, RGB rgb)
+{
+    int a = 0, b = 0;
+
+    while (a + b < size_l + size_r)
+    {
+        bool larger = false;
+        if (a < size_l && b < size_r)
         {
-            bool larger = false;
             switch (rgb)
             {
             case R:
-                if (colors[i]->r() > sorted_colors[middle]->r())
-                    larger = true;
+                if (l[a]->r() > r[b]->r()) larger = true;
                 break;
             case G:
-                if (colors[i]->g() > sorted_colors[middle]->g())
-                    larger = true;
+                if (l[a]->g() > r[b]->g()) larger = true;
                 break;
             case B:
-                if (colors[i]->b() > sorted_colors[middle]->b())
-                    larger = true;
+                if (l[a]->b() > r[b]->b()) larger = true;
+                break;
+            default:
                 break;
             }
-
-            if (larger)
-            {
-                head = middle + 1;
-                middle = (head + tail) / 2;
-            }
-            else
-            {
-                tail = middle - 1;
-                middle = (head + tail) / 2;
-            }
+        }
+        else if (b < size_l)
+        {
+            larger = true;
         }
 
-        if (head > tail)
+        if (larger)
         {
-            for (int j = i; j > middle; j--)
-            {
-                sorted_colors[j + 1] = sorted_colors[j];
-            }
-
-            sorted_colors[middle + 1] = colors[i];
+            colors[a + b] = r[b];
+            b++;
         }
         else
         {
-            for (int j = i; j >= middle; j--)
-            {
-                sorted_colors[j + 1] = sorted_colors[j];
-            }
-
-            sorted_colors[middle] = colors[i];
+            colors[a + b] = l[a];
+            a++;
         }
     }
 }

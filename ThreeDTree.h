@@ -35,7 +35,9 @@ private:
     ThreeDTree *left, *right;
     Color* color;
 
-    static void sortColor(Color** colors, Color** sorted_colors, int size, RGB rgb);
+    static void sortColor(Color** colors, int size, RGB rgb);
+    static void split(Color** colors, int size, int& size_l, int& size_r, Color** &l, Color** &r);
+    static void merge(Color** &colors, int size_l, int size_r, Color** l, Color** r, RGB rgb);
 };
 
 #endif
