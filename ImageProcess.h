@@ -6,7 +6,7 @@ namespace imageprocess
     void preprocessImage(int width, int height);
 
     unsigned char* crop(unsigned char* bmp, int width, int height, int new_width, int new_height);
-    void resize(unsigned char* bmp, int width, int height, int scale);
+    unsigned char* resize(unsigned char* bmp, int width, int height, int scale, bool scaleup = true);
     void averageColor(unsigned char* bmp, int width, int height, unsigned char* color);
 
     bool fileExists(char* path);
