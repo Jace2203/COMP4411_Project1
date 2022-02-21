@@ -329,6 +329,13 @@ void ImpressionistUI::cb_view_another(Fl_Menu_* o, void* v)
 	}
 }
 
+void ImpressionistUI::cb_mosaic(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc * pDoc = whoami(o)->getDocument();
+
+	pDoc->cropImage();
+}
+
 //-----------------------------------------------------------
 // Brings up an about dialog box
 // Called by the UI when the about menu item is chosen
@@ -710,6 +717,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Edge View",		FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_view_edge },
 		{ "&Another Image",	FL_ALT + 'i', (Fl_Callback *)ImpressionistUI::cb_view_another },
 		{ 0 },
+	{ "&Mosaic",	NULL, (Fl_Callback *)ImpressionistUI::cb_mosaic },
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
 		{ "&About",	FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_about },
 		{ 0 },

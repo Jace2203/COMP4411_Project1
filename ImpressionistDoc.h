@@ -61,6 +61,8 @@ public:
 	void	edgeDetection();
 	void	applyKernel();
 
+	void	cropImage();
+
 // Attributes
 public:
 	// Dimensions of original window.

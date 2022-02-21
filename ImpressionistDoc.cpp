@@ -15,6 +15,7 @@
 #include "ImpBrush.h"
 #include "StrokeDirection.h"
 #include "Convolution.h"
+#include "ImageProcess.h"
 
 // Include individual brush headers here.
 #include "Brushes.h"
@@ -535,4 +536,10 @@ void ImpressionistDoc::applyKernel()
 	}
 
 	refresh();
+}
+
+void ImpressionistDoc::cropImage()
+{
+	// 920 720
+	imageprocess::preprocessImage(920, 690);
 }

@@ -160,6 +160,7 @@ private:
 	static void cb_view_original(Fl_Menu_* o, void* v);
 	static void cb_view_edge(Fl_Menu_* o, void* v);
 	static void cb_view_another(Fl_Menu_* o, void* v);
+	static void cb_mosaic(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void cb_strokeChoice(Fl_Widget* o, void* v);

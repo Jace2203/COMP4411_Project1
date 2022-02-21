@@ -145,6 +145,7 @@
     <ClCompile Include="CircleBrush.cpp" />
     <ClCompile Include="Convolution.cpp" />
     <ClCompile Include="EdgeClipping.cpp" />
+    <ClCompile Include="ImageProcess.cpp" />
     <ClCompile Include="ImpBrush.cpp" />
     <ClCompile Include="Impressionist.cpp" />
     <ClCompile Include="ImpressionistDoc.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="ScatteredPointBrush.cpp" />
     <ClCompile Include="SharpBrush.cpp" />
     <ClCompile Include="StrokeDirection.cpp" />
+    <ClCompile Include="ThreeDTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlphaMappedBrush.h" />
@@ -167,6 +169,7 @@
     <ClInclude Include="CircleBrush.h" />
     <ClInclude Include="Convolution.h" />
     <ClInclude Include="EdgeClipping.h" />
+    <ClInclude Include="ImageProcess.h" />
     <ClInclude Include="ImpBrush.h" />
     <ClInclude Include="impressionist.h" />
     <ClInclude Include="impressionistDoc.h" />
@@ -181,6 +184,7 @@
     <ClInclude Include="ScatteredPointBrush.h" />
     <ClInclude Include="SharpBrush.h" />
     <ClInclude Include="StrokeDirection.h" />
+    <ClInclude Include="ThreeDTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
