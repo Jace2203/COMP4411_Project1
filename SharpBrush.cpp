@@ -47,7 +47,7 @@ void SharpBrush::BrushMove( const Point source, const Point target )
 	if (kernel == NULL)
 	{
 		int k_size = pDoc->getBlurSharpLevel() * 2 + 1;
-		kernel = new Matrix(k_size, k_size, 1);
+		kernel = new Matrix(k_size, k_size, -1);
 		kernel->setValue(pDoc->getBlurSharpLevel(), pDoc->getBlurSharpLevel(), -kernel->InnerSum());
 	}
 
@@ -55,7 +55,7 @@ void SharpBrush::BrushMove( const Point source, const Point target )
 
 	glBegin( GL_POINTS );
 
-		con->ConvolutionFilter(*kernel, source.x, source.y, false, true, color);
+		con->ConvolutionFilter(*kernel, source.x, source.y, false, false, color);
 		glColor3d(color[0] / 255, color[1] / 255, color[2] / 255);
 
 		glVertex2d( target.x, target.y );

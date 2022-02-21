@@ -134,6 +134,7 @@ void PaintView::draw()
 			glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
 		}
 		autopaint = 0;
+		m_pDoc->m_pCurrentBrush->BrushEnd(m_pAutoPaintPoint, m_pAutoPaintPoint);
 
 		glReadPixels( 0, 
 				m_nWindowHeight - m_nDrawHeight, 
