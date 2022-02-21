@@ -538,6 +538,16 @@ void ImpressionistDoc::applyKernel()
 	refresh();
 }
 
+void ImpressionistDoc::preprocess()
+{
+	// preprocess
+}
+
+void ImpressionistDoc::doMosaic()
+{
+	// do mosaic
+}
+
 void ImpressionistDoc::cropImage()
 {
 	// 920 720

@@ -61,6 +61,8 @@ public:
 	void	edgeDetection();
 	void	applyKernel();
 
+	void	preprocess();
+	void	doMosaic();
 	void	cropImage();
 
 // Attributes

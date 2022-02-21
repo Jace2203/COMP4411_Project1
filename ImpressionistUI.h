@@ -74,6 +74,12 @@ public:
 	Fl_Button*			m_kernelApplyButton;
 	Fl_Button*			m_normalizeButton;
 
+// for mosaic
+	Fl_Window*			m_mosaicDialog;
+
+	Fl_Button*			m_PreprocessButton;
+	Fl_Button*			m_DoMosaicButton;
+
 // for alpha mapped brush
 	// Fl_Window*			m_alphaMapDialog;
 
@@ -180,6 +186,8 @@ private:
 	static void cb_apply_kernel(Fl_Widget* o, void* v);
 	static void cb_kernel_normalize(Fl_Widget* o, void* v);
 
+	static void cb_preprocess_button(Fl_Widget* o, void* v);
+	static void cb_do_mosaic_button(Fl_Widget* o, void* v);
 };
 
 #endif
