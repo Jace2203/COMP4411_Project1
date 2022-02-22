@@ -19,9 +19,11 @@ public:
         int b() const;
 
         int dist(Color* another);
+        void add();
 
     private:
         unsigned char* rgb;
+        int count;
     };
 
     enum RGB

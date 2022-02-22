@@ -546,11 +546,12 @@ void ImpressionistDoc::preprocess()
 
 void ImpressionistDoc::doMosaic()
 {
-	// do mosaic
+	int x_grid = m_nPaintWidth / 20;
+	int y_grid = m_nPaintHeight / 15;
 }
 
-void ImpressionistDoc::cropImage()
-{
-	// 920 720
-	imageprocess::preprocessImage(920, 690);
-}
+// void ImpressionistDoc::cropImage()
+// {
+// 	// 920 720
+// 	imageprocess::preprocessImage(920, 690);
+// }

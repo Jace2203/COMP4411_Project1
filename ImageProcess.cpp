@@ -2,6 +2,7 @@
 
 #include "dirent/include/dirent.h"
 #include "Bitmap.h"
+#include "ThreeDTree.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -272,4 +273,89 @@ bool imageprocess::fileExists(char *path)
     {
         return false;
     }
+}
+
+ThreeDTree* imageprocess::getProcessedFiles()
+{
+    DIR *dir;
+    struct dirent *ent;
+    int count = 0;
+
+    char* path = "images/processed/";
+    if ((dir = opendir(path)) != NULL)
+    {
+        while ((ent = readdir(dir)) != NULL)
+        {
+            if (ent->d_name[0] != '.')
+            {
+                count++;
+            }
+        }
+        closedir(dir);
+    }
+    
+    char** files = new char*[count];
+    int color_count = count;
+    int i = 0;
+
+    if ((dir = opendir(path)) != NULL)
+    {
+        while ((ent = readdir(dir)) != NULL)
+        {
+            if (ent->d_name[0] != '.')
+            {
+                files[i] = new char[ent->d_namlen + 1];
+                strcpy(files[i], ent->d_name);
+
+                if (i > 0 && sameColor(files[i], files[i - 1]))
+                    color_count--;
+
+                i++;
+            }
+        }
+        closedir(dir);
+    }
+
+    ThreeDTree::Color** colors = new ThreeDTree::Color*[color_count];
+    int j = 0;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (i != 0)
+        {
+            if (sameColor(files[i], files[i - 1]))
+            {
+                colors[j - 1]->add();
+                continue;
+            }
+        }
+
+        int c[3];
+        for (int k = 0; k < 3; k++)
+        {
+            char str[3];
+            memcpy(str, files[i] + k * 3, 3);
+            c[k] = std::stoi(str);
+        }
+        ThreeDTree::Color* color = new ThreeDTree::Color(c[0], c[1], c[2]);
+        color->add();
+        colors[j] = color;
+        j++;
+    }
+
+    ThreeDTree* root = new ThreeDTree(colors, color_count);
+    delete[] colors;
+
+    return root;
+}
+
+bool imageprocess::sameColor(char* file1, char* file2)
+{
+    for (int i = 0; i < 9; i++)
+    {
+        if (file1[i] != file2[i])
+            return false;
+    }
+
+    return true;
 }

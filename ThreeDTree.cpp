@@ -5,11 +5,12 @@
 #include <string.h>
 
 ThreeDTree::Color::Color()
-    : rgb(NULL)
+: rgb(NULL), count(0)
 {
 }
 
 ThreeDTree::Color::Color(int r, int g, int b)
+: count(0)
 {
     rgb = new unsigned char[3];
     rgb[0] = r;
@@ -23,6 +24,7 @@ ThreeDTree::Color::Color(int r, int g, int b)
 // }
 
 ThreeDTree::Color::Color(unsigned char *color)
+: count(0)
 {
     rgb = new unsigned char[3];
     memcpy(rgb, color, 3);
@@ -51,6 +53,11 @@ int ThreeDTree::Color::b() const
 int ThreeDTree::Color::dist(Color *another)
 {
     return pow((r() - another->r()), 2) + pow((g() - another->g()), 2) + pow((b() - another->b()), 2);
+}
+
+void ThreeDTree::Color::add()
+{
+    count++;
 }
 
 ThreeDTree::ThreeDTree(Color **colors, int size, RGB rgb)

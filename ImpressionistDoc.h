@@ -63,7 +63,7 @@ public:
 
 	void	preprocess();
 	void	doMosaic();
-	void	cropImage();
+	// void	cropImage();
 
 // Attributes
 public:
