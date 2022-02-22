@@ -17,6 +17,7 @@ public:
         int r() const;
         int g() const;
         int b() const;
+        int getCount() const;
 
         int dist(Color* another);
         void add();

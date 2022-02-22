@@ -50,6 +50,11 @@ int ThreeDTree::Color::b() const
     return int(rgb[2]);
 }
 
+int ThreeDTree::Color::getCount() const
+{
+    return count;
+}
+
 int ThreeDTree::Color::dist(Color *another)
 {
     return pow((r() - another->r()), 2) + pow((g() - another->g()), 2) + pow((b() - another->b()), 2);
@@ -162,7 +167,7 @@ void ThreeDTree::merge(Color **&colors, int size_l, int size_r, Color **l, Color
                 break;
             }
         }
-        else if (b < size_l)
+        else if (b < size_r)
         {
             larger = true;
         }
@@ -229,7 +234,7 @@ ThreeDTree *ThreeDTree::search(ThreeDTree *root, Color *target)
 
     ThreeDTree *temp = search(nextBranch, target);
     ThreeDTree *best = NULL;
-    if (temp->color->dist(target) < root->color->dist(target))
+    if (temp != NULL && temp->color->dist(target) < root->color->dist(target))
     {
         best = temp;
     }
@@ -257,7 +262,7 @@ ThreeDTree *ThreeDTree::search(ThreeDTree *root, Color *target)
     {
         temp = search(otherBranch, target);
 
-        if (temp->color->dist(target) < best->color->dist(target))
+        if (temp != NULL && temp->color->dist(target) < best->color->dist(target))
         {
             best = temp;
         }

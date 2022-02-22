@@ -16,10 +16,14 @@ class Point;
 
 class StrokeDirection;
 
+class ThreeDTree;
+
 class ImpressionistDoc 
 {
 public:
 	ImpressionistDoc();
+
+	~ImpressionistDoc();
 
 	void	setUI(ImpressionistUI* ui);		// Assign the UI to use
 
@@ -94,6 +98,8 @@ public:
 	StrokeDirection*			m_pStrokeDirection;
 	// The stroke direction type.
 	int							m_nStrokeType;
+
+	ThreeDTree*					m_pMosaicFiles;
 
 	// Size of the brush.
 	int m_nSize;							

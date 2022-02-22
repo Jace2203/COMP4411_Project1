@@ -359,3 +359,27 @@ bool imageprocess::sameColor(char* file1, char* file2)
 
     return true;
 }
+
+char* imageprocess::getFileName(char* path, ThreeDTree::Color* color)
+{
+    char* file_path = new char[strlen(path) + 17 + 1];
+    strcpy(file_path, path);
+    
+    int r = rand() % color->getCount();
+
+    std::stringstream ss;
+    ss << std::setfill('0')   << std::setw(3) << int(color->r())
+                            << std::setw(3) << int(color->g())
+                            << std::setw(3) << int(color->b())
+                            << "_" << std::setw(3) << r << ".bmp";
+
+    strcat(file_path, ss.str().c_str());
+
+    if (!fileExists(file_path))
+    {
+        delete[] file_path;
+        return NULL;
+    }
+
+    return file_path;
+}

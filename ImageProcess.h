@@ -1,7 +1,7 @@
 #ifndef IMAGEPROCESS_H
 #define IMAGEPROCESS_H
 
-class ThreeDTree;
+#include "ThreeDTree.h"
 
 namespace imageprocess
 {
@@ -15,6 +15,8 @@ namespace imageprocess
 
     ThreeDTree* getProcessedFiles();
     bool sameColor(char* file1, char* file2);
+
+    char* getFileName(char* path, ThreeDTree::Color* color);
 
     // char** getFileNames(char* path);
 }
