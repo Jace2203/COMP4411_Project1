@@ -100,6 +100,10 @@ public:
 	int							m_nStrokeType;
 
 	ThreeDTree*					m_pMosaicFiles;
+	int							mosaic_width,
+								mosaic_height,
+								mosaic_pixel_width,
+								mosaic_pixel_height;
 
 	// Size of the brush.
 	int m_nSize;							

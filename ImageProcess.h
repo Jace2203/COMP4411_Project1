@@ -6,6 +6,7 @@
 namespace imageprocess
 {
     void preprocessImage(int width, int height);
+    void clearDir(char* path);
 
     unsigned char* crop(unsigned char* bmp, int width, int height, int new_width, int new_height);
     unsigned char* resize(unsigned char* bmp, int width, int height, int scale, bool scaleup = true);

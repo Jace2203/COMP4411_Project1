@@ -92,6 +92,27 @@ void imageprocess::preprocessImage(int width, int height)
     }
 }
 
+void imageprocess::clearDir(char* path)
+{
+    DIR *dir;
+    struct dirent *ent;
+    
+    if ((dir = opendir(path)) != NULL)
+    {
+        while ((ent = readdir(dir)) != NULL)
+        {
+            if (ent->d_name[0] != '.')
+            {
+                char* file_path = new char[ent->d_namlen + 17 + 1];
+                strcpy(file_path, path);
+                strcat(file_path, ent->d_name);
+
+                remove(file_path);
+            }
+        }
+    }
+}
+
 void imageprocess::averageColor(unsigned char *bmp, int width, int height, unsigned char *color)
 {
     int r = 0, g = 0, b = 0;

@@ -68,6 +68,12 @@ ImpressionistDoc::ImpressionistDoc()
 
 	m_pStrokeDirection = new StrokeDirection();
 	m_nStrokeType = 0;
+
+	mosaic_width = 200;
+	mosaic_height = 150;
+
+	mosaic_pixel_width = 12;
+	mosaic_pixel_height = 9;
 }
 
 ImpressionistDoc::~ImpressionistDoc()
@@ -548,17 +554,19 @@ void ImpressionistDoc::applyKernel()
 void ImpressionistDoc::preprocess()
 {
 	// preprocess
-	// imageprocess::preprocessImage(400, 300);
+	imageprocess::clearDir("images/processed/");
+
+	imageprocess::preprocessImage(mosaic_width, mosaic_height);
 	
 	m_pMosaicFiles = imageprocess::getProcessedFiles();
 }
 
 void ImpressionistDoc::doMosaic()
 {
-	int x_grid = m_nPaintWidth / 20;
-	int y_grid = m_nPaintHeight / 15;
-	int new_width = x_grid * 400;
-	int new_height = y_grid * 300;
+	int x_grid = m_nPaintWidth / mosaic_pixel_width;
+	int y_grid = m_nPaintHeight / mosaic_pixel_height;
+	int new_width = x_grid * mosaic_width;
+	int new_height = y_grid * mosaic_height;
 
 	char* path = "images/processed/";
 
@@ -570,20 +578,20 @@ void ImpressionistDoc::doMosaic()
 		for (int j = 0; j < x_grid; j++)
 		{
 			int color[3] = { 0, 0, 0 };
-			for (int y = 0; y < 15; y++)
+			for (int y = 0; y < mosaic_pixel_height; y++)
 			{
-				for (int x = 0; x < 20; x++)
+				for (int x = 0; x < mosaic_pixel_width; x++)
 				{
 					for (int k = 0; k < 3; k++)
 					{
-						color[k] += m_ucOriginal[((i * 15 + y) * m_nPaintWidth + (j * 20 + x)) * 3 + k];
+						color[k] += m_ucOriginal[((i * mosaic_pixel_height + y) * m_nPaintWidth + (j * mosaic_pixel_width + x)) * 3 + k];
 					}
 				}
 			}
 
 			for (int k = 0; k < 3; k++)
 			{
-				color[k] = color[k] / 300;
+				color[k] = color[k] / (mosaic_pixel_width * mosaic_pixel_height);
 			}
 
 			ThreeDTree::Color* target = new ThreeDTree::Color(color[0], color[1], color[2]);
@@ -618,6 +626,7 @@ void ImpressionistDoc::doMosaic()
 		}
 	}
 	writeBMP("images/mosaic/result.bmp", new_width, new_height, mosaic);
+	delete[] mosaic;
 }
 
 // void ImpressionistDoc::cropImage()
