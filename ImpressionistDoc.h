@@ -16,10 +16,14 @@ class Point;
 
 class StrokeDirection;
 
+class ThreeDTree;
+
 class ImpressionistDoc 
 {
 public:
 	ImpressionistDoc();
+
+	~ImpressionistDoc();
 
 	void	setUI(ImpressionistUI* ui);		// Assign the UI to use
 
@@ -61,6 +65,10 @@ public:
 	void	edgeDetection();
 	void	applyKernel();
 
+	void	preprocess();
+	void	doMosaic();
+	// void	cropImage();
+
 // Attributes
 public:
 	// Dimensions of original window.
@@ -90,6 +98,12 @@ public:
 	StrokeDirection*			m_pStrokeDirection;
 	// The stroke direction type.
 	int							m_nStrokeType;
+
+	ThreeDTree*					m_pMosaicFiles;
+	int							mosaic_width,
+								mosaic_height,
+								mosaic_pixel_width,
+								mosaic_pixel_height;
 
 	// Size of the brush.
 	int m_nSize;							

@@ -15,6 +15,8 @@
 #include "ImpBrush.h"
 #include "StrokeDirection.h"
 #include "Convolution.h"
+#include "ImageProcess.h"
+#include "ThreeDTree.h"
 
 // Include individual brush headers here.
 #include "Brushes.h"
@@ -34,6 +36,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_ucEdge			= NULL;
 	m_ucAnotherImage	= NULL;
 	m_ucAlphaMap		= NULL;
+	m_pMosaicFiles		= NULL;
 
 
 	// create one instance of each brush
@@ -65,6 +68,17 @@ ImpressionistDoc::ImpressionistDoc()
 
 	m_pStrokeDirection = new StrokeDirection();
 	m_nStrokeType = 0;
+
+	mosaic_width = 200;
+	mosaic_height = 150;
+
+	mosaic_pixel_width = 12;
+	mosaic_pixel_height = 9;
+}
+
+ImpressionistDoc::~ImpressionistDoc()
+{
+	delete m_pMosaicFiles;
 }
 
 
@@ -536,3 +550,87 @@ void ImpressionistDoc::applyKernel()
 
 	refresh();
 }
+
+void ImpressionistDoc::preprocess()
+{
+	// preprocess
+	imageprocess::clearDir("images/processed/");
+
+	imageprocess::preprocessImage(mosaic_width, mosaic_height);
+	
+	m_pMosaicFiles = imageprocess::getProcessedFiles();
+}
+
+void ImpressionistDoc::doMosaic()
+{
+	int x_grid = m_nPaintWidth / mosaic_pixel_width;
+	int y_grid = m_nPaintHeight / mosaic_pixel_height;
+	int new_width = x_grid * mosaic_width;
+	int new_height = y_grid * mosaic_height;
+
+	char* path = "images/processed/";
+
+	unsigned char* mosaic = new unsigned char[new_width * new_height * 3];
+	memset(mosaic, 0, new_width * new_height * 3);
+	
+	for (int i = 0; i < y_grid; i++)
+	{
+		for (int j = 0; j < x_grid; j++)
+		{
+			int color[3] = { 0, 0, 0 };
+			for (int y = 0; y < mosaic_pixel_height; y++)
+			{
+				for (int x = 0; x < mosaic_pixel_width; x++)
+				{
+					for (int k = 0; k < 3; k++)
+					{
+						color[k] += m_ucOriginal[((i * mosaic_pixel_height + y) * m_nPaintWidth + (j * mosaic_pixel_width + x)) * 3 + k];
+					}
+				}
+			}
+
+			for (int k = 0; k < 3; k++)
+			{
+				color[k] = color[k] / (mosaic_pixel_width * mosaic_pixel_height);
+			}
+
+			ThreeDTree::Color* target = new ThreeDTree::Color(color[0], color[1], color[2]);
+			ThreeDTree::Color* c = m_pMosaicFiles->SearchNearest(target);
+			
+			char* bmp = imageprocess::getFileName(path, c);
+			if (bmp == NULL)
+			{
+				fl_alert("ERROR");
+				return;
+			}
+
+			unsigned char*	data;
+			int				width,
+							height;
+			
+			if ( (data=readBMP(bmp, width, height)) == NULL )
+			{
+				fl_alert("Can't load bitmap file");
+				delete[] bmp;
+				return;
+			}
+
+			for (int y = 0; y < height; y++)
+			{
+				memcpy(mosaic + (((i * height + y) * new_width + (j * width)) * 3), data + (y * width * 3), width * 3);
+			}
+
+			delete target;
+			delete[] data;
+			delete[] bmp;
+		}
+	}
+	writeBMP("images/mosaic/result.bmp", new_width, new_height, mosaic);
+	delete[] mosaic;
+}
+
+// void ImpressionistDoc::cropImage()
+// {
+// 	// 920 720
+// 	imageprocess::preprocessImage(920, 690);
+// }

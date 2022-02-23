@@ -329,6 +329,11 @@ void ImpressionistUI::cb_view_another(Fl_Menu_* o, void* v)
 	}
 }
 
+void ImpressionistUI::cb_mosaic(Fl_Menu_* o, void* v)
+{
+	whoami(o)->m_mosaicDialog->show();
+}
+
 //-----------------------------------------------------------
 // Brings up an about dialog box
 // Called by the UI when the about menu item is chosen
@@ -500,6 +505,16 @@ void ImpressionistUI::cb_apply_kernel(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_kernel_normalize(Fl_Widget*o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_nIsNormalized=int( ((Fl_Light_Button *)o)->value() );
+}
+
+void ImpressionistUI::cb_preprocess_button(Fl_Widget* o, void* v)
+{
+	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->preprocess();
+}
+
+void ImpressionistUI::cb_do_mosaic_button(Fl_Widget* o, void* v)
+{
+	((ImpressionistDoc*)(((ImpressionistUI*)(o->user_data()))->getDocument()))->doMosaic();
 }
 
 //---------------------------------- per instance functions --------------------------------------
@@ -710,6 +725,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Edge View",		FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_view_edge },
 		{ "&Another Image",	FL_ALT + 'i', (Fl_Callback *)ImpressionistUI::cb_view_another },
 		{ 0 },
+	{ "&Mosaic",	NULL, (Fl_Callback *)ImpressionistUI::cb_mosaic },
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
 		{ "&About",	FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_about },
 		{ 0 },
@@ -952,4 +968,14 @@ ImpressionistUI::ImpressionistUI() {
 	// 	m_alphaMapBox = new Fl_Box(10, 10, 280, 280);
 	// 	m_alphaMapBMP = NULL;
 	// m_alphaMapDialog->end();
+
+	m_mosaicDialog = new Fl_Window(300, 50, "Mosaic Dialog");
+		m_PreprocessButton = new Fl_Button(20, 10, 100, 30, "Preprocess");
+		m_PreprocessButton->user_data((void*)(this));
+		m_PreprocessButton->callback(cb_preprocess_button);
+
+		m_DoMosaicButton = new Fl_Button(180, 10, 100, 30, "Mosaic!");
+		m_DoMosaicButton->user_data((void*)(this));
+		m_DoMosaicButton->callback(cb_do_mosaic_button);
+	m_mosaicDialog->end();
 }

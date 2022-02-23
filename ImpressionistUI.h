@@ -74,6 +74,12 @@ public:
 	Fl_Button*			m_kernelApplyButton;
 	Fl_Button*			m_normalizeButton;
 
+// for mosaic
+	Fl_Window*			m_mosaicDialog;
+
+	Fl_Button*			m_PreprocessButton;
+	Fl_Button*			m_DoMosaicButton;
+
 // for alpha mapped brush
 	// Fl_Window*			m_alphaMapDialog;
 
@@ -160,6 +166,7 @@ private:
 	static void cb_view_original(Fl_Menu_* o, void* v);
 	static void cb_view_edge(Fl_Menu_* o, void* v);
 	static void cb_view_another(Fl_Menu_* o, void* v);
+	static void cb_mosaic(Fl_Menu_* o, void* v);
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void cb_strokeChoice(Fl_Widget* o, void* v);
@@ -179,6 +186,8 @@ private:
 	static void cb_apply_kernel(Fl_Widget* o, void* v);
 	static void cb_kernel_normalize(Fl_Widget* o, void* v);
 
+	static void cb_preprocess_button(Fl_Widget* o, void* v);
+	static void cb_do_mosaic_button(Fl_Widget* o, void* v);
 };
 
 #endif
