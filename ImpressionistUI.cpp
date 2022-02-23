@@ -157,6 +157,24 @@ in links on the fltk help session page.
 //------------------------------------------------------------------------------------------------
 */
 
+enum
+{
+	PAINTLY_IMPRESSIONIST = 0,
+	PAINTLY_EXPRESSIONIST,
+	PAINTLY_COLOR_WASH,
+	PAINTLY_POINTILLIST,
+	PAINTLY_CUSTOMIZE
+};
+
+enum
+{
+	PAINTLY_CURVE = 0,
+	PAINTLY_BSPLINE,
+	PAINTLY_CIRCLE,
+	PAINTLY_CLIP,
+	PAINTLY_LINE
+};
+
 //------------------------------------- Help Functions --------------------------------------------
 
 //------------------------------------------------------------
@@ -214,6 +232,38 @@ void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 {
 	whoami(o)->m_colorDialog->show();
 }
+
+void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc* pDoc=whoami(o)->getDocument();
+
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyTheshold = 100;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyCurvature = 1;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyBlur = 0.5;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyGridSize = 1;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyMinStrokeL = 4;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyMaxStrokeL = 16;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyAlpha = 1;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyLayer = 1;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyR0Level = 5;
+	whoami(o)->setPaintly();
+
+	pDoc->m_pUI->m_paintView->DrawPaintly();
+	//whoami(o)->m_paintlyDialog->show();
+}
+
+void ImpressionistUI::cb_paintly_style(Fl_Widget* o, void* v)
+{
+}
+
+void ImpressionistUI::cb_paintly_stroke(Fl_Widget* o, void* v)
+{
+}
+
+void ImpressionistUI::cb_paintly_run(Fl_Widget* o, void* v)
+{
+}
+
 
 void ImpressionistUI::cb_kernel(Fl_Menu_* o, void* v)
 {
@@ -346,6 +396,14 @@ void ImpressionistUI::cb_strokeChoice(Fl_Widget* o, void* v)
 	int type = (int) v;
 
 	pDoc->setStrokeType(type);
+}
+
+void ImpressionistUI::cb_paintlyStyleChoice(Fl_Widget* o, void* v)
+{
+}
+
+void ImpressionistUI::cb_paintlyStrokeChoice(Fl_Widget* o, void* v)
+{
 }
 
 //------------------------------------------------------------
@@ -599,6 +657,19 @@ Matrix* ImpressionistUI::getCustomKernel()
 	return m_pCustomKernel;
 }
 
+void ImpressionistUI::setPaintly()
+{
+	m_pDoc->m_nPaintlyTheshold = 100;
+	m_pDoc->m_nPaintlyCurvature = 1;
+	m_pDoc->m_nPaintlyBlur = 0.5;
+	m_pDoc->m_nPaintlyGridSize = 1;
+	m_pDoc->m_nPaintlyMinStrokeL = 4;
+	m_pDoc->m_nPaintlyMaxStrokeL = 16;
+	m_pDoc->m_nPaintlyAlpha = 1;
+	m_pDoc->m_nPaintlyLayer = 5;
+	m_pDoc->m_nPaintlyR0Level = 5;
+}
+
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
@@ -606,6 +677,7 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
 		{ "&Color...",		FL_ALT + 'k', (Fl_Callback *)ImpressionistUI::cb_colors },
+		{ "&Paintly...",	FL_ALT + 't', (Fl_Callback *)ImpressionistUI::cb_paintly },
 		{ "&Kernel...",		FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_kernel },
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 
@@ -644,6 +716,24 @@ Fl_Menu_Item ImpressionistUI::strokeDirectionTypeMenu[NUM_STROKE_TYPE+1] = {
 	{"Slider/Right Mouse",	FL_ALT+'s', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)STROKE_SLIDER},
 	{"Gradient",			FL_ALT+'g', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)STROKE_GRADIENT},
 	{"Brush Direction",		FL_ALT+'b', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)STROKE_BRUSH_DIRECTION},
+	{0}
+};
+
+Fl_Menu_Item ImpressionistUI::styleTypeMenu[] = {
+	{"Impressionist",	FL_ALT+'i', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_IMPRESSIONIST},
+	{"Expressionist",	FL_ALT+'e', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_EXPRESSIONIST},
+	{"Color Wash",		FL_ALT+'w', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_COLOR_WASH},
+	{"Pointillist",		FL_ALT+'p', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_POINTILLIST},
+	{"Customize",		FL_ALT+'c', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_CUSTOMIZE},
+	{0}
+};
+
+Fl_Menu_Item ImpressionistUI::strokeTypeMenu[] = {
+	{"Curve Brush",		FL_ALT+'r', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_CURVE},
+	{"BSpline Brush",	FL_ALT+'b', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_BSPLINE},
+	{"Circle Brush",	FL_ALT+'c', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_CIRCLE},
+	{"Clip Line Brush",	FL_ALT+'p', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_CLIP},
+	{"Line Brush",		FL_ALT+'l', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_LINE},
 	{0}
 };
 
@@ -827,6 +917,22 @@ ImpressionistUI::ImpressionistUI() {
 		m_colorChooser = new Fl_Color_Chooser(10, 10, 280, 180);
 		m_colorChooser->hsv(0.0, 0.0, 1.0);
 	m_colorDialog->end();
+
+	m_paintlyDialog = new Fl_Window(400, 270, "Paintly Dialog");
+		m_PaintlyStyleChoice = new Fl_Choice(50, 10, 120, 20, "&Style");
+		m_PaintlyStyleChoice->user_data((void*)(this));
+		m_PaintlyStyleChoice->menu(styleTypeMenu);
+		m_PaintlyStyleChoice->callback(cb_paintly_style);
+
+		m_PaintlyStrokeChoice = new Fl_Choice(225, 10, 100, 20, "&Stroke");
+		m_PaintlyStrokeChoice->user_data((void*)(this));
+		m_PaintlyStrokeChoice->menu(strokeTypeMenu);
+		m_PaintlyStrokeChoice->callback(cb_paintly_stroke);
+
+		m_kernelApplyButton = new Fl_Button(350, 10, 40, 20, "Run");
+		m_kernelApplyButton->user_data((void*)(this));
+		m_kernelApplyButton->callback(cb_paintly_run);
+	m_paintlyDialog->end();
 
 	m_kernelDialog = new Fl_Window(300, 330, "Customize Kernel Dialog");
 		m_kernelInput = new Fl_Multiline_Input(10, 10, 280, 280);
