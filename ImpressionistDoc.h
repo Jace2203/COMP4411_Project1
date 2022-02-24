@@ -114,6 +114,16 @@ public:
 
 	ImpressionistUI*	m_pUI;
 
+	int 	m_nPaintlyTheshold;
+	double 	m_nPaintlyCurvature;
+	double	m_nPaintlyBlur;
+	double	m_nPaintlyGridSize;
+	int		m_nPaintlyMinStrokeL;
+	int		m_nPaintlyMaxStrokeL;
+	double	m_nPaintlyAlpha;
+	int		m_nPaintlyLayer;
+	int		m_nPaintlyR0Level;
+
 // Operations
 public:
 	// Get the color of the original picture at the specified coord

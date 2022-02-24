@@ -10,6 +10,8 @@
 #include "paintview.h"
 #include "ImpBrush.h"
 #include "StrokeDirection.h"
+#include <math.h>
+#include <iostream>
 
 
 #define LEFT_MOUSE_DOWN		1

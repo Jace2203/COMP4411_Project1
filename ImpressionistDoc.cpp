@@ -76,7 +76,7 @@ ImpressionistDoc::ImpressionistDoc()
 	mosaic_pixel_width = 12;
 	mosaic_pixel_height = 9;
 
-	m_pPaintly = new Paintly();
+	m_pPaintly = new Paintly(this);
 }
 
 ImpressionistDoc::~ImpressionistDoc()
@@ -638,3 +638,4 @@ void ImpressionistDoc::doMosaic()
 // 	// 920 720
 // 	imageprocess::preprocessImage(920, 690);
 // }
+
