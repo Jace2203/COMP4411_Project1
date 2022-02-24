@@ -54,7 +54,7 @@ public:
 	void AutoPaint(int spacing);
 
 	void DrawPaintly();
-	void paintLayer(unsigned char* canvas, unsigned char* referenceImage, int R);
+	void paintLayer(unsigned char* canvas, unsigned char* referenceImage, int R, int layer, int time);
 	double AreaError(int x, int y, double grid, Point& max, double* D);
 	double ColorDiff(GLubyte* color1, GLubyte* color2);
 	GLubyte* GetColor(unsigned char* source, int x, int y);

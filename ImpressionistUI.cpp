@@ -766,7 +766,7 @@ void ImpressionistUI::setPaintly()
 	m_pDoc->m_nPaintlyMinStrokeL = 4;
 	m_pDoc->m_nPaintlyMaxStrokeL = 16;
 	m_pDoc->m_nPaintlyAlpha = 1;
-	m_pDoc->m_nPaintlyLayer = 5;
+	m_pDoc->m_nPaintlyLayer = 1;
 	m_pDoc->m_nPaintlyR0Level = 5;
 }
 
