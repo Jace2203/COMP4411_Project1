@@ -45,20 +45,20 @@ void CurvedBrush::BrushMove(const Point source, const Point target)
 
 	
 
-	for (int j = 0; j < pDoc->getMaxStroke(); j++)
-	{
-		// if (j > pDoc->getMinStroke() && ImpressionistDoc::ColorDiff())
+	// for (int j = 0; j < pDoc->getMaxStroke(); j++)
+	// {
+	// 	// if (j > pDoc->getMinStroke() && ImpressionistDoc::ColorDiff())
 
-		glBegin(GL_TRIANGLE_FAN);
-		SetColor(source);
+	// 	glBegin(GL_TRIANGLE_FAN);
+	// 	SetColor(source);
 
-		glVertex2d(target.x, target.y);
-		for (int i = 0; i <= triangle_amount; i++)
-		{
-			glVertex2d(target.x + r * cos(i * step), target.y + r * sin(i * step));
-		}
-		glEnd();
-	}
+	// 	glVertex2d(target.x, target.y);
+	// 	for (int i = 0; i <= triangle_amount; i++)
+	// 	{
+	// 		glVertex2d(target.x + r * cos(i * step), target.y + r * sin(i * step));
+	// 	}
+	// 	glEnd();
+	// }
 }
 
 void CurvedBrush::BrushEnd(const Point source, const Point target)

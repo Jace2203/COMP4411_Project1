@@ -24,15 +24,6 @@ public:
 	LinkedList* next;
 };
 
-class Pointll
-{
-public:
-	Pointll(int x, int y);
-	~Pointll();
-	Point xy;
-	Pointll* next;
-};
-
 class PaintView : public Fl_Gl_Window
 {
 public:
@@ -73,8 +64,6 @@ private:
 			m_nWindowWidth, 
 			m_nWindowHeight;
 	Point	m_pAutoPaintPoint;
-	Pointll* m_pllMax;
-	int		 m_nNumMax;
 
 	LinkedList* m_SavedPhoto;
 };

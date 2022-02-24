@@ -41,17 +41,6 @@ LinkedList::~LinkedList()
 {
 }
 
-Pointll::Pointll(int x, int y)
-{
-	xy = Point(x, y);
-	next = nullptr;
-}
-
-Pointll::~Pointll()
-{
-	delete this->next;
-}
-
 static int		autopaint = 0;
 static int		autopaintspacing = 0;
 
@@ -65,7 +54,6 @@ PaintView::PaintView(int			x,
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
 	m_SavedPhoto = nullptr;
-	m_pllMax = nullptr;
 }
 
 
@@ -372,151 +360,4 @@ void PaintView::AutoPaint(int spacing)
 	autopaintspacing = spacing;
 	autopaint = 1;
 	redraw();
-}
-
-void PaintView::DrawPaintly()
-{
-	m_pDoc->setBrushType(2);
-	srand(time(NULL));
-
-	//unsigned char* canvas = new unsigned char[m_nDrawWidth * m_nDrawHeight * 3];
-	//memset (canvas, 0, m_nDrawWidth * m_nDrawHeight * 3);
-
-	memset (m_pDoc->m_ucPainting, 0, m_nDrawWidth * m_nDrawHeight * 3);
-	unsigned char* canvas = m_pDoc->m_ucPainting;
-	unsigned char* sourceImage = m_pDoc->m_ucBitmap;
-	unsigned char* referenceImage;
-
-	int size = pow(2, m_pDoc->m_nPaintlyR0Level + 1);
-	for (int layer = 0; layer < m_pDoc->m_nPaintlyLayer; ++layer)
-	{
-		for(int time = 0; time < 5; ++time)
-		{
-			m_nNumMax = 0;
-			//m_pDoc->setSize(size);
-
-			/*apply blur - need to be added*/
-			referenceImage = sourceImage;
-
-			/*paintLayer*/
-			paintLayer(canvas, referenceImage, size, layer, time);
-
-			Point* PointList = new Point[m_nNumMax];
-			Point temp_pt;
-			Pointll* head = m_pllMax;
-			int index;
-			for(int t = 0; t < m_nNumMax; ++t)
-			{
-				PointList[t] = head->xy;
-				head = head->next;
-			}
-
-			for(int t = 0; t < m_nNumMax; ++t)
-			{
-				index = rand() % m_nNumMax;
-				temp_pt = PointList[index];
-				PointList[index] = PointList[t];
-				PointList[t] = temp_pt;
-			}
-
-			glDrawBuffer(GL_FRONT);
-			m_pDoc->setSize(size);
-			for(int t = 0; t < m_nNumMax; ++t)
-				m_pDoc->m_pCurrentBrush->BrushMove( PointList[t], PointList[t] );
-			glFlush();
-			SaveCurrentContent();
-			RestoreContent();
-			delete m_pllMax;
-			m_pllMax = nullptr;
-			//writeBMP("save.bmp", m_nDrawWidth, m_nDrawHeight, canvas);
-			int a; std::cin >> a;
-		}
-		size /= 2;
-	}
-
-	RestoreContent();
-	printf("finish");
-}
-
-void PaintView::paintLayer(unsigned char* canvas, unsigned char* referenceImage, int R, int layer, int time)
-{
-	double* D = new double[m_nDrawWidth*m_nDrawHeight];
-	Point max;
-	GLubyte color1[3], color2[3];
-	double grid = m_pDoc->m_nPaintlyGridSize * R;
-
-	for (int y = 0; y < m_nDrawHeight; ++y)
-		for (int x = 0; x < m_nDrawWidth; ++x)
-		{
-			memcpy(color1, canvas + 3 * (x + y * m_nDrawWidth), 3);
-			memcpy(color2, referenceImage + 3 * (x + y * m_nDrawWidth), 3);
-			D[x+y*m_nDrawWidth] = ColorDiff(color1, color2);
-		}
-
-	for (int y = 0; y < m_nDrawHeight; y += grid)
-		for (int x = 0; x < m_nDrawWidth; x += grid)
-		{
-			max = Point(x, y);
-			if (AreaError(x, y, grid / 2, max, D) > m_pDoc->m_nPaintlyTheshold || (layer == 0 && time == 0))
-			{	
-				if (!m_pllMax)
-					m_pllMax = new Pointll(max.x, max.y);
-				else
-				{
-					Pointll* temp = m_pllMax;
-					while(temp->next)
-						temp = temp->next;
-					temp->next = new Pointll(max.x, max.y);
-				}
-				++m_nNumMax;
-				printf("%d %d\n",max.x, max.y);
-			}
-		}
-	delete []D;
-}
-
-void PaintView::makeSplineStroke(int x_0, int y_0, int R, unsigned char* referenceImage)
-{
-}
-
-double PaintView::AreaError(int x, int y, double grid, Point& max, double* D)
-{
-	int upper_x = (x + grid > m_nDrawWidth) ? m_nDrawWidth : x + grid,
-		lower_x = (x - grid < 0) ? 0 : x - grid,
-		upper_y = (y + grid > m_nDrawHeight) ? m_nDrawHeight : y + grid,
-		lower_y = (y - grid < 0) ? 0 : y - grid;
-	double error = 0;
-	double nMax = 0;
-
-	for(int j = lower_y; j < upper_y; ++j)
-		for(int i = lower_x; i < upper_x; ++i)
-		{
-			error += D[i+j*m_nDrawWidth];
-			if (D[i+j*m_nDrawWidth] > nMax)
-			{
-				nMax = D[i + j * m_nDrawWidth];
-				max = Point(i, j);
-			}
-		}
-	return error / (4 * grid * grid);
-}
-
-double PaintView::ColorDiff(GLubyte* color1, GLubyte* color2)
-{
-	return sqrt(pow(*(color1) - *(color2), 2) + pow(*(color1+1) - *(color2+1), 2) + pow(*(color1+2) - *(color2+2), 2));
-}
-
-GLubyte* PaintView::GetColor(unsigned char* source, int x, int y )
-{
-	if ( x < 0 ) 
-		x = 0;
-	else if ( x >= m_nDrawWidth ) 
-		x = m_nDrawWidth-1;
-
-	if ( y < 0 ) 
-		y = 0;
-	else if ( y >= m_nDrawHeight ) 
-		y = m_nDrawHeight-1;
-
-	return (GLubyte*)(source + 3 * (y*m_nDrawHeight + x));
 }

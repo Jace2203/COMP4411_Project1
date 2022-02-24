@@ -14,6 +14,8 @@
 
 #include "StrokeDirection.h"
 
+#include "Paintly.h"
+
 /*
 //------------------------------ Widget Examples -------------------------------------------------
 Here is some example code for all of the widgets that you may need to add to the 
@@ -248,7 +250,7 @@ void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v)
 	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyR0Level = 5;
 	whoami(o)->setPaintly();
 
-	pDoc->m_pUI->m_paintView->DrawPaintly();
+	pDoc->m_pPaintly->DrawPaintly();
 	//whoami(o)->m_paintlyDialog->show();
 }
 
