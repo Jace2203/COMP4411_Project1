@@ -9,6 +9,8 @@
 #include "ImpressionistUI.h"
 #include "CurvedBrush.h"
 
+#include "Paintly.h"
+
 #include <math.h>
 
 extern float frand();

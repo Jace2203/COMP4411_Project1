@@ -33,6 +33,9 @@ void Paintly::genRefImage(unsigned char* bmp, int width, int height, int size, d
             }
         }
     }
+
+    delete gaussian;
+    delete con;
 }
 
 double Paintly::ColorDiff(int* a, int* b)
