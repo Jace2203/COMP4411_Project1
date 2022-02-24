@@ -144,6 +144,7 @@
     <ClCompile Include="BlurBrush.cpp" />
     <ClCompile Include="CircleBrush.cpp" />
     <ClCompile Include="Convolution.cpp" />
+    <ClCompile Include="CurvedBrush.cpp" />
     <ClCompile Include="EdgeClipping.cpp" />
     <ClCompile Include="ImageProcess.cpp" />
     <ClCompile Include="ImpBrush.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="LineBrush.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="OriginalView.cpp" />
+    <ClCompile Include="Paintly.cpp" />
     <ClCompile Include="PaintView.cpp" />
     <ClCompile Include="PointBrush.cpp" />
     <ClCompile Include="ScatteredCircleBrush.cpp" />
@@ -168,6 +170,7 @@
     <ClInclude Include="BlurBrush.h" />
     <ClInclude Include="CircleBrush.h" />
     <ClInclude Include="Convolution.h" />
+    <ClInclude Include="CurvedBrush.h" />
     <ClInclude Include="EdgeClipping.h" />
     <ClInclude Include="ImageProcess.h" />
     <ClInclude Include="ImpBrush.h" />
@@ -177,6 +180,7 @@
     <ClInclude Include="LineBrush.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="OriginalView.h" />
+    <ClInclude Include="Paintly.h" />
     <ClInclude Include="PaintView.h" />
     <ClInclude Include="PointBrush.h" />
     <ClInclude Include="ScatteredCircleBrush.h" />

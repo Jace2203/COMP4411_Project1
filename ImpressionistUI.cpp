@@ -931,7 +931,7 @@ ImpressionistUI::ImpressionistUI() {
 			m_EdgeDetectionBox->add(m_EdgeDetectionButton);
 		m_EdgeDetectionBox->end();
 
-		m_BlurSharpSlider = new Fl_Value_Slider(10, 320, 300, 20, "Blurring/Sharpening Level");
+		m_BlurSharpSlider = new Fl_Value_Slider(10, 320, 250, 20, "Blurring/Sharpening Level");
 		m_BlurSharpSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BlurSharpSlider->type(FL_HOR_NICE_SLIDER);
         m_BlurSharpSlider->labelfont(FL_COURIER);

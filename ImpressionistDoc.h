@@ -18,6 +18,8 @@ class StrokeDirection;
 
 class ThreeDTree;
 
+class Paintly;
+
 class ImpressionistDoc 
 {
 public:
@@ -104,6 +106,8 @@ public:
 								mosaic_height,
 								mosaic_pixel_width,
 								mosaic_pixel_height;
+
+	Paintly*					m_pPaintly;
 
 	// Size of the brush.
 	int m_nSize;							

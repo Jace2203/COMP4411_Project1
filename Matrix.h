@@ -29,6 +29,7 @@ public:
     double  InnerSum() const;
 
     static Matrix* String2Matrix(const char* string);
+    static Matrix* GaussianBlurMatrix(int size, double sigma = 1.0);
 
 private:
     int m, n;

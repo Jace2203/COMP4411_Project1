@@ -1,18 +1,18 @@
 //
-// CircleBrush.h
+// CurvedBrush.h
 //
-// The header file for Circle Brush. 
+// The header file for Point Brush. 
 //
 
-#ifndef CIRCLEBRUSH_H
-#define CIRCLEBRUSH_H
+#ifndef CURVEDBRUSH_H
+#define CURVEDBRUSH_H
 
 #include "ImpBrush.h"
 
-class CircleBrush : public ImpBrush
+class CurvedBrush : public ImpBrush
 {
 public:
-	CircleBrush( ImpressionistDoc* pDoc = NULL, char* name = NULL );
+	CurvedBrush( ImpressionistDoc* pDoc = NULL, char* name = NULL );
 
 	void BrushBegin( const Point source, const Point target );
 	void BrushMove( const Point source, const Point target );

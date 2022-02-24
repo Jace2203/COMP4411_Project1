@@ -17,6 +17,7 @@
 #include "Convolution.h"
 #include "ImageProcess.h"
 #include "ThreeDTree.h"
+#include "Paintly.h"
 
 // Include individual brush headers here.
 #include "Brushes.h"
@@ -74,11 +75,14 @@ ImpressionistDoc::ImpressionistDoc()
 
 	mosaic_pixel_width = 12;
 	mosaic_pixel_height = 9;
+
+	m_pPaintly = new Paintly();
 }
 
 ImpressionistDoc::~ImpressionistDoc()
 {
 	delete m_pMosaicFiles;
+	delete m_pPaintly;
 }
 
 

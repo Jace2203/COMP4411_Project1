@@ -10,6 +10,10 @@
 #include <string>
 #include <cstdio>
 
+#ifndef M_PI
+#define M_PI 3.1415926535F
+#endif
+
 Matrix::Matrix()
 : elements(nullptr), m(0), n(0)
 {
@@ -189,6 +193,25 @@ Matrix* Matrix::String2Matrix(const char* string)
     Matrix* result = new Matrix(row, col, values);
     delete[] values;
     delete[] str;
+
+    return result;
+}
+
+Matrix* Matrix::GaussianBlurMatrix(int size, double sigma)
+{
+    Matrix* result = new Matrix(size * 2 + 1);
+
+    double r, s = 2.0 * sigma * sigma;
+
+    for (int x = -size; x <= size; x++)
+    {
+        for (int y  = -size; y <= size; y++)
+        {
+            r = sqrt(x * x + y * y);
+            double value = (exp(-(r * r) / s)) / (M_PI * s);
+            result->setValue(x + size, y + size, value);
+        }
+    }
 
     return result;
 }
