@@ -20,7 +20,7 @@ public:
     void    initialize(double value = 0.0);
     void    identity(int num);
 
-    void    setValue(int x, int y, int num);
+    void    setValue(int x, int y, double num);
     double  getValue(int x, int y) const;
 
     int     getWidth() const;

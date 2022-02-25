@@ -11,9 +11,17 @@
 #include <time.h>
 #include <iostream>
 
+#include "Bitmap.h"
+
 Paintly::Paintly(ImpressionistDoc* pDoc)
 : m_ucRefImage(NULL), width(0), height(0), m_pDoc(pDoc), m_pllMax(NULL), tail(NULL)
 {
+}
+
+Paintly::~Paintly()
+{
+    delete m_ucRefImage;
+    delete m_pllMax;
 }
 
 Pointll::Pointll(int x, int y)
@@ -44,13 +52,16 @@ void Paintly::genRefImage(unsigned char* bmp, int width, int height, int size, d
         for (int j = 0; j < width; j++)
         {
             double color[3] = { 0.0, 0.0, 0.0 };
-            con->ConvolutionFilter(*gaussian, width, height, false, true, color);
+            con->ConvolutionFilter(*gaussian, j, i, false, true, color);
             for (int k = 0; k < 3; k++)
             {
                 m_ucRefImage[(i * width + j) * 3 + k] = int(color[k]);
             }
         }
     }
+
+    delete gaussian;
+    delete con;
 }
 
 /*
