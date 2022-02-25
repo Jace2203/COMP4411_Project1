@@ -11,6 +11,7 @@
 #include "ImpressionistUI.h"
 
 #include <math.h>
+#include <iostream>
 
 #include "ImpBrush.h"
 #include "StrokeDirection.h"
@@ -399,6 +400,61 @@ int ImpressionistDoc::newMuralImage(char *iname)
 		m_pUI->m_paintView->resizeWindow(width, height);	
 		m_pUI->m_paintView->refresh();
 	}
+
+	return 1;
+}
+
+
+int ImpressionistDoc::dissolve(char *iname) 
+{
+	unsigned char*	data;
+	int				new_width, 
+					new_height;
+
+	if ( (data=readBMP(iname, new_width, new_height))==NULL ) 
+	{
+		fl_alert("Can't load bitmap file");
+		return 0;
+	}
+
+	int old_width = m_nWidth,
+		old_height = m_nHeight;
+
+	int width = max(old_width, new_width),
+		height = max(old_height, new_height);
+
+	m_nWidth		= width;
+	m_nPaintWidth	= width;
+	m_nHeight		= height;
+	m_nPaintHeight	= height;
+
+	unsigned char* old_original = m_ucBitmap;
+	unsigned char* old_painting = m_ucPainting;
+
+	m_ucBitmap = new unsigned char [width*height*3];
+	memset(m_ucBitmap, 0, width*height*3);
+	m_ucOriginal = m_ucBitmap;
+
+	m_ucPainting = new unsigned char [width*height*3];
+	memset(m_ucPainting, 0, width*height*3);
+
+	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
+								m_pUI->m_mainWindow->y(), 
+								width*2, 
+								height+25);
+
+	m_pUI->m_origView->resizeWindow(width, height);	
+	m_pUI->m_origView->refresh();
+
+	m_pUI->m_paintView->resizeWindow(width, height);	
+	m_pUI->m_paintView->refresh();
+
+	glDrawBuffer(GL_FRONT_AND_BACK);
+	glRasterPos2i( 0, 0);
+
+	m_pUI->m_origView->draw_fade( old_width, old_height, new_width,  new_height, data, old_original);
+
+	m_pUI->m_paintView->draw_fade( old_width,  old_height, old_painting);
 
 	return 1;
 }

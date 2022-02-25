@@ -34,6 +34,8 @@ public:
 	int		newMuralImage(char *iname);	
 	int		alphaMappedBrush(char *iname);
 
+	int		newMuralImage(char *iname);
+	int		dissolve(char *iname);
 
 	int     clearCanvas();                  	// called by the UI to clear the drawing canvas
 	void	setBrushType(int type);				// called by the UI to set the brushType

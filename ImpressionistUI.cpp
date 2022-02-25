@@ -296,6 +296,17 @@ void ImpressionistUI::cb_undo(Fl_Menu_* o, void* v)
 	pDoc->loadForUndo();
 }
 
+
+void ImpressionistUI::cb_dissolve(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc *pDoc=whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName() );
+	if (newfile != NULL) {
+		pDoc->dissolve(newfile);
+	}
+}
+
 void ImpressionistUI::cb_view_original(Fl_Menu_* o, void* v)
 {
 	ImpressionistDoc * pDoc = whoami(o)->getDocument();
@@ -729,7 +740,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ 0 },
 	{ "&Edit",		0, 0, 0, FL_SUBMENU },
 		{ "&Swap", 's',				(Fl_Callback *)ImpressionistUI::cb_swap },
-		{ "&Undo",	FL_CTRL + 'z',	(Fl_Callback *)ImpressionistUI::cb_undo },
+		{ "Undo",	FL_CTRL + 'z',	(Fl_Callback *)ImpressionistUI::cb_undo },
+		{ "Dissolve",	FL_CTRL + 'd',	(Fl_Callback *)ImpressionistUI::cb_dissolve },
 		{ 0 },
 	{ "&View",		0, 0, 0, FL_SUBMENU },
 		{ "&Original View",	FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_view_original },

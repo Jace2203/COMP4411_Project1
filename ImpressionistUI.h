@@ -166,6 +166,7 @@ private:
 	static void	cb_exit(Fl_Menu_* o, void* v);
 	static void	cb_swap(Fl_Menu_* o, void* v);
 	static void	cb_undo(Fl_Menu_* o, void* v);
+	static void	cb_dissolve(Fl_Menu_* o, void* v);
 	static void cb_view_original(Fl_Menu_* o, void* v);
 	static void cb_view_edge(Fl_Menu_* o, void* v);
 	static void cb_view_another(Fl_Menu_* o, void* v);
