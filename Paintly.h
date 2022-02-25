@@ -44,7 +44,7 @@ public:
 
 	void paintLayer(unsigned char* canvas, unsigned char* m_ucRefImage, int R, int layer);
 
-	void AreaError(int x, int y, double grid, double* D, int Theshold);
+	void AreaError(int x, int y, double grid, double* D, unsigned char* canvas);
 		
     GLubyte* GetColor(unsigned char* source, int x, int y);
 	
