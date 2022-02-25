@@ -258,7 +258,7 @@ void PaintView::draw()
 				if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
 				{
 					SaveCurrentContent();
-					m_pDoc->m_pStrokeDirection->StrokeBegin(source);
+					m_pDoc->m_pStrokeDirection->StrokeBegin(source, offset);
 				}
 
 				break;
@@ -266,7 +266,7 @@ void PaintView::draw()
 				if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
 				{
 					RestoreContent();
-					m_pDoc->m_pStrokeDirection->StrokeMove(source);
+					m_pDoc->m_pStrokeDirection->StrokeMove(source, offset);
 				}
 
 				break;
