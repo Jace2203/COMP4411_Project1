@@ -30,6 +30,7 @@ public:
     int m_nNumMax;
 
     Pointll* m_pllMax;
+    Pointll* tail;
 
     void genRefImage(unsigned char* bmp, int width, int height, int size, double sigma = 1.0);
 
@@ -39,9 +40,9 @@ public:
 
     void DrawPaintly();
 
-	void paintLayer(unsigned char* canvas, unsigned char* m_ucRefImage, int R, int layer, int time);
+	void paintLayer(unsigned char* canvas, unsigned char* m_ucRefImage, int R, int layer);
 
-	double AreaError(int x, int y, double grid, Point& max, double* D);
+	void AreaError(int x, int y, double grid, double* D, int Theshold);
 		
     GLubyte* GetColor(unsigned char* source, int x, int y);
 	
