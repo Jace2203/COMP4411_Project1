@@ -86,6 +86,10 @@ public:
 	// Fl_BMP_Image*		m_alphaMapBMP;
 	// Fl_Box*				m_alphaMapBox;
 
+//for faded dialog
+	Fl_Window*			m_fadeDialog;
+	Fl_Slider*			m_FadeSlider;
+
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
 	ImpressionistDoc*	getDocument();
@@ -125,6 +129,8 @@ public:
 
 	Matrix*				getCustomKernel();
 
+	double				getFadeAlpha();
+
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
 
@@ -137,6 +143,7 @@ private:
 	int		m_nEdgeClipping;
 	int		m_nAnotherGradient;
 	int		m_nSpacing;
+	double	m_nfadeAlpha;
 	int		m_nEdgeThreshold;
 	int		m_nBlurSharpLevel;
 	int		m_nRandomSize;
@@ -158,6 +165,8 @@ private:
 	static void	cb_brushes(Fl_Menu_* o, void* v);
 	static void cb_colors(Fl_Menu_* o, void* v);
 	static void cb_kernel(Fl_Menu_* o, void* v);
+	static void cb_fade(Fl_Menu_* o, void* v);
+	static void cb_fade_in(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void cb_edge_image(Fl_Menu_* o, void* v);
 	static void cb_another_image(Fl_Menu_* o, void* v);

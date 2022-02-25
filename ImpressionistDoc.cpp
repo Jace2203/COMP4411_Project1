@@ -32,6 +32,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth			= -1;
 	m_ucBitmap			= NULL;
 	m_ucPainting		= NULL;
+	m_ucFadePainting	= NULL;
 	m_ucOriginal		= NULL;
 	m_ucTemp			= NULL;
 	m_ucEdge			= NULL;

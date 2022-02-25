@@ -86,6 +86,7 @@ public:
 	unsigned char*	m_ucOriginal;
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
+	unsigned char*	m_ucFadePainting;
 	unsigned char*	m_ucTemp;
 	unsigned char*	m_ucEdge;
 	unsigned char*	m_ucAnotherImage;

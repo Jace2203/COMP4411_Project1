@@ -43,6 +43,7 @@ public:
 	void SaveForUndo();
 	void LoadForUndo();
 	void AutoPaint(int spacing);
+	void fade_in();
 
 	void draw_fade(int old_width, int old_height, unsigned char* old_painting);
 
