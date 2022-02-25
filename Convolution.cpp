@@ -71,9 +71,9 @@ void Convolution::ConvolutionFilter(const Matrix& kernel, int x, int y, bool gre
     {
         for (int j = 0; j < w; j++)
         {
-            int rr = 0;
-            int gg = 0;
-            int bb = 0;
+            double rr = 0;
+            double gg = 0;
+            double bb = 0;
             int xx = x + j - (int)floor(w / 2);
             int yy = y - i + (int)floor(h / 2);
 

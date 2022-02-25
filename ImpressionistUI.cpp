@@ -477,6 +477,9 @@ void ImpressionistUI::cb_clear_canvas_button(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_sizeSlides(Fl_Widget* o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_nSize=int( ((Fl_Slider *)o)->value() ) ;
+
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	pDoc->m_pPaintly->genRefImage(pDoc->m_ucOriginal, pDoc->m_nPaintWidth, pDoc->m_nPaintHeight, pDoc->getSize());
 }
 
 //-----------------------------------------------------------
@@ -818,6 +821,7 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Blurring",			FL_ALT+'r', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_BLUR},
   {"Sharpening",		FL_ALT+'f', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SHARP},
   {"Alpha Mapped",		FL_ALT+'a', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_ALPHA_MAPPED},
+  {"Curved Brush",		FL_ALT+'v', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_CURVED},
   {0}
 };
 
@@ -920,6 +924,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->step(1);
 		m_BrushSizeSlider->value(m_nSize);
 		m_BrushSizeSlider->align(FL_ALIGN_RIGHT);
+		m_BrushSizeSlider->when(FL_WHEN_RELEASE);
 		m_BrushSizeSlider->callback(cb_sizeSlides);
 
 		// Add brush width slider to the dialog 

@@ -10,5 +10,6 @@
 #include "BlurBrush.h"
 #include "SharpBrush.h"
 #include "AlphaMappedBrush.h"
+#include "CurvedBrush.h"
 
 #endif

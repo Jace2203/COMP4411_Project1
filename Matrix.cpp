@@ -86,7 +86,7 @@ void Matrix::identity(int num = 1)
     }
 }
 
-void Matrix::setValue(int x, int y, int num)
+void Matrix::setValue(int x, int y, double num)
 {
     elements[x][y] = num;
 }

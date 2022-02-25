@@ -21,6 +21,8 @@ class Paintly
 public:
     Paintly(ImpressionistDoc* pDoc);
 
+    ~Paintly();
+
     unsigned char* m_ucRefImage;
 
     ImpressionistDoc* m_pDoc;
