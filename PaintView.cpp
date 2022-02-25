@@ -184,116 +184,110 @@ void PaintView::draw()
 		// Clear it after processing.
 		isAnEvent	= 0;	
 
-		if (coord.x >= 0 && coord.x < m_nDrawWidth && coord.y >= 0 && coord.y < m_nDrawHeight)
+		if (coord.x < 0) coord.x = 0;
+		if (coord.y < 0) coord.y = 0;
+		if (coord.x >= m_nDrawWidth) coord.x = m_nDrawWidth - 1;
+		if (coord.y >= m_nDrawHeight) coord.y = m_nDrawHeight - 1;
+
+		Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
+		Point target( coord.x, m_nWindowHeight - coord.y );
+
+		// This is the event handler
+		switch (eventToDo) 
 		{
-			Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
-			Point target( coord.x, m_nWindowHeight - coord.y );
-			
-			coord.x = Fl::event_x();
-			coord.y = Fl::event_y();
-
-			// This is the event handler
-			switch (eventToDo) 
+		case LEFT_MOUSE_DOWN:
+			if (m_pDoc->m_ucFadePainting)
 			{
-			case LEFT_MOUSE_DOWN:
-				if (m_pDoc->m_ucFadePainting)
-				{
-					glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-					glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-					glDrawPixels( m_nDrawWidth, 
-								m_nDrawHeight, 
-								GL_RGB, 
-								GL_UNSIGNED_BYTE, 
-								m_pDoc->m_ucFadePainting);
+				glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+				glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+				glDrawPixels( m_nDrawWidth, 
+							m_nDrawHeight, 
+							GL_RGB, 
+							GL_UNSIGNED_BYTE, 
+							m_pDoc->m_ucFadePainting);
 
-					m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
-	
-					glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-					glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-					glReadPixels( 0, 
-									m_nWindowHeight - m_nDrawHeight, 
-									m_nDrawWidth, 
-									m_nDrawHeight, 
-									GL_RGB, 
-									GL_UNSIGNED_BYTE, 
-									m_pDoc->m_ucFadePainting );
-				}
-				else
-					m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
-				break;
-			case LEFT_MOUSE_DRAG:
-				if (m_pDoc->m_ucFadePainting)
-				{
-					glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-					glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-					glDrawPixels( m_nDrawWidth, 
-								m_nDrawHeight, 
-								GL_RGB, 
-								GL_UNSIGNED_BYTE, 
-								m_pDoc->m_ucFadePainting);
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
 
-					m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
-
-					glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-					glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-					glReadPixels( 0, 
+				glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+				glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+				glReadPixels( 0, 
 								m_nWindowHeight - m_nDrawHeight, 
 								m_nDrawWidth, 
 								m_nDrawHeight, 
 								GL_RGB, 
 								GL_UNSIGNED_BYTE, 
 								m_pDoc->m_ucFadePainting );
-				}
-				else
-					m_pDoc->m_pCurrentBrush->BrushMove( source, target );
-				break;
-			case LEFT_MOUSE_UP:
-				m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
-				m_pDoc->m_pStrokeDirection->resetLastMousePos();
-
-				SaveCurrentContent();
-				RestoreContent();
-				break;
-			case RIGHT_MOUSE_DOWN:
-				if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-				{
-					SaveCurrentContent();
-					int offset = m_pDoc->m_pUI->m_mainWindow->h() - m_pDoc->m_nPaintHeight - 25;
-					m_pDoc->m_pStrokeDirection->StrokeBegin(source, offset);
-				}
-
-				break;
-			case RIGHT_MOUSE_DRAG:
-				if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-				{
-					RestoreContent();
-					int offset = m_pDoc->m_pUI->m_mainWindow->h() - m_pDoc->m_nPaintHeight - 25;
-					m_pDoc->m_pStrokeDirection->StrokeMove(source, offset);
-				}
-
-				break;
-			case RIGHT_MOUSE_UP:
-				if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-				{
-					RestoreContent();
-					m_pDoc->m_pStrokeDirection->StrokeEnd(source);
-
-					m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(m_pDoc, source, target, m_pDoc->m_nStrokeType));
-				}
-
-				break;
-
-			default:
-				printf("Unknown event!!\n");		
-				break;
 			}
-		}
-		else
-		{
+			else
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+			break;
+		case LEFT_MOUSE_DRAG:
+			if (m_pDoc->m_ucFadePainting)
+			{
+				glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+				glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+				glDrawPixels( m_nDrawWidth, 
+							m_nDrawHeight, 
+							GL_RGB, 
+							GL_UNSIGNED_BYTE, 
+							m_pDoc->m_ucFadePainting);
+
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+
+				glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+				glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
+				glReadPixels( 0, 
+							m_nWindowHeight - m_nDrawHeight, 
+							m_nDrawWidth, 
+							m_nDrawHeight, 
+							GL_RGB, 
+							GL_UNSIGNED_BYTE, 
+							m_pDoc->m_ucFadePainting );
+			}
+			else
+				m_pDoc->m_pCurrentBrush->BrushMove( source, target );
+			break;
+		case LEFT_MOUSE_UP:
+			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
+			m_pDoc->m_pStrokeDirection->resetLastMousePos();
+
 			SaveCurrentContent();
 			RestoreContent();
+			break;
+		case RIGHT_MOUSE_DOWN:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				SaveCurrentContent();
+				int offset = m_pDoc->m_pUI->m_mainWindow->h() - m_pDoc->m_nPaintHeight - 25;
+				m_pDoc->m_pStrokeDirection->StrokeBegin(source, offset);
+			}
+
+			break;
+		case RIGHT_MOUSE_DRAG:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				int offset = m_pDoc->m_pUI->m_mainWindow->h() - m_pDoc->m_nPaintHeight - 25;
+				m_pDoc->m_pStrokeDirection->StrokeMove(source, offset);
+			}
+
+			break;
+		case RIGHT_MOUSE_UP:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				m_pDoc->m_pStrokeDirection->StrokeEnd(source);
+
+				m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(m_pDoc, source, target, m_pDoc->m_nStrokeType));
+			}
+
+			break;
+
+		default:
+			printf("Unknown event!!\n");		
+			break;
 		}
-		
 	}
 
 	glDisable(GL_BLEND);
