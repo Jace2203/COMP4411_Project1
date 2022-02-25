@@ -121,6 +121,8 @@ public:
 
 	bool				getIsNormalized();
 
+	int 				getRandomSize();
+
 	Matrix*				getCustomKernel();
 
 private:
@@ -137,6 +139,7 @@ private:
 	int		m_nSpacing;
 	int		m_nEdgeThreshold;
 	int		m_nBlurSharpLevel;
+	int		m_nRandomSize;
 
 	int		m_nIsNormalized;
 	Matrix*	m_pCustomKernel;
@@ -178,6 +181,7 @@ private:
 	static void cb_edge_clipping_button(Fl_Widget* o, void* v);
 	static void cb_another_gradient_button(Fl_Widget* o, void* v);
 	static void cb_set_spacing(Fl_Widget* o, void* v);
+	static void cb_random_size(Fl_Widget* o, void* v);
 	static void cb_auto_paint(Fl_Widget* o, void* v);
 	static void cb_edgeThreasholdSlides(Fl_Widget* o, void* v);
 	static void cb_edge_detection_button(Fl_Widget* o, void* v);

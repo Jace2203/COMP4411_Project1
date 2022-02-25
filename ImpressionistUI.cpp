@@ -470,6 +470,11 @@ void ImpressionistUI::cb_set_spacing(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nSpacing=int( ((Fl_Slider *)o)->value() );
 }
 
+void ImpressionistUI::cb_random_size(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nRandomSize=int( ((Fl_Button *)o)->value() );
+}
+
 void ImpressionistUI::cb_auto_paint(Fl_Widget* o, void* v)
 {
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
@@ -699,6 +704,12 @@ Matrix* ImpressionistUI::getCustomKernel()
 	return m_pCustomKernel;
 }
 
+int ImpressionistUI::getRandomSize()
+{
+	return m_nRandomSize;
+}
+
+
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {
 	{ "&File",		0, 0, 0, FL_SUBMENU },
@@ -797,6 +808,7 @@ ImpressionistUI::ImpressionistUI() {
 	m_nIsNormalized = 1;
 	m_pCustomKernel = NULL;
 	m_nBlurSharpLevel = 1;
+	m_nRandomSize = 1;
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(400, 360, "Brush Dialog");
@@ -896,7 +908,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_SizeRandomButton = new Fl_Light_Button(210, 10, 100, 20, "&Size Rand.");
 		m_SizeRandomButton->user_data((void*)(this));
 		m_SizeRandomButton->set();
-		// m_SizeRandomButton->callback();
+		m_SizeRandomButton->callback(cb_random_size);
 
 		m_PaintButton = new Fl_Button(320, 10, 50, 20, "&Paint");
 		m_PaintButton->user_data((void*)(this));

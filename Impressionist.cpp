@@ -8,6 +8,7 @@
 //
 
 #include <stdio.h>
+#include <time.h>
 
 #include <FL/Fl.h>
 #include <FL/Fl_Window.H>
@@ -22,6 +23,8 @@ ImpressionistDoc *impDoc;
 int main(int	argc, 
 		 char**	argv) 
 {
+	srand (time(NULL));
+
 	impDoc = new ImpressionistDoc();
 
 	// Create the UI
