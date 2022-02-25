@@ -764,7 +764,7 @@ Matrix* ImpressionistUI::getCustomKernel()
 
 void ImpressionistUI::setPaintly()
 {
-	m_pDoc->m_nPaintlyTheshold = 100;
+	m_pDoc->m_nPaintlyTheshold = 0;
 	m_pDoc->m_nPaintlyCurvature = 1;
 	m_pDoc->m_nPaintlyBlur = 0.5;
 	m_pDoc->m_nPaintlyGridSize = 1;
