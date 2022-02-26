@@ -196,7 +196,7 @@ void PaintView::draw()
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
-			if (m_pDoc->m_ucFadePainting)
+			if (m_pDoc->m_ucFadePainting && isFade)
 			{
 				glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 				glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
@@ -222,7 +222,7 @@ void PaintView::draw()
 				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
 			break;
 		case LEFT_MOUSE_DRAG:
-			if (m_pDoc->m_ucFadePainting)
+			if (m_pDoc->m_ucFadePainting && isFade)
 			{
 				glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 				glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
@@ -298,9 +298,14 @@ void PaintView::draw()
 
 		glTranslated(0, (m_nWindowHeight - m_nDrawHeight), 0);
 
+		ImpBrush* IBtemp = m_pDoc->m_pCurrentBrush;
+		m_pDoc->setBrushType(0);
+
 		for (int y = 0; y < m_nDrawHeight ; ++y)
 			for(int x = 0; x < m_nDrawWidth; ++x)
 				m_pDoc->m_pCurrentBrush->BrushBegin( Point(x, y), Point(x, y) );
+
+		m_pDoc->m_pCurrentBrush = IBtemp;
 
 		glEnable( GL_BLEND );
 		glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
@@ -491,6 +496,9 @@ void PaintView::draw_fade(int old_width, int old_height, unsigned char* old_pain
 				
 	glFlush();
 
+	if (isFade)
+		memcpy(old_painting, m_pDoc->m_ucFadePainting, old_width*old_height*3);
+
 	if (old_painting)
 	{
 		GLubyte color[3];
@@ -536,4 +544,14 @@ void PaintView::fade_in()
 		isFade = 0;
 	}
 	redraw();
+}
+
+int PaintView::getIsFade()
+{
+	return isFade;
+}
+
+void PaintView::setIsFade(int isfade)
+{
+	isFade = isfade;
 }

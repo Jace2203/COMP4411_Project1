@@ -44,6 +44,8 @@ public:
 	void LoadForUndo();
 	void AutoPaint(int spacing);
 	void fade_in();
+	int  getIsFade();
+	void setIsFade(int isfade);
 
 	void draw_fade(int old_width, int old_height, unsigned char* old_painting);
 

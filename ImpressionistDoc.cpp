@@ -407,6 +407,11 @@ int ImpressionistDoc::newMuralImage(char *iname)
 		m_pUI->m_paintView->resizeWindow(width, height);	
 		m_pUI->m_paintView->refresh();
 	}
+	else
+	{
+		fl_alert("Bitmap file in different size");
+		return 0;
+	}
 
 	return 1;
 }
@@ -453,8 +458,15 @@ int ImpressionistDoc::dissolve(char *iname)
 	m_pUI->m_origView->resizeWindow(width, height);	
 	m_pUI->m_origView->refresh();
 
-	m_pUI->m_paintView->resizeWindow(width, height);	
-	m_pUI->m_paintView->refresh();
+	m_pUI->m_paintView->resizeWindow(width, height);
+	if (m_pUI->m_paintView->getIsFade())
+	{
+		m_pUI->m_paintView->setIsFade(0);
+		m_pUI->m_paintView->refresh();
+		m_pUI->m_paintView->setIsFade(1);
+	}
+	else
+		m_pUI->m_paintView->refresh();
 
 	glDrawBuffer(GL_FRONT_AND_BACK);
 	glRasterPos2i( 0, 0);
