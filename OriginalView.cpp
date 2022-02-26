@@ -42,6 +42,9 @@ void OriginalView::draw()
 
 	glClear( GL_COLOR_BUFFER_BIT );
 
+	glEnable( GL_BLEND );
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	if ( m_pDoc->m_ucBitmap ) 
 	{
 
@@ -93,6 +96,7 @@ void OriginalView::draw()
 		}
 	}
 			
+	glEnd();
 	//glFlush();
 }
 

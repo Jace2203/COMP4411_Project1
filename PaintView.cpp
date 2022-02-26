@@ -542,6 +542,9 @@ void PaintView::fade_in()
 		m_pDoc->m_ucFadePainting = new unsigned char [m_nDrawWidth*m_nDrawHeight*3];
 		memcpy (m_pDoc->m_ucFadePainting, m_pDoc->m_ucPainting, m_nDrawWidth*m_nDrawHeight*3);
 	}
+	if (!isFade)
+		memcpy (m_pDoc->m_ucFadePainting, m_pDoc->m_ucPainting, m_nDrawWidth*m_nDrawHeight*3);
+
 	isFade = 1;
 	if (m_pDoc->m_pUI->getFadeAlpha() == 0)
 	{

@@ -409,7 +409,7 @@ int ImpressionistDoc::newMuralImage(char *iname)
 	}
 	else
 	{
-		fl_alert("Bitmap file in different size");
+		fl_alert("Please chose an image with same size");
 		return 0;
 	}
 
@@ -431,6 +431,12 @@ int ImpressionistDoc::dissolve(char *iname)
 
 	int old_width = m_nWidth,
 		old_height = m_nHeight;
+
+	if (old_width != new_width || old_height != new_height)
+	{
+		fl_alert("Please chose an image with same size");
+		return 0;
+	}
 
 	int width = max(old_width, new_width),
 		height = max(old_height, new_height);
@@ -531,13 +537,25 @@ void ImpressionistDoc::swap()
 {
 	if (m_ucBitmap != NULL)
 	{
-		if (m_ucOriginal == m_ucBitmap)
-			m_ucOriginal = m_ucPainting;
+		if (m_pUI->m_paintView->getIsFade())
+		{
+			m_ucTemp = m_ucOriginal;
+			m_ucOriginal = m_ucFadePainting;
+			m_ucFadePainting = m_ucTemp;
+			m_ucBitmap = m_ucOriginal;
+			memset(m_ucPainting, 0, m_nPaintWidth*m_nPaintHeight*3);
+		}
+		else
+		{
+			if (m_ucOriginal == m_ucBitmap)
+				m_ucOriginal = m_ucPainting;
 
-		m_ucTemp = m_ucPainting;
-		m_ucPainting = m_ucBitmap;
-		m_ucBitmap = m_ucTemp;
-		refresh();
+			m_ucTemp = m_ucPainting;
+			m_ucPainting = m_ucBitmap;
+			m_ucBitmap = m_ucTemp;
+		}
+		m_pUI->m_origView->redraw();
+		m_pUI->m_paintView->redraw();
 	}
 	else
 	{
