@@ -678,6 +678,7 @@ void ImpressionistDoc::preprocess()
 
 	imageprocess::preprocessImage(mosaic_width, mosaic_height);
 	
+	if (m_pMosaicFiles) delete m_pMosaicFiles;
 	m_pMosaicFiles = imageprocess::getProcessedFiles();
 }
 
