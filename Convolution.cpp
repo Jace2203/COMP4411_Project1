@@ -110,4 +110,8 @@ void Convolution::ConvolutionFilter(const Matrix& kernel, int x, int y, bool gre
         color[1] = g;
         color[2] = b;
     }
+
+    if (color[0] < 0) color[0] = 0;
+    if (color[1] < 0) color[1] = 0;
+    if (color[2] < 0) color[2] = 0;
 }
