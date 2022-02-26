@@ -247,6 +247,12 @@ int ImpressionistDoc::loadImage(char *iname)
 	if ( m_ucPainting ) delete [] m_ucPainting;
 	if ( m_ucEdge ) delete [] m_ucEdge;
 	if ( m_ucAnotherImage ) delete [] m_ucAnotherImage;
+	if (m_ucFadePainting)
+	{
+		delete[] m_ucFadePainting;
+		m_ucFadePainting = new unsigned char[m_nPaintWidth * m_nPaintHeight * 3];
+		memset(m_ucFadePainting, 0, m_nPaintWidth * m_nPaintHeight * 3);
+	}
 	
 	m_ucBitmap = NULL;
 	m_ucPainting = NULL;
@@ -476,6 +482,13 @@ int ImpressionistDoc::clearCanvas()
 		// allocate space for draw view
 		m_ucPainting	= new unsigned char [m_nPaintWidth*m_nPaintHeight*3];
 		memset(m_ucPainting, 0, m_nPaintWidth*m_nPaintHeight*3);
+
+		if (m_ucFadePainting)
+		{
+			delete[] m_ucFadePainting;
+			m_ucFadePainting = new unsigned char[m_nPaintWidth * m_nPaintHeight * 3];
+			memset(m_ucFadePainting, 0, m_nPaintWidth * m_nPaintHeight * 3);
+		}
 
 		// refresh paint view as well	
 		m_pUI->m_paintView->refresh();

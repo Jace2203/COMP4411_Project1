@@ -478,6 +478,7 @@ void PaintView::AutoPaint(int spacing)
 	redraw();
 }
 
+//this is dissovle
 void PaintView::draw_fade(int old_width, int old_height, unsigned char* old_painting)
 {
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
@@ -522,12 +523,17 @@ void PaintView::draw_fade(int old_width, int old_height, unsigned char* old_pain
 
 void PaintView::fade_in()
 {
-	isFade = 1;
 	if (!m_pDoc->m_ucFadePainting)
 	{
 		glReadBuffer(GL_FRONT);
 		m_pDoc->m_ucFadePainting = new unsigned char [m_nDrawWidth*m_nDrawHeight*3];
 		memcpy (m_pDoc->m_ucFadePainting, m_pDoc->m_ucPainting, m_nDrawWidth*m_nDrawHeight*3);
+	}
+	isFade = 1;
+	if (m_pDoc->m_pUI->getFadeAlpha() == 0)
+	{
+		memcpy (m_pDoc->m_ucPainting, m_pDoc->m_ucFadePainting, m_nDrawWidth*m_nDrawHeight*3);
+		isFade = 0;
 	}
 	redraw();
 }
