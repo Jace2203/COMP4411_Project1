@@ -109,6 +109,9 @@ void PaintView::draw()
 		RestoreContent();
 
 	}
+	
+	glEnable( GL_BLEND );
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	if (autopaint == 1)
 	{
@@ -130,12 +133,17 @@ void PaintView::draw()
 				xy[temp++] = Point(x, y);
 
 		Point temp_p;
-		for(int i = 0; i < count; ++i)
+		for (int i = 0; i < count; i++)
 		{
 			temp = rand() % (count);
 			temp_p = xy[temp];
 			xy[temp] = xy[i];
 			xy[i] = temp_p;
+		}
+
+		glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
+		for(int i = 0; i < count; ++i)
+		{
 			if (m_pDoc->m_pUI->getRandomSize())
 			{
 				temp = temp_size;
@@ -145,17 +153,10 @@ void PaintView::draw()
 					temp = rand() % (temp + 1) + (temp_size - temp);
 				}
 				m_pDoc->setSize(temp);
-				m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
 			}
-			else
-				m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
+			m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
 		}
 		m_pDoc->setSize(temp_size);
-
-		glTranslated(0, m_nWindowHeight - m_nDrawHeight, 0);
-		for(int i = 0; i < count; ++i)
-			m_pDoc->m_pCurrentBrush->BrushBegin( xy[i], xy[i] );
-
 		glTranslated(0, -(m_nWindowHeight - m_nDrawHeight), 0);
 
 		delete [] xy;
@@ -163,20 +164,12 @@ void PaintView::draw()
 		autopaint = 0;
 		m_pDoc->m_pCurrentBrush->BrushEnd(m_pAutoPaintPoint, m_pAutoPaintPoint);
 
-		// glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-		// glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
-		// glReadPixels( 0, 
-		// 		m_nWindowHeight - m_nDrawHeight, 
-		// 		m_nDrawWidth, 
-		// 		m_nDrawHeight, 
-		// 		GL_RGB, 
-		// 		GL_UNSIGNED_BYTE, 
-		// 		m_pPaintBitstart );
-
 		SaveCurrentContent();
 		RestoreContent();
 
-		memcpy(m_pDoc->m_ucFadePainting, m_pPaintBitstart, m_nDrawWidth*m_nDrawHeight*3);
+		
+		if (m_pDoc->m_ucFadePainting)
+			memcpy(m_pDoc->m_ucFadePainting, m_pPaintBitstart, m_nDrawWidth*m_nDrawHeight*3);
 	}
 
 	int originalSize = m_pDoc->getSize();
@@ -332,6 +325,8 @@ void PaintView::draw()
 
 		SaveCurrentContent();
 	}
+
+	glDisable(GL_BLEND);
 
 	glFlush();
 
