@@ -326,7 +326,7 @@ void ImpressionistUI::cb_view_original(Fl_Menu_* o, void* v)
 {
 	ImpressionistDoc * pDoc = whoami(o)->getDocument();
 
-	if (pDoc->m_ucBitmap != NULL)
+	if (pDoc->m_ucBitmap)
 	{
 		pDoc->m_ucOriginal = pDoc->m_ucBitmap;
 		pDoc->refresh();
@@ -337,7 +337,7 @@ void ImpressionistUI::cb_view_edge(Fl_Menu_* o, void* v)
 {
 	ImpressionistDoc * pDoc = whoami(o)->getDocument();
 
-	if (pDoc->m_ucEdge != NULL)
+	if (pDoc->m_ucEdge)
 	{
 		pDoc->m_ucOriginal = pDoc->m_ucEdge;
 		pDoc->refresh();
@@ -348,7 +348,7 @@ void ImpressionistUI::cb_view_another(Fl_Menu_* o, void* v)
 {
 	ImpressionistDoc * pDoc = whoami(o)->getDocument();
 
-	if (pDoc->m_ucAnotherImage != NULL)
+	if (pDoc->m_ucAnotherImage)
 	{
 		pDoc->m_ucOriginal = pDoc->m_ucAnotherImage;
 		pDoc->refresh();

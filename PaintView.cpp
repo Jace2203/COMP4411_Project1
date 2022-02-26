@@ -176,9 +176,6 @@ void PaintView::draw()
 
 	if ( m_pDoc->m_ucPainting && isAnEvent) 
 	{
-		// Clear it after processing.
-		isAnEvent	= 0;	
-
 		if (coord.x < 0) coord.x = 0;
 		if (coord.y < 0) coord.y = 0;
 		if (coord.x >= m_nDrawWidth) coord.x = m_nDrawWidth - 1;
@@ -249,36 +246,6 @@ void PaintView::draw()
 			SaveCurrentContent();
 			RestoreContent();
 			break;
-		case RIGHT_MOUSE_DOWN:
-			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-			{
-				RestoreContent();
-				SaveCurrentContent();
-				int offset = m_pDoc->m_pUI->m_mainWindow->h() - m_pDoc->m_nPaintHeight - 25;
-				m_pDoc->m_pStrokeDirection->StrokeBegin(source, offset);
-			}
-
-			break;
-		case RIGHT_MOUSE_DRAG:
-			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-			{
-				RestoreContent();
-				int offset = m_pDoc->m_pUI->m_mainWindow->h() - m_pDoc->m_nPaintHeight - 25;
-				m_pDoc->m_pStrokeDirection->StrokeMove(source, offset);
-			}
-
-			break;
-		case RIGHT_MOUSE_UP:
-			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
-			{
-				RestoreContent();
-				m_pDoc->m_pStrokeDirection->StrokeEnd(source);
-
-				m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(m_pDoc, source, target, m_pDoc->m_nStrokeType));
-			}
-
-			break;
-
 		default:
 			printf("Unknown event!!\n");		
 			break;
@@ -325,8 +292,49 @@ void PaintView::draw()
 
 		SaveCurrentContent();
 	}
-
 	glDisable(GL_BLEND);
+
+	
+
+	if ( m_pDoc->m_ucPainting && isAnEvent) 
+	{
+		// Clear it after processing.
+		isAnEvent	= 0;
+		
+		Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
+		Point target( coord.x, m_nWindowHeight - coord.y );
+
+		
+		switch (eventToDo) 
+		{
+		case RIGHT_MOUSE_DOWN:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				SaveCurrentContent();
+				int offset = m_pDoc->m_pUI->m_mainWindow->h() - m_pDoc->m_nPaintHeight - 25;
+				m_pDoc->m_pStrokeDirection->StrokeBegin(source, offset);
+			}
+			break;
+		case RIGHT_MOUSE_DRAG:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				int offset = m_pDoc->m_pUI->m_mainWindow->h() - m_pDoc->m_nPaintHeight - 25;
+				m_pDoc->m_pStrokeDirection->StrokeMove(source, offset);
+			}
+			break;
+		case RIGHT_MOUSE_UP:
+			if (m_pDoc->m_nStrokeType == STROKE_SLIDER)
+			{
+				RestoreContent();
+				m_pDoc->m_pStrokeDirection->StrokeEnd(source);
+
+				m_pDoc->setAngle(m_pDoc->m_pStrokeDirection->getAngle(m_pDoc, source, target, m_pDoc->m_nStrokeType));
+			}
+			break;
+		}
+	}
 
 	glFlush();
 

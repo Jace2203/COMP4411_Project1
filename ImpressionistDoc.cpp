@@ -435,6 +435,15 @@ int ImpressionistDoc::dissolve(char *iname)
 	int width = max(old_width, new_width),
 		height = max(old_height, new_height);
 
+	if (width != old_width || height != old_height)
+	{
+		if (m_ucAnotherImage)
+		{
+			delete m_ucAnotherImage;
+			m_ucAnotherImage = NULL;
+		}
+	}
+
 	m_nWidth		= width;
 	m_nPaintWidth	= width;
 	m_nHeight		= height;
@@ -474,6 +483,10 @@ int ImpressionistDoc::dissolve(char *iname)
 	m_pUI->m_origView->draw_fade( old_width, old_height, new_width,  new_height, data, old_original);
 
 	m_pUI->m_paintView->draw_fade( old_width,  old_height, old_painting);
+
+	edgeDetection();
+	m_ucOriginal = m_ucBitmap;
+	refresh();
 
 	return 1;
 }

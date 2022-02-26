@@ -89,14 +89,12 @@ int StrokeDirection::getAngle(ImpressionistDoc* pDoc, Point source, Point target
 {
     if (type == STROKE_GRADIENT)
     {
-        unsigned char* bmp;
+        unsigned char* bmp = pDoc->m_ucBitmap;
+
         if (pDoc->m_pUI->getAnotherGradient())
         {
-            bmp = pDoc->m_ucAnotherImage;
-        }
-        else
-        {
-            bmp = pDoc->m_ucBitmap;
+            if (pDoc->m_ucAnotherImage)
+                bmp = pDoc->m_ucAnotherImage;
         }
         int width = pDoc->m_nPaintWidth;
         int height = pDoc->m_nPaintHeight;
