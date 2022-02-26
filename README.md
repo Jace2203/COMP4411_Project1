@@ -72,7 +72,7 @@ To create an impressionistic picture, the user loads an existing image and paint
 - Normalize the kernel by pressing the button "Normalized"
 - Apply the kerenl by pressing the button "Apply Kernel"
 
-1.  To do edge clipping, on the pop-up window "Brush Dialog, click the "Edge Clipping" button. If line brush is selected, the effect will be applied.
+12.  To do edge clipping, on the pop-up window "Brush Dialog, click the "Edge Clipping" button. If line brush is selected, the effect will be applied.
 To apply another edge image, select File > Load Edge Image.
 
 13.   To do mosaic, select Mosaics. On the pop-up window, press "Preprocess" to preprocess images in "images/unprocessed" (feel free to add more images). Then press "Mosaic", the image will be stored in "images/mosaic" named "result.bmp".
