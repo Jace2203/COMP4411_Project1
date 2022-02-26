@@ -175,6 +175,8 @@ void PaintView::draw()
 
 		SaveCurrentContent();
 		RestoreContent();
+
+		memcpy(m_pDoc->m_ucFadePainting, m_pPaintBitstart, m_nDrawWidth*m_nDrawHeight*3);
 	}
 
 	int originalSize = m_pDoc->getSize();
