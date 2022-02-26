@@ -434,6 +434,21 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_BlurSharpSlider->deactivate();
 	}
 
+	if (type == BRUSH_CURVED)
+	{
+		pUI->m_MinStrokeSlider->activate();
+		pUI->m_MaxStrokeSlider->activate();
+		pUI->m_BlurFactorSlider->activate();
+		pUI->m_FilterConstantSlider->activate();
+	}
+	else
+	{
+		pUI->m_MinStrokeSlider->deactivate();
+		pUI->m_MaxStrokeSlider->deactivate();
+		pUI->m_BlurFactorSlider->deactivate();
+		pUI->m_FilterConstantSlider->deactivate();
+	}
+
 	pDoc->setBrushType(type);
 }
 
@@ -479,7 +494,8 @@ void ImpressionistUI::cb_sizeSlides(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nSize=int( ((Fl_Slider *)o)->value() ) ;
 
 	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
-	pDoc->m_pPaintly->genRefImage(pDoc->m_ucOriginal, pDoc->m_nPaintWidth, pDoc->m_nPaintHeight, pDoc->getSize());
+	ImpressionistUI * pUI = (ImpressionistUI*)(o->user_data());
+	pDoc->m_pPaintly->genRefImage(pDoc->m_ucOriginal, pDoc->m_nPaintWidth, pDoc->m_nPaintHeight, pDoc->getSize(), pUI->getBlurFactor());
 }
 
 //-----------------------------------------------------------
@@ -553,6 +569,30 @@ void ImpressionistUI::cb_edge_detection_button(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_blursharpSlides(Fl_Widget* o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_nBlurSharpLevel=int( ((Fl_Slider *)o)->value() );
+}
+
+void ImpressionistUI::cb_minStrokeSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nMinStroke=int( ((Fl_Slider *)o)->value() );
+}
+
+void ImpressionistUI::cb_maxStrokeSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nMaxStroke=int( ((Fl_Slider *)o)->value() );
+}
+
+void ImpressionistUI::cb_blurFactorSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nBlurFactor=double( ((Fl_Slider *)o)->value() );
+	
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI * pUI = (ImpressionistUI*)(o->user_data());
+	pDoc->m_pPaintly->genRefImage(pDoc->m_ucOriginal, pDoc->m_nPaintWidth, pDoc->m_nPaintHeight, pDoc->getSize(), pUI->getBlurFactor());
+}
+
+void ImpressionistUI::cb_filterConstantSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nFilterConstant=double( ((Fl_Slider *)o)->value() );
 }
 
 void ImpressionistUI::cb_apply_kernel(Fl_Widget* o, void* v)
@@ -752,6 +792,58 @@ void ImpressionistUI::setBlurSharpLevel(int level)
 		m_BlurSharpSlider->value(m_nBlurSharpLevel);
 }
 
+int ImpressionistUI::getMinStroke()
+{
+	return m_nMinStroke;
+}
+
+void ImpressionistUI::setMinStroke(int length)
+{
+	m_nMinStroke = length;
+
+	if (length <= 30)
+		m_MinStrokeSlider->value(m_nMinStroke);
+}
+
+int ImpressionistUI::getMaxStroke()
+{
+	return m_nMaxStroke;
+}
+
+void ImpressionistUI::setMaxStroke(int length)
+{
+	m_nMaxStroke = length;
+	
+	if (length <= 30)
+		m_MinStrokeSlider->value(m_nMaxStroke);
+}
+
+double ImpressionistUI::getBlurFactor()
+{
+	return m_nBlurFactor;
+}
+
+void ImpressionistUI::setBlurFactor(double factor)
+{
+	m_nBlurFactor = factor;
+
+	if (factor <= 1)
+		m_BlurFactorSlider->value(m_nBlurFactor);
+}
+
+double ImpressionistUI::getFilterConstant()
+{
+	return m_nFilterConstant;
+}
+
+void ImpressionistUI::setFilterConstant(double factor)
+{
+	m_nFilterConstant = factor;
+
+	if (factor <= 1)
+		m_FilterConstantSlider->value(m_nFilterConstant);
+}
+
 bool ImpressionistUI::getIsNormalized()
 {
 	return (bool)m_nIsNormalized;
@@ -782,7 +874,6 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
 		{ "&Color...",		FL_ALT + 'k', (Fl_Callback *)ImpressionistUI::cb_colors },
-		{ "&Paintly...",	FL_ALT + 't', (Fl_Callback *)ImpressionistUI::cb_paintly },
 		{ "&Kernel...",		FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_kernel },
 		{ "&Clear Canvas",	FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 
@@ -893,9 +984,13 @@ ImpressionistUI::ImpressionistUI() {
 	m_nIsNormalized = 1;
 	m_pCustomKernel = NULL;
 	m_nBlurSharpLevel = 1;
+	m_nMinStroke = 4;
+	m_nMaxStroke = 10;
+	m_nBlurFactor = 0.5;
+	m_nFilterConstant = 0.5;
 
 	// brush dialog definition
-	m_brushDialog = new Fl_Window(400, 360, "Brush Dialog");
+	m_brushDialog = new Fl_Window(400, 470, "Brush Dialog");
 		// Add a brush type choice to the dialog
 		m_BrushTypeChoice = new Fl_Choice(50,10,150,25,"&Brush");
 		m_BrushTypeChoice->user_data((void*)(this));	// record self to be used by static callback functions
@@ -1040,6 +1135,58 @@ ImpressionistUI::ImpressionistUI() {
 		m_BlurSharpSlider->align(FL_ALIGN_RIGHT);
 		m_BlurSharpSlider->callback(cb_blursharpSlides);
 		m_BlurSharpSlider->deactivate();
+
+		m_MinStrokeSlider = new Fl_Value_Slider(10, 350, 300, 20, "Min Stroke");
+		m_MinStrokeSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_MinStrokeSlider->type(FL_HOR_NICE_SLIDER);
+        m_MinStrokeSlider->labelfont(FL_COURIER);
+        m_MinStrokeSlider->labelsize(12);
+		m_MinStrokeSlider->minimum(1);
+		m_MinStrokeSlider->maximum(30);
+		m_MinStrokeSlider->step(1);
+		m_MinStrokeSlider->value(m_nMinStroke);
+		m_MinStrokeSlider->align(FL_ALIGN_RIGHT);
+		m_MinStrokeSlider->callback(cb_minStrokeSlides);
+		m_MinStrokeSlider->deactivate();
+
+		m_MaxStrokeSlider = new Fl_Value_Slider(10, 380, 300, 20, "Max Stroke");
+		m_MaxStrokeSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_MaxStrokeSlider->type(FL_HOR_NICE_SLIDER);
+        m_MaxStrokeSlider->labelfont(FL_COURIER);
+        m_MaxStrokeSlider->labelsize(12);
+		m_MaxStrokeSlider->minimum(1);
+		m_MaxStrokeSlider->maximum(30);
+		m_MaxStrokeSlider->step(1);
+		m_MaxStrokeSlider->value(m_nMaxStroke);
+		m_MaxStrokeSlider->align(FL_ALIGN_RIGHT);
+		m_MaxStrokeSlider->callback(cb_maxStrokeSlides);
+		m_MaxStrokeSlider->deactivate();
+
+		m_BlurFactorSlider = new Fl_Value_Slider(10, 410, 300, 20, "Blur Factor");
+		m_BlurFactorSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BlurFactorSlider->type(FL_HOR_NICE_SLIDER);
+        m_BlurFactorSlider->labelfont(FL_COURIER);
+        m_BlurFactorSlider->labelsize(12);
+		m_BlurFactorSlider->minimum(0);
+		m_BlurFactorSlider->maximum(1);
+		m_BlurFactorSlider->step(0.01);
+		m_BlurFactorSlider->value(m_nBlurFactor);
+		m_BlurFactorSlider->align(FL_ALIGN_RIGHT);
+		m_BlurFactorSlider->callback(cb_blurFactorSlides);
+		m_BlurFactorSlider->deactivate();
+		
+		m_FilterConstantSlider = new Fl_Value_Slider(10, 440, 300, 20, "Filter Constant");
+		m_FilterConstantSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_FilterConstantSlider->type(FL_HOR_NICE_SLIDER);
+        m_FilterConstantSlider->labelfont(FL_COURIER);
+        m_FilterConstantSlider->labelsize(12);
+		m_FilterConstantSlider->minimum(0);
+		m_FilterConstantSlider->maximum(1);
+		m_FilterConstantSlider->step(0.01);
+		m_FilterConstantSlider->value(m_nFilterConstant);
+		m_FilterConstantSlider->align(FL_ALIGN_RIGHT);
+		m_FilterConstantSlider->callback(cb_filterConstantSlides);
+		m_FilterConstantSlider->deactivate();
 
     m_brushDialog->end();	
 

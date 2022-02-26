@@ -62,6 +62,11 @@ public:
 	Fl_Window*			m_PaintBox;
 	Fl_Window*			m_EdgeDetectionBox;
 
+	Fl_Slider*			m_MinStrokeSlider;
+	Fl_Slider*			m_MaxStrokeSlider;
+	Fl_Slider*			m_BlurFactorSlider;
+	Fl_Slider*			m_FilterConstantSlider;
+
 // for color dialog
 	Fl_Window*			m_colorDialog;
 
@@ -125,6 +130,18 @@ public:
 	int					getBlurSharpLevel();
 	void				setBlurSharpLevel(int level);
 
+	int					getMinStroke();
+	void				setMinStroke(int length);
+
+	int					getMaxStroke();
+	void				setMaxStroke(int length);
+
+	double				getBlurFactor();
+	void				setBlurFactor(double factor);
+
+	double				getFilterConstant();
+	void				setFilterConstant(double factor);
+
 	bool				getIsNormalized();
 
 	Matrix*				getCustomKernel();
@@ -145,6 +162,10 @@ private:
 	int		m_nSpacing;
 	int		m_nEdgeThreshold;
 	int		m_nBlurSharpLevel;
+	int		m_nMinStroke;
+	int		m_nMaxStroke;
+	double	m_nBlurFactor;
+	double	m_nFilterConstant;
 
 	int		m_nIsNormalized;
 	Matrix*	m_pCustomKernel;
@@ -199,6 +220,10 @@ private:
 	static void cb_edgeThreasholdSlides(Fl_Widget* o, void* v);
 	static void cb_edge_detection_button(Fl_Widget* o, void* v);
 	static void cb_blursharpSlides(Fl_Widget* o, void* v);
+	static void cb_minStrokeSlides(Fl_Widget* o, void* v);
+	static void cb_maxStrokeSlides(Fl_Widget* o, void* v);
+	static void cb_blurFactorSlides(Fl_Widget* o, void* v);
+	static void cb_filterConstantSlides(Fl_Widget* o, void* v);
 
 	static void cb_apply_kernel(Fl_Widget* o, void* v);
 	static void cb_kernel_normalize(Fl_Widget* o, void* v);

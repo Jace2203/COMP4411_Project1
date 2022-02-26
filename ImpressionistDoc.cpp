@@ -538,7 +538,7 @@ void ImpressionistDoc::applyKernel()
 
 	if (m_pUI->getCustomKernel() == NULL)
 	{
-		// MessageBox("Wrong Kernel Format!!!");
+		fl_alert("Wrong Kernel Format!!!");
 		return;
 	}
 

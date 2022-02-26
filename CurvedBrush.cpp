@@ -69,14 +69,16 @@ void CurvedBrush::BrushMove(const Point source, const Point target)
 
 	GLubyte* strokeColor = pDoc->GetOriginalPixel(target);
 
-	double f = 1.0;
+	int minStroke = dlg->getMinStroke();
+	int maxStroke = dlg->getMaxStroke();
+	double f = dlg->getFilterConstant();
 
-	for (int j = 0; j < 10; j++)
+	for (int j = 0; j < maxStroke; j++)
 	{
 		GLubyte* refImageColor = paintly->GetColor(paintly->m_ucRefImage, pt.x, pt.y);
 		GLubyte* canvasColor = paintly->GetColor(pDoc->m_ucPainting, pt.x, pt.y);
 
-		if (j > 4 && Paintly::ColorDiff(refImageColor, canvasColor) < Paintly::ColorDiff(refImageColor, strokeColor))
+		if (j > minStroke && Paintly::ColorDiff(refImageColor, canvasColor) < Paintly::ColorDiff(refImageColor, strokeColor))
 			break;
 
 		double gx = con->XGradient(pt.x, pt.y);
