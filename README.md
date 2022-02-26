@@ -60,16 +60,19 @@ To create an impressionistic picture, the user loads an existing image and paint
 10. To apply gradient from another image, select File > Load Another Image. On the pop-up window "Brush Dialog", click the "Another Gradient" button. If line brush is selected and the stroke type is gradient, the effect will be applied.
 
 11. To apply user specified kernel, select File > Kernel. On the pop-up window "Customize Kernel Dialog", type in the kernel as the following format:
-> 1,2,1,
-> 2,4,2,
-> 1,2,1
+
+~~~
+1,2,1,
+2,4,2,
+1,2,1
+~~~
 
 - New line is a new row
 - Each number is followed by a comma (Not for the last number)
 - Normalize the kernel by pressing the button "Normalized"
 - Apply the kerenl by pressing the button "Apply Kernel"
 
-12. To do edge clipping, on the pop-up window "Brush Dialog, click the "Edge Clipping" button. If line brush is selected, the effect will be applied.
+1.  To do edge clipping, on the pop-up window "Brush Dialog, click the "Edge Clipping" button. If line brush is selected, the effect will be applied.
 To apply another edge image, select File > Load Edge Image.
 
 13.   To do mosaic, select Mosaics. On the pop-up window, press "Preprocess" to preprocess images in "images/unprocessed" (feel free to add more images). Then press "Mosaic", the image will be stored in "images/mosaic" named "result.bmp".
