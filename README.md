@@ -22,11 +22,11 @@ To create an impressionistic picture, the user loads an existing image and paint
 | W swap | 	✔ |
 | B RGB scale | ✔ |
 | B 1 level undo | 	✔ |
-| B dissolve |
-| BW fade in/out input on output canvas |
+| B dissolve | ✔ |
+| BW fade in/out input on output canvas | ✔ |
 | BW mural (blending) | ✔ |
 | BW alpha brush | ✔ |
-| BW automatic paint whole image |
+| BW automatic paint whole image | ✔ |
 | BW gradient from user-specified image | ✔ |
 | BW edge clipping | ✔ |
 | 2B user-specified kernel | ✔ |
@@ -34,6 +34,6 @@ To create an impressionistic picture, the user loads an existing image and paint
 | 2B multiresolution |
 | 2B warp brush |
 | 2B curved brush following image gradient |
-| 4B mosaic |
+| 4B mosaic | ✔ |
 | 4B impressionist video with temporal coherency |
 | 8B Bayesian matting |
