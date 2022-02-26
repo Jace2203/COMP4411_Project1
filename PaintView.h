@@ -49,6 +49,13 @@ public:
 
 	void draw_fade(int old_width, int old_height, unsigned char* old_painting);
 
+	void DrawPaintly();
+	void paintLayer(unsigned char* canvas, unsigned char* referenceImage, int R, int layer, int time);
+	double AreaError(int x, int y, double grid, Point& max, double* D);
+	double ColorDiff(GLubyte* color1, GLubyte* color2);
+	GLubyte* GetColor(unsigned char* source, int x, int y);
+	void makeSplineStroke(int x_0, int y_0, int R, unsigned char* referenceImage);
+
 	ImpressionistDoc *m_pDoc;
 
 private:

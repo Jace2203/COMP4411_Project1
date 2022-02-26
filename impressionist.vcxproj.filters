@@ -81,6 +81,12 @@
     <ClCompile Include="ThreeDTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CurvedBrush.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Paintly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitmap.h">
@@ -147,6 +153,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ThreeDTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CurvedBrush.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Paintly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

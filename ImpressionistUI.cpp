@@ -14,6 +14,8 @@
 
 #include "StrokeDirection.h"
 
+#include "Paintly.h"
+
 /*
 //------------------------------ Widget Examples -------------------------------------------------
 Here is some example code for all of the widgets that you may need to add to the 
@@ -157,6 +159,24 @@ in links on the fltk help session page.
 //------------------------------------------------------------------------------------------------
 */
 
+enum
+{
+	PAINTLY_IMPRESSIONIST = 0,
+	PAINTLY_EXPRESSIONIST,
+	PAINTLY_COLOR_WASH,
+	PAINTLY_POINTILLIST,
+	PAINTLY_CUSTOMIZE
+};
+
+enum
+{
+	PAINTLY_CURVE = 0,
+	PAINTLY_BSPLINE,
+	PAINTLY_CIRCLE,
+	PAINTLY_CLIP,
+	PAINTLY_LINE
+};
+
 //------------------------------------- Help Functions --------------------------------------------
 
 //------------------------------------------------------------
@@ -214,6 +234,38 @@ void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 {
 	whoami(o)->m_colorDialog->show();
 }
+
+void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc* pDoc=whoami(o)->getDocument();
+
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyTheshold = 100;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyCurvature = 1;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyBlur = 0.5;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyGridSize = 1;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyMinStrokeL = 4;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyMaxStrokeL = 16;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyAlpha = 1;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyLayer = 1;
+	// ((ImpressionistUI*)(o->user_data()))->m_nPaintlyR0Level = 5;
+	whoami(o)->setPaintly();
+
+	pDoc->m_pPaintly->DrawPaintly();
+	//whoami(o)->m_paintlyDialog->show();
+}
+
+void ImpressionistUI::cb_paintly_style(Fl_Widget* o, void* v)
+{
+}
+
+void ImpressionistUI::cb_paintly_stroke(Fl_Widget* o, void* v)
+{
+}
+
+void ImpressionistUI::cb_paintly_run(Fl_Widget* o, void* v)
+{
+}
+
 
 void ImpressionistUI::cb_kernel(Fl_Menu_* o, void* v)
 {
@@ -408,6 +460,21 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 		pUI->m_BlurSharpSlider->deactivate();
 	}
 
+	if (type == BRUSH_CURVED)
+	{
+		pUI->m_MinStrokeSlider->activate();
+		pUI->m_MaxStrokeSlider->activate();
+		pUI->m_BlurFactorSlider->activate();
+		pUI->m_FilterConstantSlider->activate();
+	}
+	else
+	{
+		pUI->m_MinStrokeSlider->deactivate();
+		pUI->m_MaxStrokeSlider->deactivate();
+		pUI->m_BlurFactorSlider->deactivate();
+		pUI->m_FilterConstantSlider->deactivate();
+	}
+
 	pDoc->setBrushType(type);
 }
 
@@ -419,6 +486,14 @@ void ImpressionistUI::cb_strokeChoice(Fl_Widget* o, void* v)
 	int type = (int) v;
 
 	pDoc->setStrokeType(type);
+}
+
+void ImpressionistUI::cb_paintlyStyleChoice(Fl_Widget* o, void* v)
+{
+}
+
+void ImpressionistUI::cb_paintlyStrokeChoice(Fl_Widget* o, void* v)
+{
 }
 
 //------------------------------------------------------------
@@ -443,6 +518,10 @@ void ImpressionistUI::cb_clear_canvas_button(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_sizeSlides(Fl_Widget* o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_nSize=int( ((Fl_Slider *)o)->value() ) ;
+
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI * pUI = (ImpressionistUI*)(o->user_data());
+	pDoc->m_pPaintly->genRefImage(pDoc->m_ucOriginal, pDoc->m_nPaintWidth, pDoc->m_nPaintHeight, pDoc->getSize(), pUI->getBlurFactor());
 }
 
 //-----------------------------------------------------------
@@ -521,6 +600,30 @@ void ImpressionistUI::cb_edge_detection_button(Fl_Widget* o, void* v)
 void ImpressionistUI::cb_blursharpSlides(Fl_Widget* o, void* v)
 {
 	((ImpressionistUI*)(o->user_data()))->m_nBlurSharpLevel=int( ((Fl_Slider *)o)->value() );
+}
+
+void ImpressionistUI::cb_minStrokeSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nMinStroke=int( ((Fl_Slider *)o)->value() );
+}
+
+void ImpressionistUI::cb_maxStrokeSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nMaxStroke=int( ((Fl_Slider *)o)->value() );
+}
+
+void ImpressionistUI::cb_blurFactorSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nBlurFactor=double( ((Fl_Slider *)o)->value() );
+	
+	ImpressionistDoc * pDoc = ((ImpressionistUI*)(o->user_data()))->getDocument();
+	ImpressionistUI * pUI = (ImpressionistUI*)(o->user_data());
+	pDoc->m_pPaintly->genRefImage(pDoc->m_ucOriginal, pDoc->m_nPaintWidth, pDoc->m_nPaintHeight, pDoc->getSize(), pUI->getBlurFactor());
+}
+
+void ImpressionistUI::cb_filterConstantSlides(Fl_Widget* o, void* v)
+{
+	((ImpressionistUI*)(o->user_data()))->m_nFilterConstant=double( ((Fl_Slider *)o)->value() );
 }
 
 void ImpressionistUI::cb_apply_kernel(Fl_Widget* o, void* v)
@@ -720,6 +823,58 @@ void ImpressionistUI::setBlurSharpLevel(int level)
 		m_BlurSharpSlider->value(m_nBlurSharpLevel);
 }
 
+int ImpressionistUI::getMinStroke()
+{
+	return m_nMinStroke;
+}
+
+void ImpressionistUI::setMinStroke(int length)
+{
+	m_nMinStroke = length;
+
+	if (length <= 30)
+		m_MinStrokeSlider->value(m_nMinStroke);
+}
+
+int ImpressionistUI::getMaxStroke()
+{
+	return m_nMaxStroke;
+}
+
+void ImpressionistUI::setMaxStroke(int length)
+{
+	m_nMaxStroke = length;
+	
+	if (length <= 30)
+		m_MinStrokeSlider->value(m_nMaxStroke);
+}
+
+double ImpressionistUI::getBlurFactor()
+{
+	return m_nBlurFactor;
+}
+
+void ImpressionistUI::setBlurFactor(double factor)
+{
+	m_nBlurFactor = factor;
+
+	if (factor <= 1)
+		m_BlurFactorSlider->value(m_nBlurFactor);
+}
+
+double ImpressionistUI::getFilterConstant()
+{
+	return m_nFilterConstant;
+}
+
+void ImpressionistUI::setFilterConstant(double factor)
+{
+	m_nFilterConstant = factor;
+
+	if (factor <= 1)
+		m_FilterConstantSlider->value(m_nFilterConstant);
+}
+
 bool ImpressionistUI::getIsNormalized()
 {
 	return (bool)m_nIsNormalized;
@@ -738,6 +893,19 @@ int ImpressionistUI::getRandomSize()
 double ImpressionistUI::getFadeAlpha()
 {
 	return m_nfadeAlpha;
+}
+
+void ImpressionistUI::setPaintly()
+{
+	m_pDoc->m_nPaintlyTheshold = 100;
+	m_pDoc->m_nPaintlyCurvature = 1;
+	m_pDoc->m_nPaintlyBlur = 0.5;
+	m_pDoc->m_nPaintlyGridSize = 1;
+	m_pDoc->m_nPaintlyMinStrokeL = 4;
+	m_pDoc->m_nPaintlyMaxStrokeL = 16;
+	m_pDoc->m_nPaintlyAlpha = 1;
+	m_pDoc->m_nPaintlyLayer = 1;
+	m_pDoc->m_nPaintlyR0Level = 5;
 }
 
 // Main menu definition
@@ -787,6 +955,7 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Blurring",			FL_ALT+'r', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_BLUR},
   {"Sharpening",		FL_ALT+'f', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SHARP},
   {"Alpha Mapped",		FL_ALT+'a', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_ALPHA_MAPPED},
+  {"Curved Brush",		FL_ALT+'v', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_CURVED},
   {0}
 };
 
@@ -794,6 +963,24 @@ Fl_Menu_Item ImpressionistUI::strokeDirectionTypeMenu[NUM_STROKE_TYPE+1] = {
 	{"Slider/Right Mouse",	FL_ALT+'s', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)STROKE_SLIDER},
 	{"Gradient",			FL_ALT+'g', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)STROKE_GRADIENT},
 	{"Brush Direction",		FL_ALT+'b', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)STROKE_BRUSH_DIRECTION},
+	{0}
+};
+
+Fl_Menu_Item ImpressionistUI::styleTypeMenu[] = {
+	{"Impressionist",	FL_ALT+'i', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_IMPRESSIONIST},
+	{"Expressionist",	FL_ALT+'e', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_EXPRESSIONIST},
+	{"Color Wash",		FL_ALT+'w', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_COLOR_WASH},
+	{"Pointillist",		FL_ALT+'p', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_POINTILLIST},
+	{"Customize",		FL_ALT+'c', (Fl_Callback *)ImpressionistUI::cb_paintlyStyleChoice, (void *)PAINTLY_CUSTOMIZE},
+	{0}
+};
+
+Fl_Menu_Item ImpressionistUI::strokeTypeMenu[] = {
+	{"Curve Brush",		FL_ALT+'r', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_CURVE},
+	{"BSpline Brush",	FL_ALT+'b', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_BSPLINE},
+	{"Circle Brush",	FL_ALT+'c', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_CIRCLE},
+	{"Clip Line Brush",	FL_ALT+'p', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_CLIP},
+	{"Line Brush",		FL_ALT+'l', (Fl_Callback *)ImpressionistUI::cb_paintlyStrokeChoice, (void *)PAINTLY_LINE},
 	{0}
 };
 
@@ -842,9 +1029,13 @@ ImpressionistUI::ImpressionistUI() {
 	m_nBlurSharpLevel = 1;
 	m_nRandomSize = 1;
 	m_nfadeAlpha = 0;
+	m_nMinStroke = 4;
+	m_nMaxStroke = 10;
+	m_nBlurFactor = 0.5;
+	m_nFilterConstant = 0.5;
 
 	// brush dialog definition
-	m_brushDialog = new Fl_Window(400, 360, "Brush Dialog");
+	m_brushDialog = new Fl_Window(400, 470, "Brush Dialog");
 		// Add a brush type choice to the dialog
 		m_BrushTypeChoice = new Fl_Choice(50,10,150,25,"&Brush");
 		m_BrushTypeChoice->user_data((void*)(this));	// record self to be used by static callback functions
@@ -873,6 +1064,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->step(1);
 		m_BrushSizeSlider->value(m_nSize);
 		m_BrushSizeSlider->align(FL_ALIGN_RIGHT);
+		m_BrushSizeSlider->when(FL_WHEN_RELEASE);
 		m_BrushSizeSlider->callback(cb_sizeSlides);
 
 		// Add brush width slider to the dialog 
@@ -976,7 +1168,7 @@ ImpressionistUI::ImpressionistUI() {
 			m_EdgeDetectionBox->add(m_EdgeDetectionButton);
 		m_EdgeDetectionBox->end();
 
-		m_BlurSharpSlider = new Fl_Value_Slider(10, 320, 300, 20, "Blurring/Sharpening Level");
+		m_BlurSharpSlider = new Fl_Value_Slider(10, 320, 250, 20, "Blurring/Sharpening Level");
 		m_BlurSharpSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BlurSharpSlider->type(FL_HOR_NICE_SLIDER);
         m_BlurSharpSlider->labelfont(FL_COURIER);
@@ -989,12 +1181,80 @@ ImpressionistUI::ImpressionistUI() {
 		m_BlurSharpSlider->callback(cb_blursharpSlides);
 		m_BlurSharpSlider->deactivate();
 
+		m_MinStrokeSlider = new Fl_Value_Slider(10, 350, 300, 20, "Min Stroke");
+		m_MinStrokeSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_MinStrokeSlider->type(FL_HOR_NICE_SLIDER);
+        m_MinStrokeSlider->labelfont(FL_COURIER);
+        m_MinStrokeSlider->labelsize(12);
+		m_MinStrokeSlider->minimum(1);
+		m_MinStrokeSlider->maximum(30);
+		m_MinStrokeSlider->step(1);
+		m_MinStrokeSlider->value(m_nMinStroke);
+		m_MinStrokeSlider->align(FL_ALIGN_RIGHT);
+		m_MinStrokeSlider->callback(cb_minStrokeSlides);
+		m_MinStrokeSlider->deactivate();
+
+		m_MaxStrokeSlider = new Fl_Value_Slider(10, 380, 300, 20, "Max Stroke");
+		m_MaxStrokeSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_MaxStrokeSlider->type(FL_HOR_NICE_SLIDER);
+        m_MaxStrokeSlider->labelfont(FL_COURIER);
+        m_MaxStrokeSlider->labelsize(12);
+		m_MaxStrokeSlider->minimum(1);
+		m_MaxStrokeSlider->maximum(30);
+		m_MaxStrokeSlider->step(1);
+		m_MaxStrokeSlider->value(m_nMaxStroke);
+		m_MaxStrokeSlider->align(FL_ALIGN_RIGHT);
+		m_MaxStrokeSlider->callback(cb_maxStrokeSlides);
+		m_MaxStrokeSlider->deactivate();
+
+		m_BlurFactorSlider = new Fl_Value_Slider(10, 410, 300, 20, "Blur Factor");
+		m_BlurFactorSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BlurFactorSlider->type(FL_HOR_NICE_SLIDER);
+        m_BlurFactorSlider->labelfont(FL_COURIER);
+        m_BlurFactorSlider->labelsize(12);
+		m_BlurFactorSlider->minimum(0);
+		m_BlurFactorSlider->maximum(1);
+		m_BlurFactorSlider->step(0.01);
+		m_BlurFactorSlider->value(m_nBlurFactor);
+		m_BlurFactorSlider->align(FL_ALIGN_RIGHT);
+		m_BlurFactorSlider->callback(cb_blurFactorSlides);
+		m_BlurFactorSlider->deactivate();
+		
+		m_FilterConstantSlider = new Fl_Value_Slider(10, 440, 300, 20, "Filter Constant");
+		m_FilterConstantSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_FilterConstantSlider->type(FL_HOR_NICE_SLIDER);
+        m_FilterConstantSlider->labelfont(FL_COURIER);
+        m_FilterConstantSlider->labelsize(12);
+		m_FilterConstantSlider->minimum(0);
+		m_FilterConstantSlider->maximum(1);
+		m_FilterConstantSlider->step(0.01);
+		m_FilterConstantSlider->value(m_nFilterConstant);
+		m_FilterConstantSlider->align(FL_ALIGN_RIGHT);
+		m_FilterConstantSlider->callback(cb_filterConstantSlides);
+		m_FilterConstantSlider->deactivate();
+
     m_brushDialog->end();	
 
 	m_colorDialog = new Fl_Window(300, 200, "Color Dialog");
 		m_colorChooser = new Fl_Color_Chooser(10, 10, 280, 180);
 		m_colorChooser->hsv(0.0, 0.0, 1.0);
 	m_colorDialog->end();
+
+	m_paintlyDialog = new Fl_Window(400, 270, "Paintly Dialog");
+		m_PaintlyStyleChoice = new Fl_Choice(50, 10, 120, 20, "&Style");
+		m_PaintlyStyleChoice->user_data((void*)(this));
+		m_PaintlyStyleChoice->menu(styleTypeMenu);
+		m_PaintlyStyleChoice->callback(cb_paintly_style);
+
+		m_PaintlyStrokeChoice = new Fl_Choice(225, 10, 100, 20, "&Stroke");
+		m_PaintlyStrokeChoice->user_data((void*)(this));
+		m_PaintlyStrokeChoice->menu(strokeTypeMenu);
+		m_PaintlyStrokeChoice->callback(cb_paintly_stroke);
+
+		m_kernelApplyButton = new Fl_Button(350, 10, 40, 20, "Run");
+		m_kernelApplyButton->user_data((void*)(this));
+		m_kernelApplyButton->callback(cb_paintly_run);
+	m_paintlyDialog->end();
 
 	m_kernelDialog = new Fl_Window(300, 330, "Customize Kernel Dialog");
 		m_kernelInput = new Fl_Multiline_Input(10, 10, 280, 280);

@@ -62,10 +62,21 @@ public:
 	Fl_Window*			m_PaintBox;
 	Fl_Window*			m_EdgeDetectionBox;
 
+	Fl_Slider*			m_MinStrokeSlider;
+	Fl_Slider*			m_MaxStrokeSlider;
+	Fl_Slider*			m_BlurFactorSlider;
+	Fl_Slider*			m_FilterConstantSlider;
+
 // for color dialog
 	Fl_Window*			m_colorDialog;
 
 	Fl_Color_Chooser*	m_colorChooser;
+
+
+
+	Fl_Window*			m_paintlyDialog;
+	Fl_Choice*			m_PaintlyStyleChoice;
+	Fl_Choice*			m_PaintlyStrokeChoice;
 
 // for customize kernel
 	Fl_Window*			m_kernelDialog;
@@ -123,6 +134,18 @@ public:
 	int					getBlurSharpLevel();
 	void				setBlurSharpLevel(int level);
 
+	int					getMinStroke();
+	void				setMinStroke(int length);
+
+	int					getMaxStroke();
+	void				setMaxStroke(int length);
+
+	double				getBlurFactor();
+	void				setBlurFactor(double factor);
+
+	double				getFilterConstant();
+	void				setFilterConstant(double factor);
+
 	bool				getIsNormalized();
 
 	int 				getRandomSize();
@@ -130,6 +153,7 @@ public:
 	Matrix*				getCustomKernel();
 
 	double				getFadeAlpha();
+	void				setPaintly();
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
@@ -147,6 +171,10 @@ private:
 	int		m_nEdgeThreshold;
 	int		m_nBlurSharpLevel;
 	int		m_nRandomSize;
+	int		m_nMinStroke;
+	int		m_nMaxStroke;
+	double	m_nBlurFactor;
+	double	m_nFilterConstant;
 
 	int		m_nIsNormalized;
 	Matrix*	m_pCustomKernel;
@@ -154,6 +182,8 @@ private:
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
 	static Fl_Menu_Item		brushTypeMenu[NUM_BRUSH_TYPE+1];
+	static Fl_Menu_Item		styleTypeMenu[];
+	static Fl_Menu_Item		strokeTypeMenu[];
 	static Fl_Menu_Item		strokeDirectionTypeMenu[NUM_STROKE_TYPE+1];
 
 	static ImpressionistUI*	whoami(Fl_Menu_* o);
@@ -164,6 +194,12 @@ private:
 	static void	cb_save_image(Fl_Menu_* o, void* v);
 	static void	cb_brushes(Fl_Menu_* o, void* v);
 	static void cb_colors(Fl_Menu_* o, void* v);
+	static void cb_paintly(Fl_Menu_* o, void* v);
+	static void cb_paintly_style(Fl_Widget* o, void* v);
+	static void cb_paintly_stroke(Fl_Widget* o, void* v);
+	static void cb_paintly_run(Fl_Widget* o, void* v);
+	static void	cb_paintlyStyleChoice(Fl_Widget* o, void* v);
+	static void	cb_paintlyStrokeChoice(Fl_Widget* o, void* v);
 	static void cb_kernel(Fl_Menu_* o, void* v);
 	static void cb_fade(Fl_Menu_* o, void* v);
 	static void cb_fade_in(Fl_Widget* o, void* v);
@@ -183,6 +219,7 @@ private:
 	static void	cb_about(Fl_Menu_* o, void* v);
 	static void	cb_brushChoice(Fl_Widget* o, void* v);
 	static void cb_strokeChoice(Fl_Widget* o, void* v);
+	static void cb_styleChoice(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas_button(Fl_Widget* o, void* v);
 	static void	cb_sizeSlides(Fl_Widget* o, void* v);
 	static void	cb_widthSlides(Fl_Widget* o, void* v);
@@ -196,6 +233,10 @@ private:
 	static void cb_edgeThreasholdSlides(Fl_Widget* o, void* v);
 	static void cb_edge_detection_button(Fl_Widget* o, void* v);
 	static void cb_blursharpSlides(Fl_Widget* o, void* v);
+	static void cb_minStrokeSlides(Fl_Widget* o, void* v);
+	static void cb_maxStrokeSlides(Fl_Widget* o, void* v);
+	static void cb_blurFactorSlides(Fl_Widget* o, void* v);
+	static void cb_filterConstantSlides(Fl_Widget* o, void* v);
 
 	static void cb_apply_kernel(Fl_Widget* o, void* v);
 	static void cb_kernel_normalize(Fl_Widget* o, void* v);

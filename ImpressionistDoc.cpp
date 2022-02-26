@@ -18,6 +18,7 @@
 #include "Convolution.h"
 #include "ImageProcess.h"
 #include "ThreeDTree.h"
+#include "Paintly.h"
 
 // Include individual brush headers here.
 #include "Brushes.h"
@@ -64,6 +65,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new SharpBrush( this, "Sharpening" );
 	ImpBrush::c_pBrushes[BRUSH_ALPHA_MAPPED]
 		= new AlphaMappedBrush( this, "Alpha Mapped" );
+	ImpBrush::c_pBrushes[BRUSH_CURVED]
+		= new CurvedBrush(this, "Curved");
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
@@ -76,11 +79,14 @@ ImpressionistDoc::ImpressionistDoc()
 
 	mosaic_pixel_width = 12;
 	mosaic_pixel_height = 9;
+
+	m_pPaintly = new Paintly(this);
 }
 
 ImpressionistDoc::~ImpressionistDoc()
 {
 	delete m_pMosaicFiles;
+	delete m_pPaintly;
 }
 
 
@@ -283,6 +289,7 @@ int ImpressionistDoc::loadImage(char *iname)
 	m_pUI->m_paintView->refresh();
 
 	m_pUI->m_paintView->CreateSavedPhoto();
+	m_pPaintly->genRefImage(m_ucBitmap, width, height, getSize());
 
 	return 1;
 }
@@ -644,7 +651,7 @@ void ImpressionistDoc::applyKernel()
 
 	if (m_pUI->getCustomKernel() == NULL)
 	{
-		// MessageBox("Wrong Kernel Format!!!");
+		fl_alert("Wrong Kernel Format!!!");
 		return;
 	}
 
@@ -747,3 +754,4 @@ void ImpressionistDoc::doMosaic()
 // 	// 920 720
 // 	imageprocess::preprocessImage(920, 690);
 // }
+

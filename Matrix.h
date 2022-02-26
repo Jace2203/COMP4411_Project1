@@ -20,7 +20,7 @@ public:
     void    initialize(double value = 0.0);
     void    identity(int num);
 
-    void    setValue(int x, int y, int num);
+    void    setValue(int x, int y, double num);
     double  getValue(int x, int y) const;
 
     int     getWidth() const;
@@ -29,6 +29,7 @@ public:
     double  InnerSum() const;
 
     static Matrix* String2Matrix(const char* string);
+    static Matrix* GaussianBlurMatrix(int size, double sigma = 1.0);
 
 private:
     int m, n;
